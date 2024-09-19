@@ -1,18 +1,18 @@
 package org.kiteio.punica.ui.component
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.paging.*
+import androidx.paging.CombinedLoadStates
+import androidx.paging.LoadState
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import androidx.paging.PagingSource
+import androidx.paging.PagingState
 import androidx.paging.compose.LazyPagingItems
 import org.kiteio.punica.candy.catch
 
@@ -34,9 +34,7 @@ fun LazyPagingColumn(
         content()
 
         if (loadState.refresh is LoadState.Loading || loadState.append is LoadState.Loading) item {
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                LinearProgressIndicator()
-            }
+            LinearProgressIndicator()
         }
     }
 }

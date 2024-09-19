@@ -1,6 +1,5 @@
 package org.kiteio.punica.ui.screen.module
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -13,7 +12,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.OpenInBrowser
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,6 +31,7 @@ import org.kiteio.punica.openUri
 import org.kiteio.punica.ui.component.BottomSheet
 import org.kiteio.punica.ui.component.Icon
 import org.kiteio.punica.ui.component.LazyPagingColumn
+import org.kiteio.punica.ui.component.LinearProgressIndicator
 import org.kiteio.punica.ui.component.MarkdownText
 import org.kiteio.punica.ui.component.NavBackTopAppBar
 import org.kiteio.punica.ui.component.Pager
@@ -123,19 +122,12 @@ private fun NoticeBottomSheet(visible: Boolean, onDismiss: () -> Unit, noticeIte
             launchCatch { noticeItem?.let { notice = EduNotice.notice(it) } }
         }
 
-        if (notice == null) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = dp4(6)),
-                contentAlignment = Alignment.Center
-            ) { LinearProgressIndicator() }
-        } else notice?.run {
+        notice?.run {
             if (pdf != null) PdfRendererViewCompose(url = pdf)
             else if (markdown != null) MarkdownText(
                 markdown = markdown,
                 contentPadding = PaddingValues(dp4(4))
             )
-        }
+        } ?: LinearProgressIndicator()
     }
 }

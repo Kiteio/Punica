@@ -213,7 +213,7 @@ fun TimetableAllScreen() {
                     }
                 }
             }
-        }
+        } ?: LinearProgressIndicator()
     }
 
     InfoBottomSheet(

@@ -30,7 +30,11 @@ import androidx.compose.material.icons.rounded.Spa
 import androidx.compose.material.icons.rounded.Timelapse
 import androidx.compose.material.icons.rounded.TipsAndUpdates
 import androidx.compose.material.icons.rounded.VolunteerActivism
-import androidx.compose.material3.*
+import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -65,6 +69,7 @@ import org.kiteio.punica.ui.component.BottomSheet
 import org.kiteio.punica.ui.component.Icon
 import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.Image
+import org.kiteio.punica.ui.component.LinearProgressIndicator
 import org.kiteio.punica.ui.component.NavBackTopAppBar
 import org.kiteio.punica.ui.component.ScaffoldBox
 import org.kiteio.punica.ui.component.SubduedText
@@ -141,13 +146,8 @@ private fun Report(secondClassReport: SecondClassReport?) {
     )
 
     LazyColumn(contentPadding = PaddingValues(dp4(2))) {
-        if (secondClassReport == null) {
-            item {
-                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    LinearProgressIndicator()
-                }
-            }
-        }else {
+        if (secondClassReport == null) item { LinearProgressIndicator() }
+        else {
             itemsIndexed(secondClassReport.items) { index, item ->
                 ElevatedCard(onClick = {}, modifier = Modifier.padding(dp4(2))) {
                     Row(
