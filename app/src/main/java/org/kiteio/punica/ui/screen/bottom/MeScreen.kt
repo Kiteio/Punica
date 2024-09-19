@@ -440,6 +440,7 @@ private fun Settings(modifier: Modifier = Modifier) {
         onConfirm = { localDate ->
             coroutineScope.launchCatch {
                 Preferences.edit { it[Keys.schoolStart] = localDate.toString() }
+                datePickerDialogVisible = false
             }
         },
         title = { Text(text = getString(R.string.school_start)) },

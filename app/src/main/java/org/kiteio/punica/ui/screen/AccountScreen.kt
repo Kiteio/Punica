@@ -113,7 +113,6 @@ fun AccountScreen() {
                         viewModel.onLogout()
                     }
                 }
-
                 deleteDialogVisible = false
                 Toast(R.string.deleted).show()
             }

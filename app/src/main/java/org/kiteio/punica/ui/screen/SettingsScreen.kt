@@ -440,6 +440,7 @@ private fun KeysBottomSheet(
                         visibleKey?.let { key ->
                             edit { it.remove(stringPreferencesKey(key)) }
                         }
+                        deleteDialogVisible = false
                     }
                 },
                 desc = visibleKey

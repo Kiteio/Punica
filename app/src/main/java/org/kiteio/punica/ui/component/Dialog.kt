@@ -100,7 +100,7 @@ fun DialogVisibility(visible: Boolean, content: @Composable AnimatedVisibilitySc
  * 日期选择
  * @param visible
  * @param onDismiss
- * @param onConfirm 会自动调用 [onDismiss]
+ * @param onConfirm
  * @param title
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -123,7 +123,6 @@ fun DatePickerDialog(
                 TextButton(
                     onClick = {
                         datePickerState.selectedDateMillis?.let { onConfirm(LocalDate(it)) }
-                        onDismiss()
                     }
                 ) { Text(text = getString(R.string.confirm)) }
             },

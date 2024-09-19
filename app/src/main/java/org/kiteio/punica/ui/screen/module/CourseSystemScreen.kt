@@ -3,7 +3,17 @@ package org.kiteio.punica.ui.screen.module
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
@@ -14,9 +24,37 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.rounded.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.rounded.AccountBox
+import androidx.compose.material.icons.rounded.BookmarkBorder
+import androidx.compose.material.icons.rounded.History
+import androidx.compose.material.icons.rounded.LocationOn
+import androidx.compose.material.icons.rounded.School
+import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.icons.rounded.StarBorder
+import androidx.compose.material.icons.rounded.Timelapse
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,16 +69,58 @@ import org.kiteio.punica.R
 import org.kiteio.punica.Toast
 import org.kiteio.punica.candy.catch
 import org.kiteio.punica.candy.launchCatch
-import org.kiteio.punica.datastore.*
+import org.kiteio.punica.datastore.Courses
+import org.kiteio.punica.datastore.Tokens
+import org.kiteio.punica.datastore.get
+import org.kiteio.punica.datastore.remove
+import org.kiteio.punica.datastore.set
 import org.kiteio.punica.edu.foundation.Campus
 import org.kiteio.punica.edu.system.CourseSystem
 import org.kiteio.punica.edu.system.api.Token
-import org.kiteio.punica.edu.system.api.course.*
+import org.kiteio.punica.edu.system.api.course.Course
+import org.kiteio.punica.edu.system.api.course.MyCourse
+import org.kiteio.punica.edu.system.api.course.Priority
+import org.kiteio.punica.edu.system.api.course.SearchParams
+import org.kiteio.punica.edu.system.api.course.Section
+import org.kiteio.punica.edu.system.api.course.Sort
+import org.kiteio.punica.edu.system.api.course.delete
+import org.kiteio.punica.edu.system.api.course.exit
+import org.kiteio.punica.edu.system.api.course.list
+import org.kiteio.punica.edu.system.api.course.log
+import org.kiteio.punica.edu.system.api.course.myCourses
+import org.kiteio.punica.edu.system.api.course.overview
+import org.kiteio.punica.edu.system.api.course.search
+import org.kiteio.punica.edu.system.api.course.select
+import org.kiteio.punica.edu.system.api.course.table
 import org.kiteio.punica.getString
 import org.kiteio.punica.getStringArray
-import org.kiteio.punica.ui.*
-import org.kiteio.punica.ui.component.*
+import org.kiteio.punica.ui.LocalNavController
+import org.kiteio.punica.ui.LocalViewModel
+import org.kiteio.punica.ui.collectAsIdentifiedList
+import org.kiteio.punica.ui.component.BottomSheet
+import org.kiteio.punica.ui.component.CheckBox
+import org.kiteio.punica.ui.component.Dialog
+import org.kiteio.punica.ui.component.DialogVisibility
+import org.kiteio.punica.ui.component.DropdownMenuItem
+import org.kiteio.punica.ui.component.Icon
+import org.kiteio.punica.ui.component.IconText
+import org.kiteio.punica.ui.component.KVText
+import org.kiteio.punica.ui.component.NavBackTopAppBar
+import org.kiteio.punica.ui.component.Pager
+import org.kiteio.punica.ui.component.PagingSource
+import org.kiteio.punica.ui.component.RadioButton
+import org.kiteio.punica.ui.component.ScaffoldBox
+import org.kiteio.punica.ui.component.SubduedText
+import org.kiteio.punica.ui.component.TabPager
+import org.kiteio.punica.ui.component.TextField
+import org.kiteio.punica.ui.component.Title
+import org.kiteio.punica.ui.component.items
+import org.kiteio.punica.ui.component.rememberTabPagerState
+import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.navigation.Route
+import org.kiteio.punica.ui.rememberRemote
+import org.kiteio.punica.ui.rememberRemoteList
+import org.kiteio.punica.ui.runWithReLogin
 import java.time.DayOfWeek
 
 /**
@@ -57,7 +137,8 @@ fun CourseSystemScreen() {
         eduSystem?.runWithReLogin {
             // 进入选课系统并保存 Token
             courseSystem = catch({ null }) {
-                CourseSystem.from(eduSystem).also { courseSystem -> Tokens.edit { it.set(courseSystem.token) } }
+                CourseSystem.from(eduSystem)
+                    .also { courseSystem -> Tokens.edit { it.set(courseSystem.token) } }
             }
 
             // 通过 Token 进入选课系统
@@ -131,8 +212,12 @@ fun CourseSystemScreen() {
     }
 
     courseSystem?.run {
-        MyCoursesBottomSheet(visible = myCoursesBottomSheetVisible, onDismiss = { myCoursesBottomSheetVisible = false })
-        LogsBottomSheet(visible = logsBottomSheetVisible, onDismiss = { logsBottomSheetVisible = false })
+        MyCoursesBottomSheet(
+            visible = myCoursesBottomSheetVisible,
+            onDismiss = { myCoursesBottomSheetVisible = false })
+        LogsBottomSheet(
+            visible = logsBottomSheetVisible,
+            onDismiss = { logsBottomSheetVisible = false })
         InfoDialog(
             visible = infoDialogVisible,
             onDismiss = { infoDialogVisible = false },
@@ -183,7 +268,10 @@ private fun CourseSystem.MyCoursesBottomSheet(visible: Boolean, onDismiss: () ->
                     0 -> {
                         val coroutineScope = rememberCoroutineScope()
                         val myCourses =
-                            rememberRemoteList(key1 = this@MyCoursesBottomSheet, key2 = listChangeKey) { myCourses() }
+                            rememberRemoteList(
+                                key1 = this@MyCoursesBottomSheet,
+                                key2 = listChangeKey
+                            ) { myCourses() }
 
                         var courseDeleteDialogVisible by remember { mutableStateOf(false) }
                         var visibleMyCourse by remember { mutableStateOf<MyCourse?>(null) }
@@ -199,11 +287,20 @@ private fun CourseSystem.MyCoursesBottomSheet(visible: Boolean, onDismiss: () ->
                                             Title(text = it.name)
                                             SubduedText(text = it.teacher)
                                             KVText(key = getString(R.string.id), value = it.id)
-                                            KVText(key = getString(R.string.point), value = it.point)
+                                            KVText(
+                                                key = getString(R.string.point),
+                                                value = it.point
+                                            )
                                             KVText(key = getString(R.string.type), value = it.type)
 
-                                            if (it.time.isNotBlank()) KVText(key = getString(R.string.time), it.time)
-                                            if (it.area.isNotBlank()) KVText(key = getString(R.string.area), it.area)
+                                            if (it.time.isNotBlank()) KVText(
+                                                key = getString(R.string.time),
+                                                it.time
+                                            )
+                                            if (it.area.isNotBlank()) KVText(
+                                                key = getString(R.string.area),
+                                                it.area
+                                            )
                                         }
                                         Spacer(modifier = Modifier.width(dp4()))
                                         TextButton(
@@ -226,12 +323,13 @@ private fun CourseSystem.MyCoursesBottomSheet(visible: Boolean, onDismiss: () ->
                             visible = courseDeleteDialogVisible,
                             onDismiss = { courseDeleteDialogVisible = false },
                             onConfirm = {
-                                visibleMyCourse?.let { myCourse ->
-                                    coroutineScope.launchCatch {
+                                coroutineScope.launchCatch {
+                                    visibleMyCourse?.let { myCourse ->
                                         delete(myCourse.operateId)
                                         listChangeKey = !listChangeKey
                                         Toast(R.string.unselected)
                                     }
+                                    courseDeleteDialogVisible = false
                                 }
                             },
                             courseName = visibleMyCourse?.name
@@ -240,7 +338,10 @@ private fun CourseSystem.MyCoursesBottomSheet(visible: Boolean, onDismiss: () ->
 
                     1 -> {
                         val table =
-                            rememberRemoteList(key1 = this@MyCoursesBottomSheet, key2 = listChangeKey) { table() }
+                            rememberRemoteList(
+                                key1 = this@MyCoursesBottomSheet,
+                                key2 = listChangeKey
+                            ) { table() }
                         val daysOfWeek = getStringArray(R.array.days_of_week)
 
                         Column(modifier = Modifier.padding(dp4(2))) {
@@ -248,7 +349,10 @@ private fun CourseSystem.MyCoursesBottomSheet(visible: Boolean, onDismiss: () ->
                                 (-1..6).forEach {
                                     OutlinedCard(
                                         shape = RectangleShape,
-                                        border = BorderStroke(0.1.dp, MaterialTheme.colorScheme.surfaceVariant),
+                                        border = BorderStroke(
+                                            0.1.dp,
+                                            MaterialTheme.colorScheme.surfaceVariant
+                                        ),
                                         modifier = Modifier
                                             .weight(1f)
                                             .height(dp4(6))
@@ -265,7 +369,10 @@ private fun CourseSystem.MyCoursesBottomSheet(visible: Boolean, onDismiss: () ->
                                 items(table) {
                                     OutlinedCard(
                                         shape = RectangleShape,
-                                        border = BorderStroke(0.1.dp, MaterialTheme.colorScheme.surfaceVariant)
+                                        border = BorderStroke(
+                                            0.1.dp,
+                                            MaterialTheme.colorScheme.surfaceVariant
+                                        )
                                     ) {
                                         Box(
                                             modifier = Modifier
@@ -276,7 +383,9 @@ private fun CourseSystem.MyCoursesBottomSheet(visible: Boolean, onDismiss: () ->
                                             it?.let { text ->
                                                 Text(
                                                     text = text,
-                                                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
+                                                    style = MaterialTheme.typography.bodySmall.copy(
+                                                        fontSize = 10.sp
+                                                    ),
                                                     textAlign = TextAlign.Center
                                                 )
                                             }
@@ -411,7 +520,7 @@ private fun CourseSystem.CourseList(sort: Sort.Searchable, courses: List<Course>
             visible = searchParamsBottomSheetVisible,
             onDismiss = { searchParamsBottomSheetVisible = false },
             searchParams = searchParams,
-            onConfirm = { searchParams = it }
+            onConfirm = { searchParams = it; searchParamsBottomSheetVisible = false }
         )
     }
 }
@@ -502,7 +611,6 @@ private fun SearchParamsBottomSheet(
                         onClick = {
                             onConfirm(SearchParams())
                             Toast(R.string.reset_complete).show()
-                            onDismiss()
                         }
                     ) { Text(text = getString(R.string.reset)) }
 
@@ -517,7 +625,6 @@ private fun SearchParamsBottomSheet(
                                 )
                             )
                             Toast(R.string.saved).show()
-                            onDismiss()
                         }
                     ) { Text(text = getString(R.string.save)) }
                 }
@@ -651,12 +758,13 @@ private fun CourseSystem.CourseListOuter(
         visible = priorityDialogVisible,
         onDismiss = { priorityDialogVisible = false },
         onConfirm = {
-            visibleCourse?.run {
-                coroutineScope.launchCatch {
+            coroutineScope.launchCatch {
+                visibleCourse?.run {
                     select(operateId, sort, it)
                     selected.value = true
                     Toast(R.string.selected_).show()
                 }
+                priorityDialogVisible = false
             }
         }
     )
@@ -697,13 +805,25 @@ private fun Course(
                 Spacer(modifier = Modifier.height(dp4()))
 
                 Row {
-                    KVText(key = getString(R.string.id), value = course.courseId, modifier = Modifier.weight(1f))
+                    KVText(
+                        key = getString(R.string.id),
+                        value = course.courseId,
+                        modifier = Modifier.weight(1f)
+                    )
                     Spacer(modifier = Modifier.width(dp4(2)))
-                    KVText(key = getString(R.string.point), value = course.point, modifier = Modifier.weight(1f))
+                    KVText(
+                        key = getString(R.string.point),
+                        value = course.point,
+                        modifier = Modifier.weight(1f)
+                    )
                 }
 
                 Row {
-                    KVText(key = getString(R.string.teacher), value = course.teacher, modifier = Modifier.weight(1f))
+                    KVText(
+                        key = getString(R.string.teacher),
+                        value = course.teacher,
+                        modifier = Modifier.weight(1f)
+                    )
                     Spacer(modifier = Modifier.width(dp4(2)))
                     KVText(
                         key = getString(R.string.limit),
@@ -714,8 +834,14 @@ private fun Course(
 
                 Spacer(modifier = Modifier.height(dp4()))
 
-                if (course.time.isNotBlank()) KVText(key = getString(R.string.time), value = course.time)
-                if (course.area.isNotBlank()) KVText(key = getString(R.string.area), value = course.area)
+                if (course.time.isNotBlank()) KVText(
+                    key = getString(R.string.time),
+                    value = course.time
+                )
+                if (course.area.isNotBlank()) KVText(
+                    key = getString(R.string.area),
+                    value = course.area
+                )
 
                 if (course.status.isNotBlank() && !course.selected.value) {
                     Spacer(modifier = Modifier.height(dp4()))
@@ -845,6 +971,7 @@ private fun CourseSystem.CourseBottomSheet(
                     coroutineScope.launchCatch {
                         delete(operateId)
                         selected.value = false
+                        courseDeleteDialogVisible = false
                         Toast(R.string.unselected).show()
                     }
                 },
@@ -890,9 +1017,7 @@ private fun PriorityDialog(visible: Boolean, onDismiss: () -> Unit, onConfirm: (
                             }
                         )
                     }
-                ) {
-                    Text(text = getString(R.string.confirm))
-                }
+                ) { Text(text = getString(R.string.confirm)) }
             },
             dismissButton = {
                 TextButton(onClick = onDismiss) { Text(text = getString(R.string.cancel)) }
