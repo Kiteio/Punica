@@ -1,0 +1,25 @@
+[versions]
+punica-versionCode = "1"
+punica-versionName = "1.0.0"
+
+agp = "8.7.3"
+android-compileSdk = "35"
+android-minSdk = "29"
+android-targetSdk = "35"
+androidx-activityCompose = "1.9.3"
+androidx-lifecycle = "2.8.4"
+compose-multiplatform = "1.8.0-alpha01"
+kotlin = "2.1.0"
+kotlinx-coroutines = "1.10.1"
+
+[libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
+androidx-lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-runtime-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
+composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
