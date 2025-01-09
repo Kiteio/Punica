@@ -8,6 +8,8 @@
         width="160" />
 </p>
 
+[**更新日志**](readme/CHANGELOG.md)
+
 还是挺喜欢 Compose Multiplatform 框架，
 在重构 [石榴 Android](https://github.com/Kiteio/Punica) 代码的同时想再尝试开发跨平台版本。 
 
