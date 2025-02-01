@@ -2,7 +2,8 @@
 
 ### 2025.2.1
 
-- **修改**：http 客户端错误更正
+- **添加**：YesCaptcha 客户端
+- [**修改**：http 客户端错误更正](https://github.com/Kiteio/Punica-CMP/commit/ed5f6ae23cf7bca20ff07f4ec7d6c8fbbbcfb05a)
 
 ### 2025.1.17
 

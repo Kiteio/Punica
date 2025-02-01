@@ -16,3 +16,5 @@ captures
 !*.xcodeproj/project.xcworkspace/
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
+# YesCaptcha 密钥，其中定义了 `const val yesCaptchaKey = "***"`
+composeApp/src/commonMain/kotlin/org/kiteio/punica/Key.kt
