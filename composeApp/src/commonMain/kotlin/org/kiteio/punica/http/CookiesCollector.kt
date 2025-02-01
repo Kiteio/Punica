@@ -1,6 +1,6 @@
 package org.kiteio.punica.http
 
-import io.ktor.client.plugins.cookies.CookiesStorage
+import io.ktor.client.plugins.cookies.*
 import io.ktor.http.Cookie
 import io.ktor.http.Url
 import kotlinx.coroutines.sync.Mutex
@@ -10,8 +10,8 @@ import kotlinx.coroutines.sync.withLock
  * 收集所有 Cookie 的 [CookiesStorage] 实现（[参考](https://github.com/ktorio/ktor/blob/main/ktor-client/ktor-client-core/common/src/io/ktor/client/plugins/cookies/AcceptAllCookiesStorage.kt)）。
  */
 class CookiesCollector(
-    /** Cookie 集合，键为请求 [Url]，值为对应 Cookie 列表。 */
-    private val cookies: MutableMap<Url, MutableList<Cookie>> = mutableMapOf(),
+    /** Cookie 集合，键为请求 [Url] host，值为对应 Cookie 列表。 */
+    private val cookies: MutableMap<String, MutableList<Cookie>> = mutableMapOf(),
 ) : CookiesStorage {
     /** 互斥锁 */
     private val mutex = Mutex()
@@ -21,7 +21,7 @@ class CookiesCollector(
      * 返回 [requestUrl] 对应的所有 Cookie。
      */
     override suspend fun get(requestUrl: Url) =
-        mutex.withLock { cookies[requestUrl]?.toList() ?: emptyList() }
+        mutex.withLock { cookies[requestUrl.host]?.toList() ?: emptyList() }
 
 
     /**
@@ -29,7 +29,7 @@ class CookiesCollector(
      */
     override suspend fun addCookie(requestUrl: Url, cookie: Cookie) {
         mutex.withLock {
-            cookies.getOrPut(requestUrl) { mutableListOf() }.apply {
+            cookies.getOrPut(requestUrl.host) { mutableListOf() }.apply {
                 // 移除旧 Cookie
                 removeAll { it.name == cookie.name }
                 // 添加新 Cookie

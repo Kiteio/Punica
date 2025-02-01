@@ -1,10 +1,9 @@
 package org.kiteio.punica.http
 
-import io.ktor.client.HttpClient
-import io.ktor.client.request.HttpRequestBuilder
-import io.ktor.client.request.forms.submitForm
-import io.ktor.client.request.get
-import io.ktor.http.Parameters
+import io.ktor.client.*
+import io.ktor.client.request.*
+import io.ktor.client.request.forms.*
+import io.ktor.http.*
 
 /**
  * Ktor [HttpClient] 包装。
@@ -15,16 +14,23 @@ interface HttpClientWrapper {
 
 
     /**
-     * 发送 GET 请求，返回响应内容。
+     * 返回 GET 请求响应内容。
      */
-    suspend fun get(urlString: String, block: HttpRequestBuilder.() -> Unit) =
+    suspend fun get(urlString: String, block: HttpRequestBuilder.() -> Unit = {}) =
         httpClient.get(urlString, block)
 
 
     /**
-     * 发送 POST 请求，返回响应内容。
+     * 返回 POST 请求响应内容。
      */
-    suspend fun post(
+    suspend fun post(urlString: String, block: HttpRequestBuilder.() -> Unit = {}) =
+        httpClient.post(urlString, block)
+
+
+    /**
+     * 返回表单提交响应内容。
+     */
+    suspend fun submitForm(
         urlString: String,
         formParameters: Parameters = Parameters.Empty,
         block: HttpRequestBuilder.() -> Unit = {},
