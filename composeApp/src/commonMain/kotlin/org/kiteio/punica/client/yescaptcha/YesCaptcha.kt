@@ -7,7 +7,7 @@ import org.kiteio.punica.yesCaptchaKey
 /**
  * [YesCaptcha](https://yescaptcha.com/) 客户端。
  */
-interface YesCaptchaClient: HttpClientWrapper {
+interface YesCaptcha: HttpClientWrapper {
     /** 密钥（ClientKey） */
     val key: String
 }
@@ -15,10 +15,11 @@ interface YesCaptchaClient: HttpClientWrapper {
 
 /**
  * 返回以 [key] 作为客户端密钥的 YesCaptcha 客户端。
+ *
  * [key] 默认值 [yesCaptchaKey] 为开发者自费提供（参阅 .gitignore），不对外公开。
  */
-fun YesCaptchaClient(key: String = yesCaptchaKey): YesCaptchaClient {
-    return object : YesCaptchaClient {
+fun YesCaptcha(key: String = yesCaptchaKey): YesCaptcha {
+    return object : YesCaptcha {
         override val key = key
         override val httpClient = HttpClient("https://cn.yescaptcha.com")
     }

@@ -1,8 +1,12 @@
 # 1.0.0
 
+### 2025.2.9
+
+- **添加**：教务系统客户端课表功能
+
 ### 2025.2.1
 
-- **添加**：教务系统客户端登录功能
+- [**添加**：教务系统客户端登录功能](https://github.com/Kiteio/Punica-CMP/commit/c95bdc46d1050e205b2090bd4bea9de7fa20fd34)
 - [**添加**：YesCaptcha 客户端](https://github.com/Kiteio/Punica-CMP/commit/ae16fc394ebc186f0890abce0b8d130ce382ed8e)
 - [**修改**：http 客户端错误更正](https://github.com/Kiteio/Punica-CMP/commit/ed5f6ae23cf7bca20ff07f4ec7d6c8fbbbcfb05a)
 
