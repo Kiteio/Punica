@@ -36,6 +36,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(compose.foundation)
             implementation(compose.material3)
+            implementation(compose.materialIconsExtended)
             implementation(compose.runtime)
             implementation(compose.ui)
             implementation(libs.androidx.lifecycle.runtime.compose)
@@ -46,6 +47,8 @@ kotlin {
             implementation(libs.ktor.client.content.negotitation)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.material3.windowSizeClass)
+            implementation(libs.navigation.compose)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">小石榴</string>
+    <string name="timetable">课表</string>
+    <string name="module">模块</string>
+    <string name="settings">设置</string>
 </resources>

@@ -1,12 +1,16 @@
 # 1.0.0
 
+### 2025.2.11
+
+- **添加**：导航页面
+
 ### 2025.2.10
 
-- **更新依赖**
+- [**更新依赖**](https://github.com/Kiteio/Punica-CMP/commit/c3e2b82d4166a65f6761b64167f807e17e931d00)
 
 ### 2025.2.9
 
-- [**添加**：教务系统客户端课表功能]((https://github.com/Kiteio/Punica-CMP/commit/ed5ab2cbb9c4efcc643f5713fa2653f752545eff))
+- [**添加**：教务系统客户端课表功能](https://github.com/Kiteio/Punica-CMP/commit/ed5ab2cbb9c4efcc643f5713fa2653f752545eff)
 
 ### 2025.2.1
 
