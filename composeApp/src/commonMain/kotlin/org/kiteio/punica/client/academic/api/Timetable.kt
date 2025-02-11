@@ -5,14 +5,14 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import kotlinx.datetime.DayOfWeek
 import kotlinx.serialization.Serializable
-import org.kiteio.punica.client.academic.AcademicAffairsSystem
+import org.kiteio.punica.client.academic.AcademicSystem
 import org.kiteio.punica.client.academic.foundation.Term
 import org.kiteio.punica.serialization.Identifiable
 
 /**
  * 返回学期 [term] 的课表。
  */
-suspend fun AcademicAffairsSystem.getTimetable(term: Term): Timetable {
+suspend fun AcademicSystem.getTimetable(term: Term): Timetable {
     val text = get("jsxsd/xskb/xskb_list.do") {
         parameter("xnxq01id", term)
     }.bodyAsText()

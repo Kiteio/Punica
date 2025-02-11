@@ -13,7 +13,7 @@ import org.kiteio.punica.http.HttpClientWrapper
 /**
  * [教务系统](http://jwxt.gdufe.edu.cn/jsxsd/)客户端。
  */
-interface AcademicAffairsSystem : HttpClientWrapper {
+interface AcademicSystem : HttpClientWrapper {
     val userId: Long
 }
 
@@ -21,7 +21,7 @@ interface AcademicAffairsSystem : HttpClientWrapper {
 /**
  * 返回以 [userId]（学号）、[password]（门户密码） 登录的教务系统客户端。
  */
-suspend fun AcademicAffairsSystem(userId: Long, password: String): AcademicAffairsSystem {
+suspend fun AcademicSystem(userId: Long, password: String): AcademicSystem {
     val client = Client("http://jwxt.gdufe.edu.cn")
 
     // 获取并识别验证码
@@ -39,7 +39,7 @@ suspend fun AcademicAffairsSystem(userId: Long, password: String): AcademicAffai
     ).bodyAsText()
 
     // 若返回空文本，则登录成功；否则，解析 HTML 并获取 font 标签中的错误提示
-    return if (text.isEmpty()) object : AcademicAffairsSystem {
+    return if (text.isEmpty()) object : AcademicSystem {
         override val httpClient = client.httpClient
         override val userId = userId
     } else {
