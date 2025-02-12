@@ -20,7 +20,7 @@ data class Term(val startYear: Int, val ordinal: Int) {
         /**
          * 将“yyyy-yyyy-n”的 [string] 转化为 [Term]。
          */
-        fun from(string: String) = string.split("-").run {
+        fun parse(string: String) = string.split("-").run {
             Term(get(0).toInt(), get(2).toInt())
         }
     }
