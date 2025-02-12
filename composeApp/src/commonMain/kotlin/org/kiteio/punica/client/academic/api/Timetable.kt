@@ -64,9 +64,9 @@ suspend fun AcademicSystem.getTimetable(term: Term): Timetable {
 
                 cell.add(object : Course() {
                     override val name = textNodes[partIndex * 3].text()
-                    override val teacher = teacher
+                    override val teacher = teacher.ifEmpty { null }
                     override val weeks = weeks
-                    override val classroom = classroom
+                    override val classroom = classroom.ifEmpty { null }
                     override val sections = section
                     override val dayOfWeek = DayOfWeek(column + 1)
                 })
@@ -86,15 +86,15 @@ suspend fun AcademicSystem.getTimetable(term: Term): Timetable {
  * @property term 学期
  * @property note 备注
  * @property cells 课表项
- * @property id 学号 + 学期
  */
 @Serializable
-class Timetable(
+data class Timetable(
     val userId: Long,
     val term: Term,
     val note: String?,
     val cells: List<List<Course>?>,
 ) : Identifiable<String> {
+    /** [userId] + [term] */
     override val id = "$userId$term"
 }
 
@@ -112,9 +112,9 @@ class Timetable(
 @Serializable
 abstract class Course {
     abstract val name: String
-    abstract val teacher: String
+    abstract val teacher: String?
     abstract val weeks: Set<Int>
-    abstract val classroom: String
+    abstract val classroom: String?
     abstract val sections: Set<Int>
     abstract val dayOfWeek: DayOfWeek
 }

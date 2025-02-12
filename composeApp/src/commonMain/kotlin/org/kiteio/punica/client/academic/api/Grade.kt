@@ -4,6 +4,7 @@ import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.statement.*
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.client.academic.AcademicSystem
+import org.kiteio.punica.serialization.Identifiable
 
 /**
  * 返回课程考试和资质认证考试成绩。
@@ -17,18 +18,18 @@ suspend fun AcademicSystem.getGrades(): Grades {
 /**
  * 成绩。
  *
- * @property userId 学号
+ * @property id 学号
  * @property courses 课程考试
  * @property overview 课程考试概览
  * @property qualifications 资格认证考试
  */
 @Serializable
-class Grades(
-    val userId: Long,
+data class Grades(
+    override val id: Long,
     val courses: List<CourseGrade>,
     val overview: String,
     val qualifications: List<Grade>,
-)
+): Identifiable<Long>
 
 
 /**
@@ -87,18 +88,18 @@ private suspend fun AcademicSystem.getCoursesGrade(): Pair<List<CourseGrade>, St
                 score = tds[index + 7].text(),
                 time = tds[index + 1].text(),
                 courseId = tds[index + 2].text(),
-                dailyScore = tds[index + 4].text(),
-                labScore = tds[index + 5].text(),
-                finalScore = tds[index + 6].text(),
+                dailyScore = tds[index + 4].text().ifEmpty { null },
+                labScore = tds[index + 5].text().ifEmpty { null },
+                finalScore = tds[index + 6].text().ifEmpty { null },
                 credits = tds[index + 8].text(),
                 hours = tds[index + 9].text(),
                 assessmentMethod = tds[index + 10].text(),
                 category = tds[index + 11].text(),
                 type = tds[index + 12].text(),
-                electiveCategory = tds[index + 13].text(),
+                electiveCategory = tds[index + 13].text().ifEmpty { null },
                 examType = tds[index + 14].text(),
-                mark = tds[index + 15].text(),
-                note = tds[index + 16].text(),
+                mark = tds[index + 15].text().ifEmpty { null },
+                note = tds[index + 16].text().ifEmpty { null },
             )
         )
     }
@@ -140,21 +141,21 @@ private suspend fun AcademicSystem.getCoursesGrade(): Pair<List<CourseGrade>, St
  * @property note 备注
  */
 @Serializable
-class CourseGrade(
+data class CourseGrade(
     override val name: String,
     override val score: String,
     override val time: String,
     val courseId: String,
-    val dailyScore: String,
-    val labScore: String,
-    val finalScore: String,
+    val dailyScore: String?,
+    val labScore: String?,
+    val finalScore: String?,
     val credits: String,
     val hours: String,
     val assessmentMethod: String,
     val category: String,
     val type: String,
-    val electiveCategory: String,
+    val electiveCategory: String?,
     val examType: String,
-    val mark: String,
-    val note: String,
+    val mark: String?,
+    val note: String?,
 ) : Grade()
