@@ -62,14 +62,16 @@ suspend fun AcademicSystem.getTimetable(term: Term): Timetable {
                     }
                 }
 
-                cell.add(object : Course() {
-                    override val name = textNodes[partIndex * 3].text()
-                    override val teacher = teacher.ifEmpty { null }
-                    override val weeks = weeks
-                    override val classroom = classroom.ifEmpty { null }
-                    override val sections = section
-                    override val dayOfWeek = DayOfWeek(column + 1)
-                })
+                cell.add(
+                    MCourse(
+                        name = textNodes[partIndex * 3].text(),
+                        teacher = teacher.ifEmpty { null },
+                        weeks = weeks,
+                        classroom = classroom.ifEmpty { null },
+                        sections = section,
+                        dayOfWeek = DayOfWeek(column + 1),
+                    )
+                )
             }
             cells.add(cell.takeIf { it.size > 0 })
         } else cells.add(null)
@@ -109,15 +111,28 @@ data class Timetable(
  * @property sections 节次
  * @property dayOfWeek 星期
  */
-@Serializable
-abstract class Course {
-    abstract val name: String
-    abstract val teacher: String?
-    abstract val weeks: Set<Int>
-    abstract val classroom: String?
-    abstract val sections: Set<Int>
-    abstract val dayOfWeek: DayOfWeek
+interface Course {
+    val name: String
+    val teacher: String?
+    val weeks: Set<Int>
+    val classroom: String?
+    val sections: Set<Int>
+    val dayOfWeek: DayOfWeek
 }
+
+
+/**
+ * 课表课程。
+ */
+@Serializable
+data class MCourse(
+    override val name: String,
+    override val teacher: String?,
+    override val weeks: Set<Int>,
+    override val classroom: String?,
+    override val sections: Set<Int>,
+    override val dayOfWeek: DayOfWeek,
+) : Course
 
 
 /**

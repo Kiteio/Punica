@@ -2,16 +2,18 @@ package org.kiteio.punica.client.academic.api
 
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.statement.*
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.client.academic.AcademicSystem
+import org.kiteio.punica.client.academic.foundation.Term
 import org.kiteio.punica.serialization.Identifiable
 
 /**
  * 返回课程考试和资质认证考试成绩。
  */
 suspend fun AcademicSystem.getGrades(): Grades {
-    val pair = getCoursesGrade()
-    return Grades(userId, pair.first, pair.second, getQualificationsGrade())
+    val pair = getCoursesGrades()
+    return Grades(userId, pair.first, pair.second, getQualificationsGrades())
 }
 
 
@@ -29,26 +31,40 @@ data class Grades(
     val courses: List<CourseGrade>,
     val overview: String,
     val qualifications: List<Grade>,
-): Identifiable<Long>
+) : Identifiable<Long>
+
+
+/**
+ * 成绩。
+ *
+ * @property name 名称
+ * @property score 成绩
+ */
+interface Grade {
+    val name: String
+    val score: String
+}
 
 
 /**
  * 返回资质认证考试成绩。
  */
-private suspend fun AcademicSystem.getQualificationsGrade(): List<Grade> {
+private suspend fun AcademicSystem.getQualificationsGrades(): List<Grade> {
     val text = get("jsxsd/kscj/djkscj_list").bodyAsText()
 
-    val document = Ksoup.parse(text)
-    val tds = document.getElementsByTag("td")
+    val doc = Ksoup.parse(text)
+    val tds = doc.getElementsByTag("td")
 
     val grades = mutableListOf<Grade>()
     // 范围排除 Logo 和尾部加载中
     for (index in 1..<tds.size - 1 step 9) {
-        grades.add(object : Grade() {
-            override val name = tds[index + 1].text()
-            override val score = tds[index + 4].text()
-            override val time = tds[index + 8].text()
-        })
+        grades.add(
+            QualificationsGrade(
+                name = tds[index + 1].text(),
+                score = tds[index + 4].text(),
+                date = LocalDate.parse(tds[index + 8].text()),
+            )
+        )
     }
 
     return grades
@@ -56,28 +72,26 @@ private suspend fun AcademicSystem.getQualificationsGrade(): List<Grade> {
 
 
 /**
- * 成绩。
+ * 资质认证考试成绩。
  *
- * @property name 名称
- * @property score 分数
- * @property time 时间
+ * @property date 日期
  */
 @Serializable
-abstract class Grade {
-    abstract val name: String
-    abstract val score: String
-    abstract val time: String
-}
+data class QualificationsGrade(
+    override val name: String,
+    override val score: String,
+    val date: LocalDate,
+) : Grade
 
 
 /**
  * 返回课程考试成绩和概览。
  */
-private suspend fun AcademicSystem.getCoursesGrade(): Pair<List<CourseGrade>, String> {
+private suspend fun AcademicSystem.getCoursesGrades(): Pair<List<CourseGrade>, String> {
     val text = get("jsxsd/kscj/cjcx_list").bodyAsText()
 
-    val document = Ksoup.parse(text)
-    val tds = document.getElementsByTag("td")
+    val doc = Ksoup.parse(text)
+    val tds = doc.getElementsByTag("td")
 
     val grades = mutableListOf<CourseGrade>()
     // 范围排除 Logo
@@ -86,12 +100,12 @@ private suspend fun AcademicSystem.getCoursesGrade(): Pair<List<CourseGrade>, St
             CourseGrade(
                 name = tds[index + 3].text(),
                 score = tds[index + 7].text(),
-                time = tds[index + 1].text(),
+                term = Term.parse(tds[index + 1].text()),
                 courseId = tds[index + 2].text(),
                 dailyScore = tds[index + 4].text().ifEmpty { null },
                 labScore = tds[index + 5].text().ifEmpty { null },
                 finalScore = tds[index + 6].text().ifEmpty { null },
-                credits = tds[index + 8].text(),
+                credits = tds[index + 8].text().toDouble(),
                 hours = tds[index + 9].text(),
                 assessmentMethod = tds[index + 10].text(),
                 category = tds[index + 11].text(),
@@ -105,7 +119,7 @@ private suspend fun AcademicSystem.getCoursesGrade(): Pair<List<CourseGrade>, St
     }
 
     // <div class="Nsb_pw">
-    val overview = document.body().child(4).run {
+    val overview = doc.body().child(4).run {
         // 移除 <br>
         firstElementChild()?.remove()
         // 移除 <div>
@@ -123,9 +137,7 @@ private suspend fun AcademicSystem.getCoursesGrade(): Pair<List<CourseGrade>, St
 /**
  * 课程成绩。
  *
- * @property name 课程名称
- * @property score 成绩
- * @property time 学期
+ * @property term 学期
  * @property courseId 课程编号
  * @property dailyScore 平时成绩
  * @property labScore 实验成绩
@@ -144,12 +156,12 @@ private suspend fun AcademicSystem.getCoursesGrade(): Pair<List<CourseGrade>, St
 data class CourseGrade(
     override val name: String,
     override val score: String,
-    override val time: String,
+    val term: Term,
     val courseId: String,
     val dailyScore: String?,
     val labScore: String?,
     val finalScore: String?,
-    val credits: String,
+    val credits: Double,
     val hours: String,
     val assessmentMethod: String,
     val category: String,
@@ -158,4 +170,4 @@ data class CourseGrade(
     val examType: String,
     val mark: String?,
     val note: String?,
-) : Grade()
+) : Grade

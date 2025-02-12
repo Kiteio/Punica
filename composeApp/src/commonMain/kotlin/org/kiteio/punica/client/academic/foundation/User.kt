@@ -11,7 +11,7 @@ import org.kiteio.punica.serialization.Identifiable
  * @property name 用户名
  * @property password 门户密码
  * @property secondClassPwd 第二课堂密码
- * @property campusNetPwd 校园网密码
+ * @property networkPwd 校园网密码
  * @property cookies Cookie
  */
 @Serializable
@@ -20,6 +20,6 @@ data class User(
     val name: String,
     val password: String,
     val secondClassPwd: String,
-    val campusNetPwd: String,
+    val networkPwd: String,
     val cookies: MutableMap<String, MutableList<Cookie>>,
 ) : Identifiable<Int>

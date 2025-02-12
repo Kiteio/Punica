@@ -4,6 +4,7 @@ import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.statement.*
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.client.academic.AcademicSystem
+import org.kiteio.punica.client.academic.foundation.Campus
 import org.kiteio.punica.serialization.Identifiable
 
 /**
@@ -12,8 +13,8 @@ import org.kiteio.punica.serialization.Identifiable
 suspend fun AcademicSystem.getExams(): Exams {
     val text = get("jsxsd/xsks/xsksap_list").bodyAsText()
 
-    val document = Ksoup.parse(text)
-    val tds = document.getElementsByTag("td")
+    val doc = Ksoup.parse(text)
+    val tds = doc.getElementsByTag("td")
 
     val exams = mutableListOf<Exam>()
     // 范围排除 Logo
@@ -23,7 +24,7 @@ suspend fun AcademicSystem.getExams(): Exams {
                 courseId = tds[index + 1].text(),
                 courseName = tds[index + 2].text(),
                 time = tds[index + 3].text(),
-                campus = tds[index + 4].text(),
+                campus = if (tds[index + 4].text() == "广州校区") Campus.Canton else Campus.Foshan,
                 classroom = tds[index + 5].text(),
             )
         )
@@ -60,6 +61,6 @@ data class Exam(
     val courseId: String,
     val courseName: String,
     val time: String,
-    val campus: String,
+    val campus: Campus,
     val classroom: String,
 )

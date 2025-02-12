@@ -2,7 +2,8 @@
 
 ### 2025.2.12
 
-- **添加**：教务系统客户端执行计划功能
+- **修改**：教务系统客户端功能优化
+- [**添加**：教务系统客户端执行计划功能](https://github.com/Kiteio/Punica-CMP/commit/b781f215221051a85d651ef4a72dd828b50fe659)
 - [**添加**：教务系统客户端考试安排功能](https://github.com/Kiteio/Punica-CMP/commit/25e06480edf5408926b1c3b7159f01a144fc2cc8)
 - [**添加**：教务系统客户端成绩功能](https://github.com/Kiteio/Punica-CMP/commit/eaae33bcde4e8362715bfb32fee639c4e3fbcf62)
 
