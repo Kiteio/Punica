@@ -1,8 +1,12 @@
 # 1.0.0
 
+### 2025.2.12
+
+- **添加**：教务系统客户端成绩功能
+
 ### 2025.2.11
 
-- **添加**：教务系统客户端校园网默认密码功能
+- [**添加**：教务系统客户端校园网默认密码功能](https://github.com/Kiteio/Punica-CMP/commit/524c27c26fbfd0c3742e7aaa7e1104e9d7a7c415)
 - [**添加**：导航页面](https://github.com/Kiteio/Punica-CMP/commit/d3998ca41c9c0f0c90b4610c174b0dce1c530847)
     ![ ](img/d3998ca41c9c0f0c90b4610c174b0dce1c530847.png)
 
