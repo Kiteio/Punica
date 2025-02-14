@@ -1,8 +1,12 @@
 # 1.0.0
 
+### 2025.2.14
+
+- **添加**：教务系统客户端教师信息功能
+
 ### 2025.2.12
 
-- **添加**：教务系统客户端学期日历功能
+- [**添加**：教务系统客户端学期日历功能](https://github.com/Kiteio/Punica-CMP/commit/7260d37e45873cbad3aef7c7cfc8c95e2d657fe8)
 - [**添加**：教务系统客户端学业进度功能](https://github.com/Kiteio/Punica-CMP/commit/2d7c98be2cdbccbea759f6eaf03a26c05cbdfca1)
 - [**修改**：教务系统客户端功能优化](https://github.com/Kiteio/Punica-CMP/commit/678d127b66e67d098ed8b89d6dfd60c1d814bd23)
 - [**添加**：教务系统客户端执行计划功能](https://github.com/Kiteio/Punica-CMP/commit/b781f215221051a85d651ef4a72dd828b50fe659)

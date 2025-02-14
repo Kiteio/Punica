@@ -12,8 +12,8 @@ import punica.composeapp.generated.resources.campus_foshan
  */
 enum class Campus(val nameRes: StringResource) {
     /** 广州校区 */
-    Canton(Res.string.campus_canton),
+    CANTON(Res.string.campus_canton),
 
     /** 佛山校区 */
-    Foshan(Res.string.campus_foshan)
+    FO_SHAN(Res.string.campus_foshan)
 }

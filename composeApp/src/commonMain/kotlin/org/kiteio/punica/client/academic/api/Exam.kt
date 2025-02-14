@@ -24,7 +24,7 @@ suspend fun AcademicSystem.getExams(): Exams {
                 courseId = tds[index + 1].text(),
                 courseName = tds[index + 2].text(),
                 time = tds[index + 3].text(),
-                campus = if (tds[index + 4].text() == "广州校区") Campus.Canton else Campus.Foshan,
+                campus = if (tds[index + 4].text() == "广州校区") Campus.CANTON else Campus.FO_SHAN,
                 classroom = tds[index + 5].text(),
             )
         )
