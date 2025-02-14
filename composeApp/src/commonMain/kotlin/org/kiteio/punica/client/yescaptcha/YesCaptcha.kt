@@ -5,7 +5,7 @@ import org.kiteio.punica.http.HttpClientWrapper
 import org.kiteio.punica.yesCaptchaKey
 
 /**
- * [YesCaptcha](https://yescaptcha.com/) 客户端。
+ * [YesCaptcha](https://yescaptcha.com/) 。
  */
 interface YesCaptcha: HttpClientWrapper {
     /** 密钥（ClientKey） */

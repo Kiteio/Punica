@@ -2,6 +2,8 @@ package org.kiteio.punica.client.academic.api
 
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.statement.*
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.format.char
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.client.academic.AcademicSystem
 import org.kiteio.punica.client.academic.foundation.Campus
@@ -15,6 +17,14 @@ suspend fun AcademicSystem.getExams(): Exams {
 
     val doc = Ksoup.parse(text)
     val tds = doc.getElementsByTag("td")
+    // yyyy-MM-dd HH:mm
+    val formatter = LocalDateTime.Format {
+        year(); char('-')
+        monthNumber(); char('-')
+        dayOfMonth(); char(' ')
+        hour(); char(':')
+        minute()
+    }
 
     val exams = mutableListOf<Exam>()
     // 范围排除 Logo
@@ -23,7 +33,9 @@ suspend fun AcademicSystem.getExams(): Exams {
             Exam(
                 courseId = tds[index + 1].text(),
                 courseName = tds[index + 2].text(),
-                time = tds[index + 3].text(),
+                duration = tds[index + 3].text().split("~").let {
+                    LocalDateTime.parse(it[0], formatter)..LocalDateTime.parse(it[1])
+                },
                 campus = if (tds[index + 4].text() == "广州校区") Campus.CANTON else Campus.FO_SHAN,
                 classroom = tds[index + 5].text(),
             )
@@ -52,7 +64,7 @@ data class Exams(
  *
  * @property courseId 课程编号
  * @property courseName 课程名称
- * @property time 时间
+ * @property duration 持续时间
  * @property campus 校区
  * @property classroom 考场
  */
@@ -60,7 +72,7 @@ data class Exams(
 data class Exam(
     val courseId: String,
     val courseName: String,
-    val time: String,
+    val duration: ClosedRange<LocalDateTime>,
     val campus: Campus,
     val classroom: String,
 )

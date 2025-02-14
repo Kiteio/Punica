@@ -2,7 +2,8 @@
 
 ### 2025.2.14
 
-- **添加**：教务系统客户端课程课表功能
+- **添加**：选课系统客户端
+- [**添加**：教务系统客户端课程课表功能](https://github.com/Kiteio/Punica-CMP/commit/76f80d7f51dd4b6edf4fe9a3355654093a9644e8)
 - [**添加**：教务系统客户端教师信息功能](https://github.com/Kiteio/Punica-CMP/commit/324f95be9a4c0ccdd7ef7891954a03d4c9ff2132)
 
 ### 2025.2.12

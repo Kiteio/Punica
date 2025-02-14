@@ -8,4 +8,6 @@
     <string name="timetable">课表</string>
     <string name="module">模块</string>
     <string name="settings">设置</string>
+
+    <string name="course_system_inaccessible">选课系统无法访问</string>
 </resources>
