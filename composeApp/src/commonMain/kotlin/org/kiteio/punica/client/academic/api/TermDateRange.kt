@@ -9,7 +9,7 @@ import org.kiteio.punica.client.academic.AcademicSystem
 import org.kiteio.punica.client.academic.foundation.Term
 
 /**
- * 返回学期日历。
+ * 返回学期 [term] 的日历。
  */
 suspend fun AcademicSystem.getTermDateRange(term: Term): ClosedRange<LocalDate> {
     val text = submitForm(

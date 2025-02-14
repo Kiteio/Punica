@@ -63,21 +63,27 @@ suspend fun AcademicSystem.getTimetable(term: Term): Timetable {
                 }
 
                 cell.add(
-                    MCourse(
-                        name = textNodes[partIndex * 3].text(),
-                        teacher = teacher.ifEmpty { null },
-                        weeks = weeks,
-                        classroom = classroom.ifEmpty { null },
-                        sections = section,
-                        dayOfWeek = DayOfWeek(column + 1),
-                    )
+                    object : Course {
+                        override val name = textNodes[partIndex * 3].text()
+                        override val teacher = teacher.ifEmpty { null }
+                        override val weeks = weeks
+                        override val classroom = classroom.ifEmpty { null }
+                        override val sections = section
+                        override val dayOfWeek = DayOfWeek(column + 1)
+
+                    }
                 )
             }
             cells.add(cell.takeIf { it.size > 0 })
         } else cells.add(null)
     }
 
-    return Timetable(userId, term, tds[tds.lastIndex].text().takeIf { it != "未安排时间课程：" }, cells)
+    return Timetable(
+        userId,
+        term,
+        tds[tds.lastIndex].text().takeIf { it != "未安排时间课程：" },
+        cells,
+    )
 }
 
 
@@ -122,29 +128,15 @@ interface Course {
 
 
 /**
- * 课表课程。
+ * 将 [weeksString] 解析解析为 [Int] 并添加至 [MutableList]。
  */
-@Serializable
-data class MCourse(
-    override val name: String,
-    override val teacher: String?,
-    override val weeks: Set<Int>,
-    override val classroom: String?,
-    override val sections: Set<Int>,
-    override val dayOfWeek: DayOfWeek,
-) : Course
-
-
-/**
- * 将 [weeksStr] 解析解析为 [Int] 并添加至 [MutableList]。
- */
-fun MutableSet<Int>.addAllWeeks(weeksStr: String) {
+fun MutableSet<Int>.addAllWeeks(weeksString: String) {
     var firstNum = ""  // 读取到的第一个数字
     var secondNum = ""  // 读取到的第二个数字
     var isSecond = false  // 正在写入的是否为第二个数
 
-    for (index in weeksStr.indices) {
-        val char = weeksStr[index]
+    for (index in weeksString.indices) {
+        val char = weeksString[index]
 
         if (char.isDigit()) {
             if (isSecond) secondNum += char
