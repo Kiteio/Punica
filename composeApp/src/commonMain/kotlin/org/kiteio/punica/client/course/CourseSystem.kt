@@ -17,12 +17,6 @@ interface CourseSystem : HttpClientWrapper {
     /** 轮次 id */
     val id: String
 
-    /** 轮次名称 */
-    val name: String
-
-    /** 持续时间 */
-    val duration: ClosedRange<String>
-
     /** 学号 */
     val userId: Long
 }
@@ -45,8 +39,6 @@ suspend fun AcademicSystem.CourseSystem(courseSystemId: String? = null): CourseS
             else -> return object : CourseSystem {
                 override val httpClient = this@CourseSystem.httpClient
                 override val id = it
-                override val name = ""
-                override val duration = ""..""
                 override val userId = this@CourseSystem.userId
             }
         }
@@ -66,8 +58,6 @@ suspend fun AcademicSystem.CourseSystem(courseSystemId: String? = null): CourseS
         object : CourseSystem {
             override val httpClient = this@CourseSystem.httpClient
             override val id = id
-            override val name = tds[2].text().replace(tds[1].text(), "")
-            override val duration = tds[3].text()..tds[4].text()
             override val userId = this@CourseSystem.userId
         }
     }

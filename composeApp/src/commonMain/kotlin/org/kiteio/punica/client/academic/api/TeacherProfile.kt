@@ -82,7 +82,7 @@ suspend fun AcademicSystem.getTeacherProfile(teacherId: String): TeacherProfile 
                         val courses = if (index == trs.lastIndex - 6) teaching else taught
                         for (tdIndex in tds.indices step 4) {
                             courses.add(
-                                TaughtCourse(
+                                TCourse(
                                     name = tds[tdIndex + 1].text(),
                                     sort = tds[tdIndex + 2].text(),
                                     term = Term.parse(tds[tdIndex + 3].text()),
@@ -151,8 +151,8 @@ data class TeacherProfile(
     val weChat: String?,
     val email: String?,
     val biography: String?,
-    val taught: List<TaughtCourse>,
-    val teaching: List<TaughtCourse>,
+    val taught: List<TCourse>,
+    val teaching: List<TCourse>,
     val philosophy: String?,
     val slogan: String?,
 )
@@ -165,7 +165,7 @@ data class TeacherProfile(
  * @property sort 课程类别
  * @property term 学期
  */
-data class TaughtCourse(val name: String, val sort: String, val term: Term)
+data class TCourse(val name: String, val sort: String, val term: Term)
 
 
 /**
@@ -189,8 +189,8 @@ private class TeacherProfileBuilder {
     var weChat: String? = null
     var email: String? = null
     var biography: String? = null
-    val taught = mutableListOf<TaughtCourse>()
-    val teaching = mutableListOf<TaughtCourse>()
+    val taught = mutableListOf<TCourse>()
+    val teaching = mutableListOf<TCourse>()
     var philosophy: String? = null
     var slogan: String? = null
 

@@ -17,3 +17,9 @@ enum class Campus(val nameRes: StringResource) {
     /** 佛山校区 */
     FO_SHAN(Res.string.campus_foshan)
 }
+
+
+/**
+ * 校区唯一标识。
+ */
+val Campus.id get() = ordinal + 1
