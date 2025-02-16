@@ -7,9 +7,10 @@ import io.ktor.http.*
 
 /**
  * Ktor [HttpClient] 包装。
+ *
+ * @property httpClient Ktor [HttpClient]
  */
 interface HttpClientWrapper {
-    /** Ktor [HttpClient] */
     val httpClient: HttpClient
 
 

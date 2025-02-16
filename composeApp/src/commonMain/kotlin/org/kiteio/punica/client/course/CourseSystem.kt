@@ -12,12 +12,12 @@ import punica.composeapp.generated.resources.course_system_inaccessible
 
 /**
  * 选课系统。
+ *
+ * @property id 轮次 id
+ * @property userId 学号
  */
 interface CourseSystem : HttpClientWrapper {
-    /** 轮次 id */
     val id: String
-
-    /** 学号 */
     val userId: Long
 }
 

@@ -2,7 +2,8 @@
 
 ### 2025.2.16
 
-- **添加**：CET 客户端功能
+- **添加**：第二课堂客户端功能
+- [**添加**：CET 客户端功能](https://github.com/Kiteio/Punica-CMP/commit/a5504d50d3321b3dd141b54f2d164bb8b52b7ae5)
 
 ### 2025.2.15
 

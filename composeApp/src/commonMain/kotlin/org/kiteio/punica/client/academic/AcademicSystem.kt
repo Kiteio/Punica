@@ -12,9 +12,10 @@ import org.kiteio.punica.http.HttpClientWrapper
 
 /**
  * [教务系统](http://jwxt.gdufe.edu.cn/jsxsd/)。
+ *
+ * @property userId 学号
  */
 interface AcademicSystem : HttpClientWrapper {
-    /** 学号 */
     val userId: Long
 }
 

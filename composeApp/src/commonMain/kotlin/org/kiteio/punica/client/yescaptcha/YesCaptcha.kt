@@ -6,9 +6,10 @@ import org.kiteio.punica.yesCaptchaKey
 
 /**
  * [YesCaptcha](https://yescaptcha.com/) 。
+ *
+ * @property key 密钥（ClientKey）
  */
 interface YesCaptcha : HttpClientWrapper {
-    /** 密钥（ClientKey） */
     val key: String
 }
 
