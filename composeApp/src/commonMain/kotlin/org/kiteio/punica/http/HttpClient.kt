@@ -15,7 +15,7 @@ import org.kiteio.punica.serialization.Json
 fun HttpClient(baseUrl: String) = HttpClient {
     defaultRequest { url(urlString = baseUrl); header(HttpHeaders.AcceptEncoding, "br") }
     // 内容协商：Json
-    install(ContentNegotiation) { json(Json()) }
+    install(ContentNegotiation) { json(Json) }
     // 超时：4000ms
     install(HttpTimeout) { requestTimeoutMillis = 4000; connectTimeoutMillis = 4000 }
     // Cookie 管理
