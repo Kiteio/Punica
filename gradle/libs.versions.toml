@@ -16,6 +16,7 @@ kotlinx-serialization = "1.8.0"
 ksoup = "0.2.2"
 ktor = "3.0.3"
 navigation = "2.8.0-alpha12"
+otp = "2.4.1"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
@@ -32,6 +33,7 @@ ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "kto
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 material3-windowSizeClass = { module = "org.jetbrains.compose.material3:material3-window-size-class", version.ref = "compose-multiplatform" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation" }
+otp = { module = "dev.turingcomplete:kotlin-onetimepassword", version.ref = "otp" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

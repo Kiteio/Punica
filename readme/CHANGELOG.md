@@ -1,8 +1,12 @@
 # 1.0.0
 
+### 2025.2.17
+
+- **添加**：TOTP 功能
+
 ### 2025.2.16
 
-- **添加**：教务处客户端教务通知功能
+- [**添加**：教务处客户端教务通知功能](https://github.com/Kiteio/Punica-CMP/commit/8d59938fc335c3ffd191ab5a85fc358463ee79ea)
 - [**添加**：第二课堂客户端功能](https://github.com/Kiteio/Punica-CMP/commit/73e979ba89fa5c2b174b910d91a58f3bdfa69459)
 - [**添加**：CET 客户端功能](https://github.com/Kiteio/Punica-CMP/commit/a5504d50d3321b3dd141b54f2d164bb8b52b7ae5)
 
