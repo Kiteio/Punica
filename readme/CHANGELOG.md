@@ -2,7 +2,8 @@
 
 ### 2025.2.17
 
-- **添加**：TOTP 功能
+- **添加**：添加网页 VPN 客户端
+- [**添加**：TOTP 功能](https://github.com/Kiteio/Punica-CMP/commit/ebc7a802d4739de9e0c9e3d3d49e028c5ccbcad7)
 
 ### 2025.2.16
 

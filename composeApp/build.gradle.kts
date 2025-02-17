@@ -29,6 +29,7 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.cryptography.provider.jdk)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.otp)
         }
@@ -42,6 +43,7 @@ kotlin {
             implementation(compose.ui)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.cryptography.core)
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.ksoup)
@@ -53,11 +55,13 @@ kotlin {
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
+            implementation(libs.cryptography.provider.jdk)
             implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.otp)
         }
         iosMain.dependencies {
+            implementation(libs.cryptography.provider.apple)
             implementation(libs.ktor.client.darwin)
         }
     }

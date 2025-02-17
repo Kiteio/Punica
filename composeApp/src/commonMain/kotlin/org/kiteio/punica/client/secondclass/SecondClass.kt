@@ -19,14 +19,14 @@ import org.kiteio.punica.serialization.Json
 interface SecondClass : HttpClientWrapper {
     val id: String
     val token: String
-    val userId: String
+    val userId: Long
 }
 
 
 /**
  * 返回 [userId]、[password] 登录的第二课堂客户端。
  */
-suspend fun SecondClass(userId: String, password: String): SecondClass {
+suspend fun SecondClass(userId: Long, password: String): SecondClass {
     val client = Client("http://2ketang.gdufe.edu.cn")
 
     val response = client.submitForm(
@@ -38,7 +38,7 @@ suspend fun SecondClass(userId: String, password: String): SecondClass {
                     LoginParameter(
                         schoolId = "10018",
                         userId = userId,
-                        password = password.ifEmpty { userId }),
+                        password = password.ifEmpty { userId.toString() }),
                 ),
             )
         }
@@ -66,7 +66,7 @@ suspend fun SecondClass(userId: String, password: String): SecondClass {
 @Serializable
 private data class LoginParameter(
     @SerialName("school") val schoolId: String,
-    @SerialName("account") val userId: String,
+    @SerialName("account") val userId: Long,
     val password: String,
 )
 
