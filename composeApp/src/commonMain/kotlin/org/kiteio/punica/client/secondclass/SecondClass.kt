@@ -38,7 +38,7 @@ suspend fun SecondClass(userId: Long, password: String): SecondClass {
                     LoginParameter(
                         schoolId = "10018",
                         userId = userId,
-                        password = password.ifEmpty { userId.toString() }),
+                        password = password.ifEmpty { "$userId" }),
                 ),
             )
         }

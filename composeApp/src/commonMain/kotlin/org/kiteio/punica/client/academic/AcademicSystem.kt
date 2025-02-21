@@ -5,6 +5,7 @@ import com.fleeksoft.ksoup.select.Evaluator
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.util.*
+import org.kiteio.punica.client.academic.foundation.User
 import org.kiteio.punica.client.yescaptcha.YesCaptcha
 import org.kiteio.punica.client.yescaptcha.api.createTask
 import org.kiteio.punica.http.Client
@@ -21,10 +22,10 @@ interface AcademicSystem : HttpClientWrapper {
 
 
 /**
- * 返回以 [userId]（学号）、[password]（门户密码） 登录的教务系统客户端。
+ * 返回以 [user] 登录的教务系统客户端。
  */
-suspend fun AcademicSystem(userId: Long, password: String): AcademicSystem {
-    val client = Client("http://jwxt.gdufe.edu.cn")
+suspend fun AcademicSystem(user: User): AcademicSystem {
+    val client = Client("http://jwxt.gdufe.edu.cn", user.cookies)
 
     // 获取并识别验证码
     val base64 = client.get("jsxsd/verifycode.servlet").readRawBytes().encodeBase64()
@@ -34,8 +35,8 @@ suspend fun AcademicSystem(userId: Long, password: String): AcademicSystem {
     val text = client.submitForm(
         "jsxsd/xk/LoginToXkLdap",
         parameters {
-            append("USERNAME", userId.toString())
-            append("PASSWORD", password)
+            append("USERNAME", "${user.id}")
+            append("PASSWORD", user.password)
             append("RANDOMCODE", captcha)
         }
     ).bodyAsText()
@@ -43,7 +44,7 @@ suspend fun AcademicSystem(userId: Long, password: String): AcademicSystem {
     // 若返回空文本，则登录成功；否则，解析 HTML 并获取 font 标签中的错误提示
     return if (text.isEmpty()) object : AcademicSystem {
         override val httpClient = client.httpClient
-        override val userId = userId
+        override val userId = user.id
     } else {
         val doc = Ksoup.parse(text)
         val message = doc.selectFirst(Evaluator.Tag("font"))?.text()

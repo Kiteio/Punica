@@ -43,5 +43,21 @@ data class Term(val startYear: Int, val ordinal: Int) {
         fun parse(string: String) = string.split("-").run {
             Term(get(0).toInt(), get(2).toInt())
         }
+
+
+        /**
+         * 返回 [userId] 的所有学期。
+         */
+        fun list(userId: Long): List<Term> {
+            val startYear = "20${"$userId".substring(0..1)}".toInt()
+
+            val terms = mutableListOf<Term>()
+            for (year in startYear..startYear + 3) {
+                terms.add(Term(year, 1))
+                terms.add(Term(year, 2))
+            }
+
+            return terms
+        }
     }
 }

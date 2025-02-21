@@ -1,8 +1,11 @@
+import com.android.build.gradle.internal.api.ApkVariantOutputImpl
+import com.codingfeline.buildkonfig.compiler.FieldSpec
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.androidApplication)
+    alias(libs.plugins.buildkonfig)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.kotlinMultiplatform)
@@ -29,9 +32,11 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.appdirs)
             implementation(libs.cryptography.provider.jdk)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.otp)
+            implementation(libs.startup.runtine)
         }
         commonMain.dependencies {
             implementation(compose.components.resources)
@@ -41,8 +46,13 @@ kotlin {
             implementation(compose.materialIconsExtended)
             implementation(compose.runtime)
             implementation(compose.ui)
+            implementation(libs.alertKmp)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.composeSettings.ui)
+            implementation(libs.composeIcon.css)
+            implementation(libs.composeIcon.simple)
+            implementation(libs.composeIcon.tabler)
             implementation(libs.cryptography.core)
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.serialization.json)
@@ -51,10 +61,12 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.material3.windowSizeClass)
+            implementation(libs.materialkolor)
             implementation(libs.navigation.compose)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
+            implementation(libs.appdirs)
             implementation(libs.cryptography.provider.jdk)
             implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.ktor.client.okhttp)
@@ -85,6 +97,15 @@ android {
             isShrinkResources = true
         }
     }
+    applicationVariants.all {
+        buildOutputs.all {
+            if (this is ApkVariantOutputImpl) {
+                // punica-[Platform]-[VersionName].apk
+                outputFileName =
+                    "punica-android-${defaultConfig.versionName}.apk"
+            }
+        }
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
@@ -104,5 +125,17 @@ compose.desktop {
             packageName = "org.kiteio.punica"
             packageVersion = libs.versions.punica.versionName.get()
         }
+    }
+}
+
+
+buildkonfig {
+    packageName = "org.kiteio.punica"
+    objectName = "Build"
+
+    defaultConfigs {
+        buildConfigField(FieldSpec.Type.STRING, "appName", "Punica")
+        buildConfigField(FieldSpec.Type.STRING, "versionName", libs.versions.punica.versionName.get())
+        buildConfigField(FieldSpec.Type.STRING, "organization", "Kiteio")
     }
 }

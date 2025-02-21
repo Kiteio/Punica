@@ -8,7 +8,6 @@ import org.kiteio.punica.serialization.Identifiable
  * 用户。
  *
  * @property id 学号
- * @property name 用户名
  * @property password 门户密码
  * @property secondClassPwd 第二课堂密码
  * @property networkPwd 校园网密码
@@ -16,10 +15,9 @@ import org.kiteio.punica.serialization.Identifiable
  */
 @Serializable
 data class User(
-    override val id: Int,
-    val name: String,
+    override val id: Long,
     val password: String,
     val secondClassPwd: String,
     val networkPwd: String,
     val cookies: MutableMap<String, MutableList<Cookie>>,
-) : Identifiable<Int>
+) : Identifiable<Long>

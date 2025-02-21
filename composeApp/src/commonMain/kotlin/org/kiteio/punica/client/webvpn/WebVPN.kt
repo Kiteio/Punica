@@ -11,6 +11,7 @@ import io.ktor.http.*
 import io.ktor.util.*
 import io.ktor.utils.io.core.*
 import kotlinx.serialization.Serializable
+import org.kiteio.punica.client.academic.foundation.User
 import org.kiteio.punica.http.Client
 import org.kiteio.punica.http.HttpClientWrapper
 import kotlin.random.Random
@@ -22,13 +23,13 @@ interface WebVPN : HttpClientWrapper
 
 
 /**
- * 返回 [userId]、[password] 登录的 [WebVPN]。
+ * 返回 [user] 登录的 [WebVPN]。
  *
  * TODO("TOTP 校验成功后，重定向 Url 与浏览器不同。")
  */
 @OptIn(DelicateCryptographyApi::class)
-suspend fun WebVPN(userId: Long, password: String, onNeedTOTP: () -> String): WebVPN {
-    val client = Client("https://authserver.gdufe.edu.cn")
+suspend fun WebVPN(user: User, onNeedTOTP: () -> String): WebVPN {
+    val client = Client("https://authserver.gdufe.edu.cn", user.cookies)
     val text = client.get("authserver/login").bodyAsText()
 
     val doc = Ksoup.parse(text)
@@ -43,14 +44,14 @@ suspend fun WebVPN(userId: Long, password: String, onNeedTOTP: () -> String): We
         .keyDecoder().decodeFromByteArray(AES.Key.Format.RAW, key.toByteArray())
         .cipher().encryptWithIv(
             iv = randomString(16).toByteArray(),
-            plaintext = "${randomString(64)}$password".toByteArray(),
+            plaintext = "${randomString(64)}${user.password}".toByteArray(),
         ).encodeBase64()
 
     // 登录
     var headers = client.submitForm(
         "authserver/login",
         parameters {
-            append("username", userId.toString())
+            append("username", "${user.id}")
             append("password", encodedPassword)
             append("_eventId", "submit")
             append("cllt", "userNameLogin")

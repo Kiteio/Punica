@@ -1,8 +1,31 @@
 # 1.0.0
 
+### 2025.2.21
+
+- 添加：顶层导航页面内容
+
+    **Android**
+
+    <p align="center">
+        <img width="30%" src="img/2025.2.21-3.jpg" alt="screenshot" />
+        <img width="30%" src="img/2025.2.21-4.jpg" alt="screenshot" />
+        <img width="30%" src="img/2025.2.21-5.jpg" alt="screenshot" />
+    </p>
+
+    **桌面端**
+
+    <p align="center">
+        <img width="45%" src="img/2025.2.21-0.png" alt="screenshot" />
+        <img width="45%" src="img/2025.2.21-1.png" alt="screenshot" />
+    </p>
+
+    <p align="center">
+        <img width="45%" src="img/2025.2.21-2.png" alt="screenshot" />
+    </p>
+
 ### 2025.2.17
 
-- **添加**：添加网页 VPN 客户端
+- [**添加**：添加网页 VPN 客户端](https://github.com/Kiteio/Punica-CMP/commit/2c0a6b251468d37effaab445fe96998ea412f5ac)
 - [**添加**：TOTP 功能](https://github.com/Kiteio/Punica-CMP/commit/ebc7a802d4739de9e0c9e3d3d49e028c5ccbcad7)
 
 ### 2025.2.16
@@ -34,7 +57,7 @@
 
 - [**添加**：教务系统客户端校园网默认密码功能](https://github.com/Kiteio/Punica-CMP/commit/524c27c26fbfd0c3742e7aaa7e1104e9d7a7c415)
 - [**添加**：导航页面](https://github.com/Kiteio/Punica-CMP/commit/d3998ca41c9c0f0c90b4610c174b0dce1c530847)
-    ![ ](img/d3998ca41c9c0f0c90b4610c174b0dce1c530847.png)
+    ![screenshot](img/2025.2.11-0.png)
 
 ### 2025.2.10
 

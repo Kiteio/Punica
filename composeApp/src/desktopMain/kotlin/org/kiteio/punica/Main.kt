@@ -17,6 +17,6 @@ fun main() = application {
         title = stringResource(Res.string.app_name),
         icon = painterResource(Res.drawable.punica),
     ) {
-        App(widthSizeClass = calculateWindowSizeClass().widthSizeClass)
+        App(windowSizeClass = calculateWindowSizeClass())
     }
 }

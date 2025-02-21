@@ -30,8 +30,8 @@ suspend fun CourseSystem.search(
 ) = submitForm(
     "jsxsd/xsxkkc/xsxk${courseCategory.search}xk",
     parameters {
-        append("iDisplayStart", (pageSize * pageIndex).toString())
-        append("iDisplayLength", pageSize.toString())
+        append("iDisplayStart", "${pageSize * pageIndex}")
+        append("iDisplayLength", "$pageSize")
     },
 ) {
     when(courseCategory) {

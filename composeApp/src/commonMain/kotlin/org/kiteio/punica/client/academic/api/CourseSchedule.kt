@@ -16,7 +16,7 @@ import org.kiteio.punica.serialization.Identifiable
 suspend fun AcademicSystem.getCourseSchedule(term: Term): CourseSchedule {
     val text = submitForm(
         "jsxsd/kbcx/kbxx_kc_ifr",
-        parameters { append("xnxqh", term.toString()) }
+        parameters { append("xnxqh", "$term") }
     ) { timeout { requestTimeoutMillis = 25000 } }.bodyAsText()
 
     val doc = Ksoup.parse(text)
@@ -47,7 +47,8 @@ suspend fun AcademicSystem.getCourseSchedule(term: Term): CourseSchedule {
                         CCourse(
                             name = courseName,
                             teacher = teacher,
-                            weeks = mutableSetOf<Int>().apply { addAllWeeks(weeksString) },
+                            weeksString = weeksString,
+                            weeks = parseWeeksString(weeksString),
                             classroom = textNode[2].text().trim(),
                             sections = ((offset - 1) % 6 * 2).let { setOf(it + 1, it + 2) },
                             dayOfWeek = DayOfWeek((offset - 1) / 6 + 1),
@@ -86,6 +87,7 @@ data class CourseSchedule(
 data class CCourse(
     override val name: String,
     override val teacher: String?,
+    override val weeksString: String,
     override val weeks: Set<Int>,
     override val classroom: String?,
     override val sections: Set<Int>,

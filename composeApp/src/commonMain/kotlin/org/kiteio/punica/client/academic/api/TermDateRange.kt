@@ -14,7 +14,7 @@ import org.kiteio.punica.client.academic.foundation.Term
 suspend fun AcademicSystem.getTermDateRange(term: Term): ClosedRange<LocalDate> {
     val text = submitForm(
         "jsxsd/jxzl/jxzl_query",
-        parameters { append("xnxq01id", term.toString()) }
+        parameters { append("xnxq01id", "$term") }
     ).bodyAsText()
 
     val doc = Ksoup.parse(text)

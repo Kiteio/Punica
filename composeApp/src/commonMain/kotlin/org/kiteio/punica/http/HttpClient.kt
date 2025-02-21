@@ -10,14 +10,14 @@ import io.ktor.serialization.kotlinx.json.*
 import org.kiteio.punica.serialization.Json
 
 /**
- * 创建以 [baseUrl] 为 [HttpClient]
+ * 返回 [HttpClient]。
  */
-fun HttpClient(baseUrl: String) = HttpClient {
+fun HttpClient(baseUrl: String, cookies:  MutableMap<String, MutableList<Cookie>> = mutableMapOf()) = HttpClient {
     defaultRequest { url(urlString = baseUrl); header(HttpHeaders.AcceptEncoding, "br") }
     // 内容协商：Json
     install(ContentNegotiation) { json(Json) }
     // 超时：4000ms
     install(HttpTimeout) { requestTimeoutMillis = 4000; connectTimeoutMillis = 4000 }
     // Cookie 管理
-    install(HttpCookies) { storage = CookiesCollector() }
+    install(HttpCookies) { storage = CookiesCollector(cookies) }
 }

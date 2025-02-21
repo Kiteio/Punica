@@ -18,7 +18,7 @@ suspend fun AcademicSystem.getTimetable(term: Term): Timetable {
     }.bodyAsText()
 
     val doc = Ksoup.parse(text)
-    val tds = doc.getElementsByTag("td").apply { removeFirst() }
+    val tds = doc.getElementsByTag("td").apply { removeAt(0) }
 
     val cells = mutableListOf<MutableList<Course>?>()
 
@@ -47,7 +47,7 @@ suspend fun AcademicSystem.getTimetable(term: Term): Timetable {
                 val fonts = Ksoup.parse(parts[partIndex]).getElementsByTag("font")
 
                 var teacher = ""
-                val weeks = mutableSetOf<Int>()
+                var weeksString = ""
                 var classroom = ""
 
                 // 由 font 获取上课信息
@@ -57,7 +57,7 @@ suspend fun AcademicSystem.getTimetable(term: Term): Timetable {
                     // <font title="[类型]"></font>
                     when (font.attr("title")) {
                         "老师" -> teacher = fontText
-                        "周次(节次)" -> weeks.addAllWeeks(fontText)
+                        "周次(节次)" -> weeksString = fontText
                         "教室" -> classroom = fontText
                     }
                 }
@@ -66,11 +66,11 @@ suspend fun AcademicSystem.getTimetable(term: Term): Timetable {
                     object : Course {
                         override val name = textNodes[partIndex * 3].text()
                         override val teacher = teacher.ifEmpty { null }
-                        override val weeks = weeks
+                        override val weeksString = weeksString
+                        override val weeks = parseWeeksString(weeksString)
                         override val classroom = classroom.ifEmpty { null }
                         override val sections = section
                         override val dayOfWeek = DayOfWeek(column + 1)
-
                     }
                 )
             }
@@ -112,6 +112,7 @@ data class Timetable(
  *
  * @property name 名称
  * @property teacher 教师
+ * @property weeksString 周次字符串
  * @property weeks 周次
  * @property classroom 教室
  * @property sections 节次
@@ -120,6 +121,7 @@ data class Timetable(
 interface Course {
     val name: String
     val teacher: String?
+    val weeksString: String
     val weeks: Set<Int>
     val classroom: String?
     val sections: Set<Int>
@@ -128,15 +130,16 @@ interface Course {
 
 
 /**
- * 将 [weeksString] 解析解析为 [Int] 并添加至 [MutableList]。
+ * 返回 [text] 解析后 [Set]<[Int]>。
  */
-fun MutableSet<Int>.addAllWeeks(weeksString: String) {
+fun parseWeeksString(text: String): Set<Int> {
+    val set = mutableSetOf<Int>()
     var firstNum = ""  // 读取到的第一个数字
     var secondNum = ""  // 读取到的第二个数字
     var isSecond = false  // 正在写入的是否为第二个数
 
-    for (index in weeksString.indices) {
-        val char = weeksString[index]
+    for (index in text.indices) {
+        val char = text[index]
 
         if (char.isDigit()) {
             if (isSecond) secondNum += char
@@ -151,10 +154,10 @@ fun MutableSet<Int>.addAllWeeks(weeksString: String) {
             // 数字分隔符，结算此前输入
             ',', '，' -> {
                 if (isSecond) {
-                    addAll(firstNum.toInt()..secondNum.toInt())
+                    set.addAll(firstNum.toInt()..secondNum.toInt())
                     isSecond = false
                     secondNum = ""
-                } else add(firstNum.toInt())
+                } else set.add(firstNum.toInt())
                 firstNum = ""
             }
             // 跳过空字符、括号
@@ -164,17 +167,19 @@ fun MutableSet<Int>.addAllWeeks(weeksString: String) {
                 if (isSecond) {
                     val range = firstNum.toInt()..secondNum.toInt()
                     when (char) {
-                        '周' -> addAll(range)
-                        '单' -> addAll(range.filter { it % 2 != 0 })
-                        '双' -> addAll(range.filter { it % 2 == 0 })
+                        '周' -> set.addAll(range)
+                        '单' -> set.addAll(range.filter { it % 2 != 0 })
+                        '双' -> set.addAll(range.filter { it % 2 == 0 })
                     }
                 } else {
                     // 防止出现多余分隔符
-                    if (firstNum.isNotEmpty()) add(firstNum.toInt())
+                    if (firstNum.isNotEmpty()) set.add(firstNum.toInt())
                 }
 
                 break
             }
         }
     }
+
+    return set
 }

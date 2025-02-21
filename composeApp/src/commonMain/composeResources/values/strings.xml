@@ -5,9 +5,65 @@
     <string name="campus_canton">广州校区</string>
     <string name="campus_foshan">佛山校区</string>
 
-    <string name="timetable">课表</string>
-    <string name="module">模块</string>
-    <string name="settings">设置</string>
-
     <string name="course_system_inaccessible">选课系统无法访问</string>
+
+    <string name="nothing_provided">什么也没有</string>
+
+    <!-- TimetablePage.kt -->
+    <string name="week">第%1$d周</string>
+    <string name="reset">重置</string>
+    <string name="note">备注</string>
+    <string name="close">关闭</string>
+    <string name="display_at_timetable_bottom">在课表底部展示</string>
+    <string name="teacher">教师</string>
+    <string name="classroom">教室</string>
+    <string name="weeks">周次</string>
+    <string name="sections">节次</string>
+    <string name="day_of_week">星期</string>
+    <string-array name="days_of_week">
+        <item>一</item>
+        <item>二</item>
+        <item>三</item>
+        <item>四</item>
+        <item>五</item>
+        <item>六</item>
+        <item>日</item>
+    </string-array>
+
+    <!-- ModulesPage.kt -->
+    <string name="emergency_call">紧急电话</string>
+    <string name="academic_notice">教学通知</string>
+    <string name="frequently_used_websites">常用网站</string>
+    <string name="course_system">选课系统</string>
+    <string name="exam">考试安排</string>
+    <string name="cet">四六级</string>
+    <string name="grade">成绩</string>
+    <string name="second_class">第二课堂</string>
+    <string name="teacher_profile">教师信息</string>
+    <string name="course_timetable">课程课表</string>
+    <string name="implementation_plan">执行计划</string>
+    <string name="academic_progress">学业进度</string>
+    <string name="campus_network">校园网</string>
+    <string name="otp">OTP</string>
+
+    <!-- SettingsPage.kt -->
+    <string name="account">账号</string>
+    <string name="academic_system">教务系统</string>
+    <string name="not_logged_in">未登录</string>
+    <string name="common">常用</string>
+    <string name="current_week">当前周次</string>
+    <string name="campus">校区</string>
+    <string name="canton_haizhu">广州 · 海珠</string>
+    <string name="foshan_sanshui">佛山 · 三水</string>
+    <string name="theme_mode">主题模式</string>
+    <string name="theme_mode_default">跟随系统</string>
+    <string name="theme_mode_light">亮色</string>
+    <string name="theme_mode_dark">暗色</string>
+    <string name="about">关于</string>
+    <string name="version">版本</string>
+
+    <!-- HomePage.kt -->
+    <string name="timetable">课表</string>
+    <string name="modules">模块</string>
+    <string name="settings">设置</string>
 </resources>

@@ -16,7 +16,7 @@ suspend fun AcademicSystem.getTeachers(name: String, pageIndex: Int = 1): Teache
             append("jsxm", name)
             // 院系查询，院系过多，暂不考虑
             // append("kkyx", "10000")
-            append("pageIndex", pageIndex.toString())
+            append("pageIndex", "$pageIndex")
         },
     ).bodyAsText()
 
