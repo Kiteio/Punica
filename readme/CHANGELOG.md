@@ -1,8 +1,12 @@
 # 1.0.0
 
+### 2025.2.22
+
+- **添加**：DataStore
+
 ### 2025.2.21
 
-- 添加：顶层导航页面内容
+- [**添加**：顶层导航页面内容](https://github.com/Kiteio/Punica-CMP/commit/11f2abd868e28e0fda9ce522c17225968c877c43)
 
     **Android**
 

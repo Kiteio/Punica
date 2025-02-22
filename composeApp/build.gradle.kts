@@ -54,6 +54,7 @@ kotlin {
             implementation(libs.composeIcon.simple)
             implementation(libs.composeIcon.tabler)
             implementation(libs.cryptography.core)
+            implementation(libs.datastore)
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.ksoup)
