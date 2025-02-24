@@ -2,7 +2,6 @@ package org.kiteio.punica.client.academic.foundation
 
 import io.ktor.http.*
 import kotlinx.serialization.Serializable
-import org.kiteio.punica.serialization.Identifiable
 
 /**
  * 用户。
@@ -15,9 +14,9 @@ import org.kiteio.punica.serialization.Identifiable
  */
 @Serializable
 data class User(
-    override val id: Long,
-    val password: String,
-    val secondClassPwd: String,
-    val networkPwd: String,
-    val cookies: MutableMap<String, MutableList<Cookie>>,
-) : Identifiable<Long>
+    val id: String,
+    val password: String = "",
+    val secondClassPwd: String = "",
+    val networkPwd: String = "",
+    val cookies: MutableMap<String, MutableList<Cookie>> = mutableMapOf(),
+)

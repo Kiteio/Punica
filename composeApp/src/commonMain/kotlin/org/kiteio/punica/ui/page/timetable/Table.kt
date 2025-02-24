@@ -12,7 +12,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import org.kiteio.punica.client.academic.api.Course
+import org.kiteio.punica.client.academic.foundation.ICourse
 
 /**
  * 课表表格。
@@ -24,7 +24,7 @@ import org.kiteio.punica.client.academic.api.Course
 @Composable
 fun TimetableTable(
     currentPage: Int?,
-    courses: List<List<Course>?>,
+    courses: List<List<ICourse>?>,
     onItemClick: (Int) -> Unit,
     spacing: Dp,
     modifier: Modifier = Modifier,
@@ -96,7 +96,7 @@ private fun HorizontalGrid(
  * @param spacing 元素间隙
  */
 @Composable
-private fun Cell(course: Course?, onClick: () -> Unit, spacing: Dp, modifier: Modifier = Modifier) {
+private fun Cell(course: ICourse?, onClick: () -> Unit, spacing: Dp, modifier: Modifier = Modifier) {
     course?.run {
         Surface(
             onClick = onClick,

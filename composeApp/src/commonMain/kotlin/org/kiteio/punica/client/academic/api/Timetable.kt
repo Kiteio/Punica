@@ -6,8 +6,8 @@ import io.ktor.client.statement.*
 import kotlinx.datetime.DayOfWeek
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.client.academic.AcademicSystem
+import org.kiteio.punica.client.academic.foundation.Course
 import org.kiteio.punica.client.academic.foundation.Term
-import org.kiteio.punica.serialization.Identifiable
 
 /**
  * 返回学期 [term] 的课表。
@@ -63,15 +63,15 @@ suspend fun AcademicSystem.getTimetable(term: Term): Timetable {
                 }
 
                 cell.add(
-                    object : Course {
-                        override val name = textNodes[partIndex * 3].text()
-                        override val teacher = teacher.ifEmpty { null }
-                        override val weeksString = weeksString
-                        override val weeks = parseWeeksString(weeksString)
-                        override val classroom = classroom.ifEmpty { null }
-                        override val sections = section
-                        override val dayOfWeek = DayOfWeek(column + 1)
-                    }
+                    Course(
+                        name = textNodes[partIndex * 3].text(),
+                        teacher = teacher.ifEmpty { null },
+                        weeksString = weeksString,
+                        weeks = parseWeeksString(weeksString),
+                        classroom = classroom.ifEmpty { null },
+                        sections = section,
+                        dayOfWeek = DayOfWeek(column + 1),
+                    )
                 )
             }
             cells.add(cell.takeIf { it.size > 0 })
@@ -97,35 +97,13 @@ suspend fun AcademicSystem.getTimetable(term: Term): Timetable {
  */
 @Serializable
 data class Timetable(
-    val userId: Long,
+    val userId: String,
     val term: Term,
     val note: String?,
     val cells: List<List<Course>?>,
-) : Identifiable<String> {
+) {
     /** [userId] + [term] */
-    override val id = "$userId$term"
-}
-
-
-/**
- * 课程。
- *
- * @property name 名称
- * @property teacher 教师
- * @property weeksString 周次字符串
- * @property weeks 周次
- * @property classroom 教室
- * @property sections 节次
- * @property dayOfWeek 星期
- */
-interface Course {
-    val name: String
-    val teacher: String?
-    val weeksString: String
-    val weeks: Set<Int>
-    val classroom: String?
-    val sections: Set<Int>
-    val dayOfWeek: DayOfWeek
+    val id = "$userId$term"
 }
 
 

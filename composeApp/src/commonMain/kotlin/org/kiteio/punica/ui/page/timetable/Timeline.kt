@@ -9,8 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.flow.first
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.foundation.Campus
+import org.kiteio.punica.ui.rememberRBlocking
 
 /**
  * 课表时间线。
@@ -19,6 +21,8 @@ import org.kiteio.punica.client.academic.foundation.Campus
  */
 @Composable
 fun TimetableTimeline(spacing: Dp, modifier: Modifier = Modifier) {
+    val campus = rememberRBlocking { AppVM.campus.first() }
+
     Column(modifier = modifier) {
         for (index in 0..<6) {
             TimetableMealSpacer(index)
@@ -26,7 +30,7 @@ fun TimetableTimeline(spacing: Dp, modifier: Modifier = Modifier) {
             TimelineCard(spacing = spacing, modifier = Modifier.weight(1f)) {
                 val i = index * 2
 
-                with(AppVM.campus) {
+                with(campus) {
                     if (this@with == Campus.CANTON) {
                         // 广州校区
                         Text(schedule[i].start)

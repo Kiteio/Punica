@@ -17,14 +17,20 @@ import punica.composeapp.generated.resources.week
 
 /**
  * 课表顶部导航栏。
+ *
+ * @param week 周次
+ * @param currentPage 当前页码
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimetableVM.TopAppBar(
+    week: Int,
     currentPage: Int,
     onPageChange: (Int) -> Unit,
     onNoteDialogDisplayRequest: () -> Unit,
 ) {
+    val userId by AppVM.academicUserId.collectAsState(null)
+
     TopAppBar(
         title = {
             Row {
@@ -32,12 +38,12 @@ fun TimetableVM.TopAppBar(
                 Week(
                     currentPage = currentPage,
                     onPageChange = onPageChange,
-                    enabled = timetable != null,
+                    enabled = userId != null,
                 )
 
                 // 重置
-                if (currentPage != AppVM.week) {
-                    IconButton(onClick = { onPageChange(AppVM.week) }) {
+                if (currentPage != week) {
+                    IconButton(onClick = { onPageChange(week) }) {
                         Icon(
                             Icons.Outlined.Refresh,
                             contentDescription = stringResource(Res.string.reset),
@@ -48,7 +54,7 @@ fun TimetableVM.TopAppBar(
         },
         actions = {
             // 备注
-            IconButton(onClick = onNoteDialogDisplayRequest) {
+            IconButton(onClick = onNoteDialogDisplayRequest, enabled = timetable != null) {
                 Icon(
                     Icons.Outlined.Info,
                     contentDescription = stringResource(Res.string.note),
@@ -56,7 +62,7 @@ fun TimetableVM.TopAppBar(
             }
 
             // 学期
-            Term()
+            Term(userId = userId)
         }
     )
 }
@@ -101,17 +107,20 @@ private fun Week(currentPage: Int, onPageChange: (Int) -> Unit, enabled: Boolean
  * 学期。
  */
 @Composable
-private fun TimetableVM.Term() {
+private fun TimetableVM.Term(userId: String?) {
     var expanded by remember { mutableStateOf(false) }
 
     Box {
-        TextButton(onClick = { if (AppVM.user != null) expanded = true }) {
+        TextButton(
+            onClick = { expanded = true },
+            enabled = userId != null,
+        ) {
             Text("$term", style = MaterialTheme.typography.titleMedium)
         }
 
         // 下拉菜单
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            AppVM.user?.id?.let {
+            userId?.let {
                 val terms = Term.list(it)
 
                 for (item in terms) {

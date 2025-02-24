@@ -2,7 +2,7 @@ package org.kiteio.punica.ui.widget
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ErrorOutline
+import androidx.compose.material.icons.outlined.Inbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
@@ -20,11 +20,11 @@ import punica.composeapp.generated.resources.nothing_provided
  * @param isLoading 是否正在加载中
  */
 @Composable
-fun <T> ProvideNotNull(any: T?, isLoading: Boolean, modifier: Modifier = Modifier, content: @Composable T.() -> Unit) {
+fun <T> ProvideNotNull(any: T?, isLoading: Boolean, modifier: Modifier = Modifier, content: @Composable (T) -> Unit) {
     Box(modifier = modifier) {
         when {
             isLoading -> LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-            any != null -> content(any)
+            any != null && (any !is List<*> || any.isNotEmpty()) -> content(any)
             else -> Empty()
         }
     }
@@ -44,7 +44,7 @@ private fun Empty() {
         val text = stringResource(Res.string.nothing_provided)
 
         Icon(
-            Icons.Outlined.ErrorOutline,
+            Icons.Outlined.Inbox,
             contentDescription = text,
             modifier = Modifier.size(32.dp),
         )

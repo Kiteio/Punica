@@ -17,7 +17,6 @@ import org.kiteio.punica.client.course.CourseSystem
 import org.kiteio.punica.client.course.foundation.CourseCategory
 import org.kiteio.punica.client.course.foundation.CourseCategory.*
 import org.kiteio.punica.client.course.foundation.Section
-import org.kiteio.punica.serialization.Identifiable
 
 /**
  * 返回搜索到的课程列表。
@@ -112,7 +111,7 @@ private data class SearchBody(
  */
 @Serializable
 data class SCourse(
-    @SerialName("jx0404id") override val id: String,
+    @SerialName("jx0404id") val id: String,
     @SerialName("kch") val courseId: String,
     @SerialName("kcmc") val name: String,
     @SerialName("xf") val credits: Double,
@@ -132,7 +131,7 @@ data class SCourse(
     @SerialName("dwmc") val courseProvider: String,
     @SerialName("ksfs") val assessmentMethod: String,
     @SerialName("kkapList") val arrangements: List<CourseArrangement>,
-) : Identifiable<String>
+)
 
 
 /**

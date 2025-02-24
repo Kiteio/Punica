@@ -15,7 +15,10 @@ import androidx.compose.ui.unit.dp
 import compose.icons.CssGgIcons
 import compose.icons.TablerIcons
 import compose.icons.cssggicons.*
-import compose.icons.tablericons.*
+import compose.icons.tablericons.Book
+import compose.icons.tablericons.ChartLine
+import compose.icons.tablericons.Id
+import compose.icons.tablericons.Rocket
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -62,16 +65,15 @@ private fun Content() {
         ModuleImpl(Res.string.course_timetable, TablerIcons.Book),
         ModuleImpl(Res.string.implementation_plan, TablerIcons.Rocket),
         ModuleImpl(Res.string.academic_progress, TablerIcons.ChartLine),
-        ModuleImpl(Res.string.campus_network, TablerIcons.Wifi),
         ModuleImpl(Res.string.otp, Icons.Outlined.VerifiedUser),
     )
 
     Scaffold(contentWindowInsets = WindowInsets.statusBars) { innerPadding ->
         LazyVerticalGrid(
             columns = GridCells.Adaptive(if (isCompactWidth) 160.dp else 120.dp),
+            modifier = Modifier.fillMaxSize().padding(innerPadding),
             contentPadding = PaddingValues(8.dp),
             horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxSize().padding(innerPadding),
         ) {
             items(modules, key = { it.nameRes.key }) {
                 Module(

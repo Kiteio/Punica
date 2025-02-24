@@ -31,7 +31,7 @@ suspend fun SecondClass.getGrades(): SecondClassGrades {
  */
 @Serializable
 data class SecondClassGrades(
-    val userId: Long,
+    val userId: String,
     val grades: List<SecondClassGrade>,
 )
 

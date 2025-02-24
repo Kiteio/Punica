@@ -48,8 +48,8 @@ data class Term(val startYear: Int, val ordinal: Int) {
         /**
          * 返回 [userId] 的所有学期。
          */
-        fun list(userId: Long): List<Term> {
-            val startYear = "20${"$userId".substring(0..1)}".toInt()
+        fun list(userId: String): List<Term> {
+            val startYear = "20${userId.substring(0..1)}".toInt()
 
             val terms = mutableListOf<Term>()
             for (year in startYear..startYear + 3) {

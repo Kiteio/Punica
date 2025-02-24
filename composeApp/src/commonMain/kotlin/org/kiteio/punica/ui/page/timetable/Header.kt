@@ -13,7 +13,6 @@ import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.plus
 import org.jetbrains.compose.resources.stringArrayResource
-import org.kiteio.punica.AppVM
 import org.kiteio.punica.wrapper.now
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.days_of_week
@@ -21,6 +20,7 @@ import punica.composeapp.generated.resources.days_of_week
 /**
  * 课表星期。
  *
+ * @param week 周次
  * @param currentPage 当前页码
  * @param spacing 元素间隙
  * @param timelineWeight 时间线权重
@@ -28,6 +28,7 @@ import punica.composeapp.generated.resources.days_of_week
  */
 @Composable
 fun TimetableHeader(
+    week: Int,
     currentPage: Int,
     spacing: Dp,
     timelineWeight: Float,
@@ -37,7 +38,7 @@ fun TimetableHeader(
     val now = remember { LocalDate.now() }
     val ordinal = now.dayOfWeek.ordinal
 
-    val offset = currentPage - AppVM.week
+    val offset = currentPage - week
     val offsetDate = now.plus(DatePeriod(days = offset * 7))
 
     val daysOfWeek = stringArrayResource(Res.array.days_of_week)

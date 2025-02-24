@@ -5,12 +5,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.foundation.Campus
 import org.kiteio.punica.ui.theme.ThemeMode
 import org.kiteio.punica.ui.widget.SettingsGroup
 import org.kiteio.punica.ui.widget.SettingsMenuLink
+import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.*
 
 /**
@@ -18,17 +20,23 @@ import punica.composeapp.generated.resources.*
  */
 @Composable
 fun CommonSettingsGroup() {
+    val scope = rememberCoroutineScope()
+
     SettingsGroup(title = { Text(stringResource(Res.string.common)) }) {
+        // 主题模式
+        ThemeModeSetting(scope = scope)
+
         // 当前周次
-        WeeKSetting()
+        WeeKSetting(scope = scope)
 
         // 校区
+        val campus by AppVM.campus.collectAsState(Campus.CANTON)
         SettingsMenuLink(
             title = { Text(stringResource(Res.string.campus)) },
             subtitle = {
                 Text(
                     stringResource(
-                        when (AppVM.campus) {
+                        when (campus) {
                             Campus.CANTON -> Res.string.canton_haizhu
                             Campus.FO_SHAN -> Res.string.foshan_sanshui
                         }
@@ -41,53 +49,8 @@ fun CommonSettingsGroup() {
                     contentDescription = stringResource(Res.string.campus),
                 )
             },
-            onClick = { AppVM.switchCampus() },
+            onClick = { scope.launchCatching { AppVM.switchCampus() } },
         )
-
-        // 主题模式
-        ThemeModeSetting()
-    }
-}
-
-
-/**
- * 当前周次设置。
- */
-@Composable
-private fun WeeKSetting() {
-    var expanded by remember { mutableStateOf(false) }
-
-    Box {
-        SettingsMenuLink(
-            title = { Text(stringResource(Res.string.current_week)) },
-            subtitle = { Text(stringResource(Res.string.week, AppVM.week)) },
-            icon = {
-                Icon(
-                    Icons.Outlined.DateRange,
-                    contentDescription = stringResource(Res.string.current_week),
-                )
-            },
-            onClick = { expanded = true },
-        )
-
-        // 下拉菜单
-        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            repeat(AppVM.TIMETABLE_MAX_PAGE) {
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            stringResource(Res.string.week, it),
-                            color = if (it == AppVM.week) MaterialTheme.colorScheme.primary
-                            else LocalContentColor.current,
-                        )
-                    },
-                    onClick = {
-                        AppVM.changeWeek(it)
-                        expanded = false
-                    }
-                )
-            }
-        }
     }
 }
 
@@ -96,18 +59,19 @@ private fun WeeKSetting() {
  * 主题模式设置。
  */
 @Composable
-private fun ThemeModeSetting() {
+private fun ThemeModeSetting(scope: CoroutineScope) {
     var expanded by remember { mutableStateOf(false) }
+    val themeMode by AppVM.themeMode.collectAsState(ThemeMode.Default)
 
     Box {
         SettingsMenuLink(
             title = { Text(stringResource(Res.string.theme_mode)) },
             subtitle = {
-                Text(stringResource(AppVM.themeMode.nameRes))
+                Text(stringResource(themeMode.nameRes))
             },
             icon = {
                 Icon(
-                    when (AppVM.themeMode) {
+                    when (themeMode) {
                         ThemeMode.Default -> Icons.Outlined.AutoMode
                         ThemeMode.Light -> Icons.Outlined.LightMode
                         ThemeMode.Dark -> Icons.Outlined.DarkMode
@@ -125,13 +89,60 @@ private fun ThemeModeSetting() {
                     text = {
                         Text(
                             stringResource(it.nameRes),
-                            color = if (it == AppVM.themeMode) MaterialTheme.colorScheme.primary
+                            color = if (it == themeMode) MaterialTheme.colorScheme.primary
                             else LocalContentColor.current,
                         )
                     },
                     onClick = {
-                        AppVM.changeThemeMode(it)
-                        expanded = false
+                        scope.launchCatching {
+                            AppVM.changeThemeMode(it)
+                            expanded = false
+                        }
+                    }
+                )
+            }
+        }
+    }
+}
+
+
+/**
+ * 当前周次设置。
+ */
+@Composable
+private fun WeeKSetting(scope: CoroutineScope) {
+    var expanded by remember { mutableStateOf(false) }
+    val week by AppVM.week.collectAsState(1)
+
+    Box {
+        SettingsMenuLink(
+            title = { Text(stringResource(Res.string.current_week)) },
+            subtitle = { Text(stringResource(Res.string.week, week)) },
+            icon = {
+                Icon(
+                    Icons.Outlined.DateRange,
+                    contentDescription = stringResource(Res.string.current_week),
+                )
+            },
+            onClick = { expanded = true },
+        )
+
+        // 下拉菜单
+        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            repeat(AppVM.TIMETABLE_MAX_PAGE) {
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            stringResource(Res.string.week, it),
+                            color = if (it == week) MaterialTheme.colorScheme.primary
+                            else LocalContentColor.current,
+                        )
+                    },
+                    onClick = {
+                        scope.launchCatching {
+                            AppVM.changeWeek(it)
+                            expanded = false
+                        }
                     }
                 )
             }

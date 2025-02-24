@@ -18,7 +18,7 @@ import punica.composeapp.generated.resources.course_system_inaccessible
  */
 interface CourseSystem : HttpClientWrapper {
     val id: String
-    val userId: Long
+    val userId: String
 }
 
 

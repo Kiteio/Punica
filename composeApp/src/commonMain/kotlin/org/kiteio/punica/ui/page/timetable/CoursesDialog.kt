@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.isoDayNumber
 import org.jetbrains.compose.resources.stringResource
-import org.kiteio.punica.client.academic.api.Course
+import org.kiteio.punica.client.academic.foundation.ICourse
 import punica.composeapp.generated.resources.*
 
 /**
@@ -21,7 +21,7 @@ import punica.composeapp.generated.resources.*
  * @param courses 课程
  */
 @Composable
-fun CoursesDialog(visible: Boolean, onDismissRequest: () -> Unit, courses: List<Course>?) {
+fun CoursesDialog(visible: Boolean, onDismissRequest: () -> Unit, courses: List<ICourse>?) {
     if (visible) {
         AlertDialog(
             onDismissRequest = onDismissRequest,
@@ -54,7 +54,7 @@ fun CoursesDialog(visible: Boolean, onDismissRequest: () -> Unit, courses: List<
  * 课程。
  */
 @Composable
-private fun Course(course: Course, modifier: Modifier = Modifier) {
+private fun Course(course: ICourse, modifier: Modifier = Modifier) {
     Card(modifier = modifier) {
         Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
             // 课程名称

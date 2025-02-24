@@ -17,7 +17,7 @@ import org.kiteio.punica.http.HttpClientWrapper
  * @property userId 学号
  */
 interface AcademicSystem : HttpClientWrapper {
-    val userId: Long
+    val userId: String
 }
 
 
@@ -35,7 +35,7 @@ suspend fun AcademicSystem(user: User): AcademicSystem {
     val text = client.submitForm(
         "jsxsd/xk/LoginToXkLdap",
         parameters {
-            append("USERNAME", "${user.id}")
+            append("USERNAME", user.id)
             append("PASSWORD", user.password)
             append("RANDOMCODE", captcha)
         }

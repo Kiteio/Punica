@@ -1,18 +1,16 @@
 package org.kiteio.punica.ui.page.timetable
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
+import org.kiteio.punica.ui.widget.Checkbox
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.close
 import punica.composeapp.generated.resources.display_at_timetable_bottom
@@ -50,13 +48,11 @@ fun NoteDialog(
                         Spacer(modifier = Modifier.height(8.dp))
                     }
                     // 复选框：是否在底部展示
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Checkbox(
-                            bottomNoteVisible,
-                            onCheckedChange = { onBottomNoteVisibleChange() },
-                        )
-                        Text(stringResource(Res.string.display_at_timetable_bottom))
-                    }
+                    Checkbox(
+                        bottomNoteVisible,
+                        onCheckedChange = { onBottomNoteVisibleChange() },
+                        label = { Text(stringResource(Res.string.display_at_timetable_bottom)) },
+                    )
                 }
             },
         )

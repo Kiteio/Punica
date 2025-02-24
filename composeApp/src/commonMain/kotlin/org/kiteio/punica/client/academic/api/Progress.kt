@@ -6,7 +6,6 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.client.academic.AcademicSystem
-import org.kiteio.punica.serialization.Identifiable
 
 /**
  * 返回学业进度。
@@ -62,14 +61,14 @@ suspend fun AcademicSystem.getProgresses(): Progresses {
 /**
  * 学业进度。
  *
- * @property id 学号
+ * @property userId 学号
  * @property modules 学业进度模块
  */
 @Serializable
 data class Progresses(
-    override val id: Long,
+    val userId: String,
     val modules: List<ProgressModule>,
-) : Identifiable<Long>
+)
 
 
 /**

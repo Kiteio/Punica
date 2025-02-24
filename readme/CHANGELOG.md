@@ -1,8 +1,15 @@
 # 1.0.0
 
+### 2025.2.24
+
+- **添加**：账号页面
+    <p align="center">
+        <img width="30%" src="img/2025.2.24-0.jpg" alt="screenshot" />
+    </p>
+
 ### 2025.2.22
 
-- **添加**：DataStore
+- [**添加**：DataStore](https://github.com/Kiteio/Punica-CMP/commit/4e97e66f3575389d4eb59820d4147340800661e0)
 
 ### 2025.2.21
 

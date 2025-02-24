@@ -6,7 +6,6 @@ import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.client.academic.AcademicSystem
 import org.kiteio.punica.client.academic.foundation.Term
-import org.kiteio.punica.serialization.Identifiable
 
 /**
  * 返回课程考试和资质认证考试成绩。
@@ -20,18 +19,18 @@ suspend fun AcademicSystem.getGrades(): Grades {
 /**
  * 成绩。
  *
- * @property id 学号
+ * @property userId 学号
  * @property courses 课程考试
  * @property overview 课程考试概览
  * @property qualifications 资格认证考试
  */
 @Serializable
 data class Grades(
-    override val id: Long,
+    val userId: String,
     val courses: List<CourseGrade>,
     val overview: String,
     val qualifications: List<Grade>,
-) : Identifiable<Long>
+)
 
 
 /**

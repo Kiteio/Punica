@@ -3,12 +3,17 @@ package org.kiteio.punica.ui.page.timetable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.api.Timetable
 import org.kiteio.punica.client.academic.api.getTimetable
 import org.kiteio.punica.client.academic.foundation.Term
-import org.kiteio.punica.ui.widget.showToast
+import org.kiteio.punica.serialization.Stores
+import org.kiteio.punica.serialization.get
+import org.kiteio.punica.serialization.set
 
 class TimetableVM : ViewModel() {
     /** 课表 */
@@ -34,14 +39,26 @@ class TimetableVM : ViewModel() {
     suspend fun switchTimetable() {
         AppVM.academicSystem?.run {
             isTimetableLoading = true
+            // 本地获取
+            timetable = getTimetableFromStore()
+
             try {
-                timetable = getTimetable(term)
-            } catch (e: Exception) {
-                showToast(e)
+                // 教务系统获取
+                timetable = getTimetable(term).also { timetable ->
+                    // 本地保存
+                    Stores.timetable.edit { it[timetable.id] = timetable }
+                }
             } finally {
                 isTimetableLoading = false
             }
         }
+    }
+
+
+    private suspend fun getTimetableFromStore(): Timetable? {
+        return AppVM.academicUserId.first()?.let { userId ->
+            Stores.timetable.data.map { it.get<Timetable>("$userId$term") }
+        }?.first()
     }
 
 

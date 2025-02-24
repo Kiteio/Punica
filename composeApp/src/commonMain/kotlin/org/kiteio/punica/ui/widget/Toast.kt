@@ -2,8 +2,6 @@ package org.kiteio.punica.ui.widget
 
 import NotificationType
 import createNotification
-import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.getString
 
 private val notification = createNotification(
     NotificationType.TOAST
@@ -22,13 +20,5 @@ fun showToast(message: String) {
  * 显示 [throwable]。
  */
 fun showToast(throwable: Throwable) {
-    notification.show(throwable.message ?: throwable.toString())
-}
-
-
-/**
- * 显示 [stringResource]。
- */
-suspend fun showToast(stringResource: StringResource) {
-    notification.show(getString(stringResource))
+    notification.show(throwable.message ?: throwable::class.simpleName!!)
 }

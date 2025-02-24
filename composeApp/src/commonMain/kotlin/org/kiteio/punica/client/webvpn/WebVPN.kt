@@ -51,7 +51,7 @@ suspend fun WebVPN(user: User, onNeedTOTP: () -> String): WebVPN {
     var headers = client.submitForm(
         "authserver/login",
         parameters {
-            append("username", "${user.id}")
+            append("username", user.id)
             append("password", encodedPassword)
             append("_eventId", "submit")
             append("cllt", "userNameLogin")

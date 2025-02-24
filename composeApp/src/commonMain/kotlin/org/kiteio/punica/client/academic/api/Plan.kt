@@ -5,7 +5,6 @@ import io.ktor.client.statement.*
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.client.academic.AcademicSystem
 import org.kiteio.punica.client.academic.foundation.Term
-import org.kiteio.punica.serialization.Identifiable
 
 /**
  * 返回执行计划。
@@ -40,14 +39,14 @@ suspend fun AcademicSystem.getPlans(): Plans {
 /**
  * 执行计划。
  *
- * @property id 学号
+ * @property userId 学号
  * @property plans 执行计划
  */
 @Serializable
 data class Plans(
-    override val id: Long,
+    val userId: String,
     val plans: List<Plan>,
-) : Identifiable<Long>
+)
 
 
 /**

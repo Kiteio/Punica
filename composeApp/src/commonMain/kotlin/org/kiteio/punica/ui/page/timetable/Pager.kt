@@ -6,7 +6,7 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
-import org.kiteio.punica.client.academic.api.Course
+import org.kiteio.punica.client.academic.foundation.ICourse
 import org.kiteio.punica.ui.compositionlocal.LocalWindowSizeClass
 import org.kiteio.punica.ui.compositionlocal.isCompactWidth
 import org.kiteio.punica.ui.compositionlocal.isMediumHeight
@@ -24,7 +24,7 @@ import org.kiteio.punica.ui.widget.HorizontalPager
 @Composable
 fun TimetablePager(
     state: PagerState,
-    courses: List<List<Course>?>,
+    courses: List<List<ICourse>?>,
     onItemClick: (Int) -> Unit,
     lineHeight: Dp,
     spacing: Dp,
@@ -36,8 +36,8 @@ fun TimetablePager(
 
     HorizontalPager(state = state, modifier = modifier) {
         LazyColumn(
-            contentPadding = PaddingValues(spacing),
             modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(spacing),
         ) {
             item {
                 Row(

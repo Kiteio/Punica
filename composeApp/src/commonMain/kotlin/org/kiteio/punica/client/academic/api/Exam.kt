@@ -7,7 +7,6 @@ import kotlinx.datetime.format.char
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.client.academic.AcademicSystem
 import org.kiteio.punica.client.academic.foundation.Campus
-import org.kiteio.punica.serialization.Identifiable
 
 /**
  * 返回考试安排。
@@ -49,14 +48,14 @@ suspend fun AcademicSystem.getExams(): Exams {
 /**
  * 考试安排。
  *
- * @property id 学号
+ * @property userId 学号
  * @property exams 考试
  */
 @Serializable
 data class Exams(
-    override val id: Long,
+    val userId: String,
     val exams: List<Exam>,
-) : Identifiable<Long>
+)
 
 
 /**

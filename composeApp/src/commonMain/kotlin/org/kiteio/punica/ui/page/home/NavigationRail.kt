@@ -5,11 +5,14 @@ import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.AppVM
+import org.kiteio.punica.ui.compositionlocal.LocalIsDarkTheme
+import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.theme_mode
 
@@ -25,13 +28,14 @@ fun NavigationRail(
     onNavigate: (TopLevelRoute) -> Unit,
     navDestination: NavDestination?,
 ) {
-    val isDarkTheme = AppVM.isDarkTheme()
+    val scope = rememberCoroutineScope()
+    val isDarkTheme = LocalIsDarkTheme.current
 
     NavigationRail(
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
         header = {
             // 主题模式切换按钮
-            IconButton(onClick = { AppVM.switchTheme(isDarkTheme) }) {
+            IconButton(onClick = { scope.launchCatching { AppVM.switchTheme(isDarkTheme) } }) {
                 Icon(
                     if (isDarkTheme) Icons.Outlined.DarkMode else Icons.Outlined.LightMode,
                     contentDescription = stringResource(Res.string.theme_mode),

@@ -7,8 +7,8 @@ import io.ktor.http.*
 import kotlinx.datetime.DayOfWeek
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.client.academic.AcademicSystem
+import org.kiteio.punica.client.academic.foundation.CCourse
 import org.kiteio.punica.client.academic.foundation.Term
-import org.kiteio.punica.serialization.Identifiable
 
 /**
  * 返回学期 [term] 的课程课表。
@@ -68,29 +68,11 @@ suspend fun AcademicSystem.getCourseSchedule(term: Term): CourseSchedule {
 /**
  * 课程课表。
  *
- * @property id 学期
+ * @property term 学期
  * @property courses 课程。每一项是包含多个相同课程的列表。
  */
 @Serializable
 data class CourseSchedule(
-    override val id: Term,
+    val term: Term,
     val courses: List<List<CCourse>>,
-) : Identifiable<Term>
-
-
-/**
- * 课程。
- *
- * @property clazz 班级
- */
-@Serializable
-data class CCourse(
-    override val name: String,
-    override val teacher: String?,
-    override val weeksString: String,
-    override val weeks: Set<Int>,
-    override val classroom: String?,
-    override val sections: Set<Int>,
-    override val dayOfWeek: DayOfWeek,
-    val clazz: String,
-) : Course
+)
