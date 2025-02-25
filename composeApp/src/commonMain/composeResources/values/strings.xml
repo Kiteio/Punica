@@ -16,6 +16,15 @@
     <string name="nothing_provided">什么也没有</string>
     <string name="error">出现了点问题</string>
 
+    <!-- WebsitesPage.kt -->
+    <string name="gdufe_portal">融合门户</string>
+    <string name="gdufe_all">一体化平台</string>
+    <string name="gdufe_app">广财通</string>
+    <string name="gdufe_finance">财务系统</string>
+    <string name="gdufe_mooc">广财慕课</string>
+    <string name="gdufe_blackboard">毕博平台</string>
+    <string name="library">图书馆</string>
+
     <!-- EmergencyCallPage.kt -->
     <string name="copy">复制</string>
     <string name="copy_successful">复制成功</string>

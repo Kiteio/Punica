@@ -1,5 +1,6 @@
 package org.kiteio.punica.ui.page.notice
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -43,7 +44,6 @@ fun AcademicNoticePage() = viewModel { AcademicNoticeVM() }.Content()
 
 @Composable
 private fun AcademicNoticeVM.Content() {
-    val uriHandler = LocalUriHandler.current
     val notices = noticePager.collectAsLazyPagingItems()
 
     Scaffold(
@@ -52,14 +52,13 @@ private fun AcademicNoticeVM.Content() {
         Loading(notices.loadState.refresh, modifier = Modifier.padding(innerPadding)) {
             LazyVerticalStaggeredGrid(
                 columns = StaggeredGridCells.Adaptive(200.dp),
-                modifier = Modifier.padding(4.dp),
+                contentPadding = PaddingValues(4.dp)
             ) {
                 items(notices.itemCount) { index ->
                     val notice = notices[index]
                     notice?.let {
                         Notice(
                             notice = it,
-                            onClick = { uriHandler.openUri(it.urlString) },
                             modifier = Modifier.padding(4.dp),
                         )
                     }
@@ -74,8 +73,10 @@ private fun AcademicNoticeVM.Content() {
  * 通知。
  */
 @Composable
-private fun Notice(notice: Notice, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    ElevatedCard(onClick = onClick, modifier = modifier) {
+private fun Notice(notice: Notice, modifier: Modifier = Modifier) {
+    val uriHandler = LocalUriHandler.current
+
+    ElevatedCard(onClick = { uriHandler.openUri(notice.urlString) }, modifier = modifier) {
         ListItem(
             headlineContent = { Text(notice.title) },
             supportingContent = { Text(notice.time) }

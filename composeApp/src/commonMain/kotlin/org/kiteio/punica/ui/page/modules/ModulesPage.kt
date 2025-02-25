@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesomeMosaic
 import androidx.compose.material.icons.outlined.AutoAwesomeMosaic
-import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.material3.*
@@ -34,6 +33,7 @@ import org.kiteio.punica.ui.compositionlocal.isCompactWidth
 import org.kiteio.punica.ui.page.call.EmergencyCallRoute
 import org.kiteio.punica.ui.page.home.TopLevelRoute
 import org.kiteio.punica.ui.page.notice.AcademicNoticeRoute
+import org.kiteio.punica.ui.page.websites.WebsitesRoute
 import punica.composeapp.generated.resources.*
 
 /**
@@ -63,7 +63,7 @@ private fun Content() {
     val modules = listOf(
         EmergencyCallRoute,
         AcademicNoticeRoute,
-        ModuleImpl(Res.string.frequently_used_websites, Icons.Outlined.StarOutline),
+        WebsitesRoute,
         ModuleImpl(Res.string.course_system, CssGgIcons.Slack),
         ModuleImpl(Res.string.exam, CssGgIcons.Time),
         ModuleImpl(Res.string.cet, Icons.Outlined.Verified),

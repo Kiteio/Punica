@@ -16,6 +16,8 @@ import org.kiteio.punica.ui.page.home.HomePage
 import org.kiteio.punica.ui.page.home.HomeRoute
 import org.kiteio.punica.ui.page.notice.AcademicNoticePage
 import org.kiteio.punica.ui.page.notice.AcademicNoticeRoute
+import org.kiteio.punica.ui.page.websites.WebsitesPage
+import org.kiteio.punica.ui.page.websites.WebsitesRoute
 import org.kiteio.punica.ui.theme.PunicaTheme
 import org.kiteio.punica.wrapper.launchCatching
 
@@ -44,6 +46,7 @@ fun App(windowSizeClass: WindowSizeClass) {
             composable<AccountRoute> { AccountPage(it.toRoute<AccountRoute>()) }
             composable<EmergencyCallRoute> { EmergencyCallPage() }
             composable<AcademicNoticeRoute> { AcademicNoticePage() }
+            composable<WebsitesRoute> { WebsitesPage() }
         }
     }
 }

@@ -2,7 +2,9 @@
 
 ### 2025.2.25
 
-- **添加**：教学通知页面
+- **添加**：常用网站页面
+  ![screenshot](img/2025.2.25-2.png)
+- [**添加**：教学通知页面](https://github.com/Kiteio/Punica-CMP/commit/97053aef7c8fcee2329bc096b85251bea1101fc0)
     ![screenshot](img/2025.2.25-1.png)
 - [**添加**：紧急电话页面](https://github.com/Kiteio/Punica-CMP/commit/2b7fd30cc954cbb0e424c648bdfbad8909b31809)
     <p align="center">
