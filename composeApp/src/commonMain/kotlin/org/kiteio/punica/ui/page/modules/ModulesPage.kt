@@ -17,7 +17,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import compose.icons.CssGgIcons
 import compose.icons.TablerIcons
-import compose.icons.cssggicons.*
+import compose.icons.cssggicons.Clipboard
+import compose.icons.cssggicons.Dribbble
+import compose.icons.cssggicons.Slack
+import compose.icons.cssggicons.Time
 import compose.icons.tablericons.Book
 import compose.icons.tablericons.ChartLine
 import compose.icons.tablericons.Id
@@ -28,8 +31,9 @@ import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.ui.compositionlocal.LocalNavController
 import org.kiteio.punica.ui.compositionlocal.LocalWindowSizeClass
 import org.kiteio.punica.ui.compositionlocal.isCompactWidth
-import org.kiteio.punica.ui.page.emergencycall.EmergencyCallRoute
+import org.kiteio.punica.ui.page.call.EmergencyCallRoute
 import org.kiteio.punica.ui.page.home.TopLevelRoute
+import org.kiteio.punica.ui.page.notice.AcademicNoticeRoute
 import punica.composeapp.generated.resources.*
 
 /**
@@ -58,7 +62,7 @@ private fun Content() {
 
     val modules = listOf(
         EmergencyCallRoute,
-        ModuleImpl(Res.string.academic_notice, CssGgIcons.Bell),
+        AcademicNoticeRoute,
         ModuleImpl(Res.string.frequently_used_websites, Icons.Outlined.StarOutline),
         ModuleImpl(Res.string.course_system, CssGgIcons.Slack),
         ModuleImpl(Res.string.exam, CssGgIcons.Time),

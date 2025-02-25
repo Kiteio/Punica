@@ -1,4 +1,4 @@
-package org.kiteio.punica.ui.page.emergencycall
+package org.kiteio.punica.ui.page.call
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues

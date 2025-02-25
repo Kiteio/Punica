@@ -42,7 +42,7 @@ fun HomePage() = Content()
 
 
 @Composable
-fun Content() {
+private fun Content() {
     val windowSizeClass = LocalWindowSizeClass.current
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()

@@ -9,7 +9,7 @@ import org.kiteio.punica.client.office.AcademicOffice
  * 返回教务通知。
  */
 suspend fun AcademicOffice.getNotices(index: Int = 1): List<Notice> {
-    val urlString = "/4133/list${index}.${if (index > 11) "htm" else "psp"}"
+    val urlString = "/4133/list${index}.psp"
     val text = get(urlString).bodyAsText()
 
     val doc = Ksoup.parse(text)

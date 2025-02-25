@@ -10,10 +10,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.kiteio.punica.ui.page.account.AccountPage
 import org.kiteio.punica.ui.page.account.AccountRoute
-import org.kiteio.punica.ui.page.emergencycall.EmergencyCallPage
-import org.kiteio.punica.ui.page.emergencycall.EmergencyCallRoute
+import org.kiteio.punica.ui.page.call.EmergencyCallPage
+import org.kiteio.punica.ui.page.call.EmergencyCallRoute
 import org.kiteio.punica.ui.page.home.HomePage
 import org.kiteio.punica.ui.page.home.HomeRoute
+import org.kiteio.punica.ui.page.notice.AcademicNoticePage
+import org.kiteio.punica.ui.page.notice.AcademicNoticeRoute
 import org.kiteio.punica.ui.theme.PunicaTheme
 import org.kiteio.punica.wrapper.launchCatching
 
@@ -41,6 +43,7 @@ fun App(windowSizeClass: WindowSizeClass) {
             composable<HomeRoute> { HomePage() }
             composable<AccountRoute> { AccountPage(it.toRoute<AccountRoute>()) }
             composable<EmergencyCallRoute> { EmergencyCallPage() }
+            composable<AcademicNoticeRoute> { AcademicNoticePage() }
         }
     }
 }

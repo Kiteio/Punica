@@ -16,7 +16,7 @@ import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.foundation.ICourse
 import org.kiteio.punica.ui.page.home.TopLevelRoute
 import org.kiteio.punica.ui.rememberRBlocking
-import org.kiteio.punica.ui.widget.ProvideNotNull
+import org.kiteio.punica.ui.widget.LoadingNotNullOrEmpty
 import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.timetable
@@ -67,7 +67,7 @@ private fun TimetableVM.Content() {
         },
         contentWindowInsets = WindowInsets.statusBars,
     ) { innerPadding ->
-        ProvideNotNull(
+        LoadingNotNullOrEmpty(
             timetable,
             isLoading = isTimetableLoading,
             modifier = Modifier.padding(innerPadding),

@@ -64,6 +64,7 @@ kotlin {
             implementation(libs.material3.windowSizeClass)
             implementation(libs.materialkolor)
             implementation(libs.navigation.compose)
+            implementation(libs.paging.compose)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

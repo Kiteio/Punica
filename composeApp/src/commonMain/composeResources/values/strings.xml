@@ -14,6 +14,7 @@
     <string name="dismiss">取消</string>
 
     <string name="nothing_provided">什么也没有</string>
+    <string name="error">出现了点问题</string>
 
     <!-- EmergencyCallPage.kt -->
     <string name="copy">复制</string>
