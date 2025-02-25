@@ -15,6 +15,15 @@
 
     <string name="nothing_provided">什么也没有</string>
 
+    <!-- EmergencyCallPage.kt -->
+    <string name="copy">复制</string>
+    <string name="copy_successful">复制成功</string>
+    <string name="first_aid">门诊部急救</string>
+    <string name="campus_alarm">校园报警</string>
+    <string name="campus_police_office">校园警务室</string>
+    <string name="guanzhou_police_station">官洲派出所</string>
+    <string name="hours_24">24小时</string>
+
     <!-- AccountPage.kt -->
     <string name="user_id">学号</string>
     <string name="password">密码</string>

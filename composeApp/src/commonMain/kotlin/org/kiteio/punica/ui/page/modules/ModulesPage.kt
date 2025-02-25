@@ -6,7 +6,10 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesomeMosaic
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.AutoAwesomeMosaic
+import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.material.icons.outlined.Verified
+import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,6 +28,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.ui.compositionlocal.LocalNavController
 import org.kiteio.punica.ui.compositionlocal.LocalWindowSizeClass
 import org.kiteio.punica.ui.compositionlocal.isCompactWidth
+import org.kiteio.punica.ui.page.emergencycall.EmergencyCallRoute
 import org.kiteio.punica.ui.page.home.TopLevelRoute
 import punica.composeapp.generated.resources.*
 
@@ -53,7 +57,7 @@ private fun Content() {
     val navController = LocalNavController.current
 
     val modules = listOf(
-        ModuleImpl(Res.string.emergency_call, Icons.Outlined.Call),
+        EmergencyCallRoute,
         ModuleImpl(Res.string.academic_notice, CssGgIcons.Bell),
         ModuleImpl(Res.string.frequently_used_websites, Icons.Outlined.StarOutline),
         ModuleImpl(Res.string.course_system, CssGgIcons.Slack),

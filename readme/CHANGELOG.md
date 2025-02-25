@@ -1,8 +1,15 @@
 # 1.0.0
 
+### 2025.2.25
+
+- **添加**：紧急电话页面
+    <p align="center">
+        <img width="30%" src="img/2025.2.25-0.jpg" alt="screenshot" />
+    </p>
+
 ### 2025.2.24
 
-- **添加**：账号页面
+- [**添加**：账号页面](https://github.com/Kiteio/Punica-CMP/commit/aea6d5e6993518aa23da5353f9f9ba6b8c9c630c)
     <p align="center">
         <img width="30%" src="img/2025.2.24-0.jpg" alt="screenshot" />
     </p>
