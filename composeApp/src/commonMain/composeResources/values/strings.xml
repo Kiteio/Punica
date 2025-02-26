@@ -17,6 +17,21 @@
     <string name="nothing_provided">什么也没有</string>
     <string name="error">出现了点问题</string>
 
+    <!-- SecondClasPage.kt -->
+    <string name="activity">活动</string>
+    <string name="log">记录</string>
+    <string name="logo">标识</string>
+    <string name="online">线上</string>
+    <string name="offline">线下</string>
+    <string name="need_submit">需要提交作业</string>
+    <string name="application_deadline">报名截止时间</string>
+    <string name="place">名额</string>
+    <string name="admin">管理员</string>
+    <string name="phone_number">手机号</string>
+    <string name="coach">指导老师</string>
+    <string name="training_hours">指导学时</string>
+    <string name="host">主办方</string>
+
     <!-- GradesPage.kt -->
     <string name="search">搜索</string>
     <string name="course_grades">课程成绩</string>

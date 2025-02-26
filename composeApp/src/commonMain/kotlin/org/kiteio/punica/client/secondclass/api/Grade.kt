@@ -19,7 +19,7 @@ suspend fun SecondClass.getGrades(): SecondClassGrades {
 
     require(body.code == 200) { body.msg }
 
-    return SecondClassGrades(userId, body.data)
+    return SecondClassGrades(userId, body.data as List<SecondClassGrade>)
 }
 
 
@@ -43,11 +43,12 @@ data class SecondClassGrades(
  * @property score 分数
  * @property requiredScore 要求分数
  */
-interface SecondClassGrade {
-    val name: String
-    val score: Double
-    val requiredScore: Double
-}
+@Serializable
+data class SecondClassGrade(
+    @SerialName("classifyName") val name: String,
+    @SerialName("classifyHours") val score: Double,
+    @SerialName("classifySchoolMinHours") val requiredScore: Double,
+)
 
 
 /**
@@ -57,16 +58,5 @@ interface SecondClassGrade {
 private data class GradesBody(
     override val code: Int,
     override val msg: String,
-    override val data: List<SecondClassGradeImpl>,
-) : SecondClassBody<List<SecondClassGradeImpl>>
-
-
-/**
- * 第二课堂成绩。
- */
-@Serializable
-private data class SecondClassGradeImpl(
-    @SerialName("classifyName") override val name: String,
-    @SerialName("classifyHours") override val score: Double,
-    @SerialName("classifySchoolMinHours") override val requiredScore: Double,
-): SecondClassGrade
+    override val data: List<SecondClassGrade>,
+) : SecondClassBody<List<SecondClassGrade>>

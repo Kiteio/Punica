@@ -33,34 +33,33 @@ fun AccountVM.AccountBottomSheet(
     initialLoginWhenSave: Boolean = false,
 ) {
     if (visible) {
-        val scope = rememberCoroutineScope()
-
-        var userId by remember { mutableStateOf(initialUser?.id ?: "") }
-        var password by remember {
-            mutableStateOf(
-                when (type) {
-                    Academic -> initialUser?.password
-                    SecondClass -> initialUser?.secondClassPwd
-                    Network -> initialUser?.networkPwd
-                    OTP -> initialUser?.otpSecret
-                } ?: ""
-            )
-        }
-        // 保存时登录
-        var loginWhenSave by remember { mutableStateOf(initialLoginWhenSave) }
-
-        var passwordVisible by remember { mutableStateOf(false) }
-        val isUserIdError = userId.isBlank() || type != Network && userId.length != 11
-        val isPasswordError = type != SecondClass && password.isBlank()
-
         ModalBottomSheet(
             onDismissRequest = onDismissRequest,
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         ) {
+            val scope = rememberCoroutineScope()
             val focusManager = LocalFocusManager.current
 
+            var userId by remember { mutableStateOf(initialUser?.id ?: "") }
+            var password by remember {
+                mutableStateOf(
+                    when (type) {
+                        Academic -> initialUser?.password
+                        SecondClass -> initialUser?.secondClassPwd
+                        Network -> initialUser?.networkPwd
+                        OTP -> initialUser?.otpSecret
+                    } ?: ""
+                )
+            }
+            // 保存时登录
+            var loginWhenSave by remember { mutableStateOf(initialLoginWhenSave) }
+
+            var passwordVisible by remember { mutableStateOf(false) }
+            val isUserIdError = userId.isBlank() || type != Network && userId.length != 11
+            val isPasswordError = type != SecondClass && password.isBlank()
+
             Column(
-                modifier = Modifier.fillMaxSize().padding(8.dp)
+                modifier = Modifier.fillMaxSize().padding(16.dp)
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null

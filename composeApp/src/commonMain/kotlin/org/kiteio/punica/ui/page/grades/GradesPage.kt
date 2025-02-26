@@ -8,7 +8,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.SearchOff
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -41,19 +44,18 @@ object GradesRoute : ModuleRoute {
 fun GradesPage() = viewModel { GradesVM() }.Content()
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun GradesVM.Content() {
-    // 监听账号，更新课表
-    LaunchedEffectCatching(AppVM.academicSystem) {
-        updateGrades()
-    }
-
     val tabs = listOf(Res.string.course_grades, Res.string.qualification_grades)
     val state = rememberPagerState { tabs.size }
     var searchBarVisible by remember { mutableStateOf(false) }
     var query by remember { mutableStateOf("") }
     var noteDialogVisible by remember { mutableStateOf(false) }
+
+    // 监听账号，更新成绩
+    LaunchedEffectCatching(AppVM.academicSystem) {
+        updateGrades()
+    }
 
     Scaffold(
         topBar = {

@@ -66,7 +66,7 @@ private fun TimetableVM.Content() {
             TopAppBar(
                 week = week,
                 currentPage = state.currentPage,
-                onPageChange = { scope.launchCatching { state.scrollToPage(it) } },
+                onPageChange = { scope.launchCatching { state.requestScrollToPage(it) } },
                 onNoteDialogDisplayRequest = { noteDialogVisible = true },
             )
         },

@@ -2,7 +2,13 @@
 
 ### 2025.2.26
 
-- **添加**：成绩页面
+- **添加**：第二课堂页面
+    <p align="center">
+        <img width="30%" src="img/2025.2.26-2.jpg" alt="screenshot" />
+        <img width="30%" src="img/2025.2.26-3.jpg" alt="screenshot" />
+        <img width="30%" src="img/2025.2.26-4.jpg" alt="screenshot" />
+    </p>
+- [**添加**：成绩页面](https://github.com/Kiteio/Punica-CMP/commit/929c7947a9c4e0239cb57a4eaa6ef542f9645167)
 - [**添加**：四六级页面](https://github.com/Kiteio/Punica-CMP/commit/92b74c7ee0baba53cf54a411c52983fdeeb5b6bc)
     <p align="center">
         <img width="30%" src="img/2025.2.26-1.jpg" alt="screenshot" />

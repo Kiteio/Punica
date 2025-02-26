@@ -25,6 +25,8 @@ import org.kiteio.punica.ui.page.home.HomePage
 import org.kiteio.punica.ui.page.home.HomeRoute
 import org.kiteio.punica.ui.page.notice.AcademicNoticePage
 import org.kiteio.punica.ui.page.notice.AcademicNoticeRoute
+import org.kiteio.punica.ui.page.secondclass.SecondClassPage
+import org.kiteio.punica.ui.page.secondclass.SecondClassRoute
 import org.kiteio.punica.ui.page.websites.WebsitesPage
 import org.kiteio.punica.ui.page.websites.WebsitesRoute
 import org.kiteio.punica.ui.theme.PunicaTheme
@@ -60,6 +62,7 @@ fun App(windowSizeClass: WindowSizeClass, snackbarHostState: SnackbarHostState? 
                 composable<WebsitesRoute> { WebsitesPage() }
                 composable<CETRoute> { CETPage() }
                 composable<GradesRoute> { GradesPage() }
+                composable<SecondClassRoute> { SecondClassPage() }
             }
         }
     }

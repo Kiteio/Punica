@@ -6,6 +6,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.client.secondclass.SecondClass
 import org.kiteio.punica.client.secondclass.foundation.SecondClassBody
+import org.kiteio.punica.wrapper.timestampToString
 
 /**
  * 返回成绩获取记录。
@@ -27,14 +28,14 @@ suspend fun SecondClass.getGradeLogs(): List<GradeLog> {
  * @property activityName 活动名称
  * @property category 分类
  * @property score 分数
- * @property timestamp 时间戳
+ * @property time 时间
  * @property term 学期
  */
 interface GradeLog {
     val activityName: String
     val category: String
     val score: Double
-    val timestamp: Long
+    val time: String
     val term: String
 }
 
@@ -60,8 +61,9 @@ private data class GradeLogImpl(
     val optName: String?,
     @SerialName("className") override val category: String,
     @SerialName("score") override val score: Double,
-    @SerialName("sendTime") override val timestamp: Long,
+    @SerialName("sendTime") val timestamp: Long,
     @SerialName("xueqiName") override val term: String,
 ) : GradeLog {
-    override val activityName = "${actName ?: ""}${proName ?: ""} ${optName ?: ""}"
+    override val activityName = actName ?: proName ?: optName ?: ""
+    override val time = timestampToString(timestamp)
 }

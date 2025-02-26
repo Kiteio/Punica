@@ -8,6 +8,7 @@ import org.kiteio.punica.client.secondclass.SecondClass
 import org.kiteio.punica.client.secondclass.foundation.ActivityType
 import org.kiteio.punica.client.secondclass.foundation.SecondClassBody
 import org.kiteio.punica.serialization.Json
+import org.kiteio.punica.wrapper.timestampToString
 
 /**
  * 返回活动。
@@ -94,13 +95,13 @@ data class ActivityImpl(
     override val name: String,
     override val category: String,
     @SerialName("hours") override val score: Double,
-    val startTime: String,
-    val endTime: String,
+    val startTime: Long,
+    val endTime: Long,
     @SerialName("orgName") override val organization: String,
     @SerialName("logo") override val logoUrl: String,
     @SerialName("typeName") override val type: String,
     val oto: Int,
 ) : Activity {
-    override val duration = startTime..endTime
+    override val duration = timestampToString(startTime)..timestampToString(endTime)
     override val isOnline = oto == 1
 }
