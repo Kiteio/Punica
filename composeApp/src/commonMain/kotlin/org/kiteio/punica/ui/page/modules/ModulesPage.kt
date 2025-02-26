@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesomeMosaic
 import androidx.compose.material.icons.outlined.AutoAwesomeMosaic
-import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -30,6 +29,7 @@ import org.kiteio.punica.ui.compositionlocal.LocalNavController
 import org.kiteio.punica.ui.compositionlocal.LocalWindowSizeClass
 import org.kiteio.punica.ui.compositionlocal.isCompactWidth
 import org.kiteio.punica.ui.page.call.EmergencyCallRoute
+import org.kiteio.punica.ui.page.cet.CETRoute
 import org.kiteio.punica.ui.page.home.TopLevelRoute
 import org.kiteio.punica.ui.page.notice.AcademicNoticeRoute
 import org.kiteio.punica.ui.page.websites.WebsitesRoute
@@ -65,7 +65,7 @@ private fun Content() {
         WebsitesRoute,
         ModuleImpl(Res.string.course_system, CssGgIcons.Slack),
         ModuleImpl(Res.string.exam, CssGgIcons.Time),
-        ModuleImpl(Res.string.cet, Icons.Outlined.Verified),
+        CETRoute,
         ModuleImpl(Res.string.grade, CssGgIcons.Clipboard),
         ModuleImpl(Res.string.second_class, CssGgIcons.Dribbble),
         ModuleImpl(Res.string.teacher_profile, TablerIcons.Id),
