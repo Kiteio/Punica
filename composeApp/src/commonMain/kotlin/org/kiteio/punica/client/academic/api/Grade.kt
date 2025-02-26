@@ -11,8 +11,13 @@ import org.kiteio.punica.client.academic.foundation.Term
  * 返回课程考试和资质认证考试成绩。
  */
 suspend fun AcademicSystem.getGrades(): Grades {
-    val pair = getCoursesGrades()
-    return Grades(userId, pair.first, pair.second, getQualificationsGrades())
+    val pair = getCourseGrades()
+    return Grades(
+        userId,
+        pair.first.reversed(),
+        pair.second,
+        getQualificationGrades().reversed(),
+    )
 }
 
 
@@ -29,7 +34,7 @@ data class Grades(
     val userId: String,
     val courses: List<CourseGrade>,
     val overview: String,
-    val qualifications: List<Grade>,
+    val qualifications: List<QualificationGrade>,
 )
 
 
@@ -39,7 +44,7 @@ data class Grades(
  * @property name 名称
  * @property score 成绩
  */
-interface Grade {
+sealed interface Grade {
     val name: String
     val score: String
 }
@@ -48,17 +53,17 @@ interface Grade {
 /**
  * 返回资质认证考试成绩。
  */
-private suspend fun AcademicSystem.getQualificationsGrades(): List<Grade> {
+private suspend fun AcademicSystem.getQualificationGrades(): List<QualificationGrade> {
     val text = get("jsxsd/kscj/djkscj_list").bodyAsText()
 
     val doc = Ksoup.parse(text)
     val tds = doc.getElementsByTag("td")
 
-    val grades = mutableListOf<Grade>()
+    val grades = mutableListOf<QualificationGrade>()
     // 范围排除 Logo 和尾部加载中
     for (index in 1..<tds.size - 1 step 9) {
         grades.add(
-            QualificationsGrade(
+            QualificationGrade(
                 name = tds[index + 1].text(),
                 score = tds[index + 4].text(),
                 date = LocalDate.parse(tds[index + 8].text()),
@@ -76,7 +81,7 @@ private suspend fun AcademicSystem.getQualificationsGrades(): List<Grade> {
  * @property date 日期
  */
 @Serializable
-data class QualificationsGrade(
+data class QualificationGrade(
     override val name: String,
     override val score: String,
     val date: LocalDate,
@@ -86,7 +91,7 @@ data class QualificationsGrade(
 /**
  * 返回课程考试成绩和概览。
  */
-private suspend fun AcademicSystem.getCoursesGrades(): Pair<List<CourseGrade>, String> {
+private suspend fun AcademicSystem.getCourseGrades(): Pair<List<CourseGrade>, String> {
     val text = get("jsxsd/kscj/cjcx_list").bodyAsText()
 
     val doc = Ksoup.parse(text)

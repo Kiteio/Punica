@@ -12,7 +12,10 @@ import org.kiteio.punica.serialization.Json
 /**
  * 返回 [HttpClient]。
  */
-fun HttpClient(baseUrl: String, cookies:  MutableMap<String, MutableList<Cookie>> = mutableMapOf()) = HttpClient {
+fun HttpClient(
+    baseUrl: String,
+    cookies:  MutableMap<String, MutableList<Cookie>> = mutableMapOf(),
+) = HttpClient {
     defaultRequest { url(urlString = baseUrl); header(HttpHeaders.AcceptEncoding, "br") }
     // 内容协商：Json
     install(ContentNegotiation) { json(Json) }

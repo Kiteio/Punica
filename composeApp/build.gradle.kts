@@ -65,6 +65,7 @@ kotlin {
             implementation(libs.materialkolor)
             implementation(libs.navigation.compose)
             implementation(libs.paging.compose)
+            implementation(libs.sublime.fuzzy)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

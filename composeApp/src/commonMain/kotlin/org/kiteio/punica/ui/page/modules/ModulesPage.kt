@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import compose.icons.CssGgIcons
 import compose.icons.TablerIcons
-import compose.icons.cssggicons.Clipboard
 import compose.icons.cssggicons.Dribbble
 import compose.icons.cssggicons.Slack
 import compose.icons.cssggicons.Time
@@ -30,6 +29,7 @@ import org.kiteio.punica.ui.compositionlocal.LocalWindowSizeClass
 import org.kiteio.punica.ui.compositionlocal.isCompactWidth
 import org.kiteio.punica.ui.page.call.EmergencyCallRoute
 import org.kiteio.punica.ui.page.cet.CETRoute
+import org.kiteio.punica.ui.page.grades.GradesRoute
 import org.kiteio.punica.ui.page.home.TopLevelRoute
 import org.kiteio.punica.ui.page.notice.AcademicNoticeRoute
 import org.kiteio.punica.ui.page.websites.WebsitesRoute
@@ -66,7 +66,7 @@ private fun Content() {
         ModuleImpl(Res.string.course_system, CssGgIcons.Slack),
         ModuleImpl(Res.string.exam, CssGgIcons.Time),
         CETRoute,
-        ModuleImpl(Res.string.grade, CssGgIcons.Clipboard),
+        GradesRoute,
         ModuleImpl(Res.string.second_class, CssGgIcons.Dribbble),
         ModuleImpl(Res.string.teacher_profile, TablerIcons.Id),
         ModuleImpl(Res.string.course_timetable, TablerIcons.Book),

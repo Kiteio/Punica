@@ -1,4 +1,4 @@
-package org.kiteio.punica.ui.page.timetable
+package org.kiteio.punica.ui.widget
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,25 +10,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
-import org.kiteio.punica.ui.widget.Checkbox
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.close
-import punica.composeapp.generated.resources.display_at_timetable_bottom
 import punica.composeapp.generated.resources.note
 
 /**
  * 备注对话框。
  *
  * @param note 备注
- * @param bottomNoteVisible 底部备注是否可见
  */
 @Composable
 fun NoteDialog(
     visible: Boolean,
     onDismissRequest: () -> Unit,
     note: String?,
-    bottomNoteVisible: Boolean,
-    onBottomNoteVisibleChange: () -> Unit,
+    content: @Composable (() -> Unit)? = null,
 ) {
     if (visible) {
         AlertDialog(
@@ -47,12 +43,7 @@ fun NoteDialog(
                         Text(it)
                         Spacer(modifier = Modifier.height(8.dp))
                     }
-                    // 复选框：是否在底部展示
-                    Checkbox(
-                        bottomNoteVisible,
-                        onCheckedChange = { onBottomNoteVisibleChange() },
-                        label = { Text(stringResource(Res.string.display_at_timetable_bottom)) },
-                    )
+                    content?.invoke()
                 }
             },
         )

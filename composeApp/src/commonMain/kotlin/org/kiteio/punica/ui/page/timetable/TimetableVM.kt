@@ -25,7 +25,7 @@ class TimetableVM : ViewModel() {
         private set
 
     /** 是否在课表底部显示备注 */
-    var isBottomNoteVisible by mutableStateOf(true)
+    var bottomNoteVisible by mutableStateOf(true)
         private set
 
     /** 学期 */
@@ -34,19 +34,25 @@ class TimetableVM : ViewModel() {
 
 
     /**
-     * 切换课表。
+     * 更新课表。
      */
-    suspend fun switchTimetable() {
-        AppVM.academicSystem?.run {
+    suspend fun updateTimetable() {
+        AppVM.academicUserId.first()?.let { userId ->
             isTimetableLoading = true
             // 本地获取
-            timetable = getTimetableFromStore()
+            timetable = Stores.timetable.data.map {
+                it.get<Timetable>("$userId$term")
+            }.first().also {
+                if (it != null) isTimetableLoading = false
+            }
 
             try {
-                // 教务系统获取
-                timetable = getTimetable(term).also { timetable ->
-                    // 本地保存
-                    Stores.timetable.edit { it[timetable.id] = timetable }
+                AppVM.academicSystem?.run {
+                    // 教务系统获取
+                    timetable = getTimetable(term).also { timetable ->
+                        // 本地保存
+                        Stores.timetable.edit { it[timetable.id] = timetable }
+                    }
                 }
             } finally {
                 isTimetableLoading = false
@@ -55,18 +61,11 @@ class TimetableVM : ViewModel() {
     }
 
 
-    private suspend fun getTimetableFromStore(): Timetable? {
-        return AppVM.academicUserId.first()?.let { userId ->
-            Stores.timetable.data.map { it.get<Timetable>("$userId$term") }
-        }?.first()
-    }
-
-
     /**
      * 切换课表底部备注可见性。
      */
     fun switchBottomNoteVisible() {
-        isBottomNoteVisible = !isBottomNoteVisible
+        bottomNoteVisible = !bottomNoteVisible
     }
 
 

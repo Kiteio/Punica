@@ -16,6 +16,7 @@ import kotlinx.coroutines.delay
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
+import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.foundation.User
 import org.kiteio.punica.tool.TOTP
 import org.kiteio.punica.ui.widget.showToast
@@ -29,7 +30,7 @@ import punica.composeapp.generated.resources.*
  * OTP 用户。
  */
 @Composable
-fun OTPUser(user: User, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun AccountVM.OTPUser(user: User, onClick: () -> Unit, modifier: Modifier = Modifier) {
     val scope = rememberCoroutineScope()
     val clipboardManager = LocalClipboardManager.current
 
@@ -80,7 +81,9 @@ fun OTPUser(user: User, onClick: () -> Unit, modifier: Modifier = Modifier) {
                         )
                     }
 
-                    DeleteIconButton(onDeleteAccount = {})
+                    DeleteIconButton(
+                        onDeleteAccount = { scope.launchCatching { AppVM.deleteUser(type, user.id) } },
+                    )
                 }
             }
         )
@@ -130,7 +133,9 @@ fun AccountVM.User(user: User, isCurrentAccount: Boolean, onClick: () -> Unit, m
                         )
                     }
 
-                    DeleteIconButton(onDeleteAccount = {})
+                    DeleteIconButton(
+                        onDeleteAccount = { scope.launchCatching { AppVM.deleteUser(type, user.id) } },
+                    )
                 }
             }
         )

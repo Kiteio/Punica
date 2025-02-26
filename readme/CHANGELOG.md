@@ -2,7 +2,8 @@
 
 ### 2025.2.26
 
-- **添加**：四六级页面
+- **添加**：成绩页面
+- [**添加**：四六级页面](https://github.com/Kiteio/Punica-CMP/commit/92b74c7ee0baba53cf54a411c52983fdeeb5b6bc)
     <p align="center">
         <img width="30%" src="img/2025.2.26-1.jpg" alt="screenshot" />
     </p>

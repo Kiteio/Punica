@@ -12,14 +12,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.Serializable
+import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.foundation.ICourse
 import org.kiteio.punica.ui.page.home.TopLevelRoute
 import org.kiteio.punica.ui.rememberRBlocking
+import org.kiteio.punica.ui.widget.Checkbox
 import org.kiteio.punica.ui.widget.LoadingNotNullOrEmpty
+import org.kiteio.punica.ui.widget.NoteDialog
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.Res
+import punica.composeapp.generated.resources.display_at_timetable_bottom
 import punica.composeapp.generated.resources.timetable
 
 /**
@@ -52,9 +56,9 @@ private fun TimetableVM.Content() {
     var coursesDialogVisible by remember { mutableStateOf(false) }
     var visibleCourses by remember { mutableStateOf<List<ICourse>?>(null) }
 
-    // 监听账号和学期变化，切换课表
+    // 监听账号和学期变化，更新课表
     LaunchedEffectCatching(AppVM.academicSystem, term) {
-        scope.launchCatching { switchTimetable() }
+        updateTimetable()
     }
 
     Scaffold(
@@ -103,7 +107,7 @@ private fun TimetableVM.Content() {
                     modifier = Modifier.weight(1f),
                 )
                 // 课表备注
-                if (isBottomNoteVisible && timetable.note != null) {
+                if (bottomNoteVisible && timetable.note != null) {
                     Column(modifier = Modifier.fillMaxWidth()) {
                         HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant)
                         Text(
@@ -120,12 +124,17 @@ private fun TimetableVM.Content() {
 
     // 备注对话框
     NoteDialog(
-        noteDialogVisible,
+        visible = noteDialogVisible,
         onDismissRequest = { noteDialogVisible = false },
         note = timetable?.note,
-        bottomNoteVisible = isBottomNoteVisible,
-        onBottomNoteVisibleChange = ::switchBottomNoteVisible,
-    )
+    ) {
+        // 复选框：是否在底部展示
+        Checkbox(
+            bottomNoteVisible,
+            onCheckedChange = { switchBottomNoteVisible() },
+            label = { Text(stringResource(Res.string.display_at_timetable_bottom)) },
+        )
+    }
 
     CoursesDialog(
         coursesDialogVisible,

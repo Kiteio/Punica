@@ -14,6 +14,9 @@ object Stores {
 
     /** 课表 */
     val timetable by lazy { dataStore("timetable") }
+
+    /** 成绩 */
+    val grades by lazy { dataStore("grades") }
 }
 
 

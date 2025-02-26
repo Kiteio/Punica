@@ -20,6 +20,7 @@ import org.kiteio.punica.client.cet.api.getExam
 import org.kiteio.punica.ui.page.modules.ModuleRoute
 import org.kiteio.punica.ui.widget.LoadingNotNullOrEmpty
 import org.kiteio.punica.ui.widget.NavBackAppBar
+import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.cet
 
@@ -44,10 +45,12 @@ fun CETPage() = Content()
 private fun Content() {
     var isLoading by remember { mutableStateOf(true) }
     val exam by produceState<CETExam?>(null) {
-        try {
-            value = CET().getExam()
-        } finally {
-            isLoading = false
+        launchCatching {
+            try {
+                value = CET().getExam()
+            } finally {
+                isLoading = false
+            }
         }
     }
 
