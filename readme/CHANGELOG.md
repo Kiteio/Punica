@@ -2,7 +2,8 @@
 
 ### 2025.2.26
 
-- **添加**：OTP 账号
+- **修改**：桌面端 Toast 改为 Snackbar
+- [**添加**：OTP 账号](https://github.com/Kiteio/Punica-CMP/commit/c4d51b155516cad5c1350dc0a84d3b08751d2f24)
     <p align="center">
         <img width="30%" src="img/2025.2.26-0.jpg" alt="screenshot" />
     </p>

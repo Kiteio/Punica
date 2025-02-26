@@ -1,5 +1,8 @@
 package org.kiteio.punica
 
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -24,7 +27,7 @@ import org.kiteio.punica.ui.theme.PunicaTheme
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 
 @Composable
-fun App(windowSizeClass: WindowSizeClass) {
+fun App(windowSizeClass: WindowSizeClass, snackbarHostState: SnackbarHostState? = null) {
     val navController = rememberNavController()
     val themeMode by AppVM.themeMode.collectAsState(
         runBlocking { AppVM.themeMode.first() }
@@ -34,20 +37,24 @@ fun App(windowSizeClass: WindowSizeClass) {
     // 监听教务系统学号变化，更新教务系统
     LaunchedEffectCatching(userId) { AppVM.updateAcademicSystem(userId) }
 
-    PunicaTheme(
-        themeMode = themeMode,
-        windowSizeClass = windowSizeClass,
-        navController = navController,
+    Scaffold(
+        snackbarHost = { if (snackbarHostState != null) SnackbarHost(hostState = snackbarHostState) },
     ) {
-        NavHost(
+        PunicaTheme(
+            themeMode = themeMode,
+            windowSizeClass = windowSizeClass,
             navController = navController,
-            startDestination = HomeRoute,
         ) {
-            composable<HomeRoute> { HomePage() }
-            composable<AccountRoute> { AccountPage(it.toRoute<AccountRoute>()) }
-            composable<EmergencyCallRoute> { EmergencyCallPage() }
-            composable<AcademicNoticeRoute> { AcademicNoticePage() }
-            composable<WebsitesRoute> { WebsitesPage() }
+            NavHost(
+                navController = navController,
+                startDestination = HomeRoute,
+            ) {
+                composable<HomeRoute> { HomePage() }
+                composable<AccountRoute> { AccountPage(it.toRoute<AccountRoute>()) }
+                composable<EmergencyCallRoute> { EmergencyCallPage() }
+                composable<AcademicNoticeRoute> { AcademicNoticePage() }
+                composable<WebsitesRoute> { WebsitesPage() }
+            }
         }
     }
 }
