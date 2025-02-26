@@ -1,7 +1,9 @@
 package org.kiteio.punica
 
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -19,11 +21,10 @@ import org.kiteio.punica.ui.page.notice.AcademicNoticeRoute
 import org.kiteio.punica.ui.page.websites.WebsitesPage
 import org.kiteio.punica.ui.page.websites.WebsitesRoute
 import org.kiteio.punica.ui.theme.PunicaTheme
-import org.kiteio.punica.wrapper.launchCatching
+import org.kiteio.punica.wrapper.LaunchedEffectCatching
 
 @Composable
 fun App(windowSizeClass: WindowSizeClass) {
-    val scope = rememberCoroutineScope()
     val navController = rememberNavController()
     val themeMode by AppVM.themeMode.collectAsState(
         runBlocking { AppVM.themeMode.first() }
@@ -31,7 +32,7 @@ fun App(windowSizeClass: WindowSizeClass) {
     val userId by AppVM.academicUserId.collectAsState(null)
 
     // 监听教务系统学号变化，更新教务系统
-    LaunchedEffect(userId) { scope.launchCatching { AppVM.updateAcademicSystem(userId) } }
+    LaunchedEffectCatching(userId) { AppVM.updateAcademicSystem(userId) }
 
     PunicaTheme(
         themeMode = themeMode,

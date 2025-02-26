@@ -5,11 +5,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import kotlinx.coroutines.flow.flowOf
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.ui.compositionlocal.LocalNavController
-import org.kiteio.punica.ui.page.account.AccountCategory
 import org.kiteio.punica.ui.page.account.AccountRoute
+import org.kiteio.punica.ui.page.account.PasswordType
+import org.kiteio.punica.ui.page.account.PasswordType.*
 import org.kiteio.punica.ui.widget.SettingsGroup
 import org.kiteio.punica.ui.widget.SettingsMenuLink
 import punica.composeapp.generated.resources.Res
@@ -24,16 +26,19 @@ fun AccountSettingsGroup() {
     val navController = LocalNavController.current
 
     SettingsGroup(title = { Text(stringResource(Res.string.account)) }) {
-        AccountCategory.entries.forEach {
+        PasswordType.entries.forEach {
             val userId by when (it) {
-                AccountCategory.Academic -> AppVM.academicUserId
-                AccountCategory.SecondClass -> AppVM.secondClassUserId
-                AccountCategory.Network -> AppVM.networkUserId
+                Academic -> AppVM.academicUserId
+                SecondClass -> AppVM.secondClassUserId
+                Network -> AppVM.networkUserId
+                OTP -> flowOf(null)
             }.collectAsState(null)
 
             SettingsMenuLink(
                 title = { Text(stringResource(it.nameRes)) },
-                subtitle = { Text(userId ?: stringResource(Res.string.not_logged_in)) },
+                subtitle = if (it == OTP) null else {
+                    { Text(userId ?: stringResource(Res.string.not_logged_in)) }
+                },
                 icon = {
                     Icon(
                         it.icon,

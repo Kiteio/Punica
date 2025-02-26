@@ -38,3 +38,10 @@ inline operator fun <reified T> Preferences.get(key: String) =
  * 移除 [key]。
  */
 fun MutablePreferences.remove(key: String) = remove(stringPreferencesKey(key))
+
+
+/**
+ * 移除符合 [predicate] 的 key。
+ */
+fun MutablePreferences.removeAll(predicate: (String) -> Boolean) =
+    asMap().keys.map { it.name }.filter(predicate).onEach { remove(it) }

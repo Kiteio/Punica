@@ -17,6 +17,7 @@ import org.kiteio.punica.client.academic.foundation.ICourse
 import org.kiteio.punica.ui.page.home.TopLevelRoute
 import org.kiteio.punica.ui.rememberRBlocking
 import org.kiteio.punica.ui.widget.LoadingNotNullOrEmpty
+import org.kiteio.punica.wrapper.LaunchedEffectCatching
 import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.timetable
@@ -52,7 +53,7 @@ private fun TimetableVM.Content() {
     var visibleCourses by remember { mutableStateOf<List<ICourse>?>(null) }
 
     // 监听账号和学期变化，切换课表
-    LaunchedEffect(AppVM.academicSystem, term) {
+    LaunchedEffectCatching(AppVM.academicSystem, term) {
         scope.launchCatching { switchTimetable() }
     }
 

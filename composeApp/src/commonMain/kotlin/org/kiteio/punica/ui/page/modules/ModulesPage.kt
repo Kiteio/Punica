@@ -8,7 +8,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesomeMosaic
 import androidx.compose.material.icons.outlined.AutoAwesomeMosaic
 import androidx.compose.material.icons.outlined.Verified
-import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -73,7 +72,6 @@ private fun Content() {
         ModuleImpl(Res.string.course_timetable, TablerIcons.Book),
         ModuleImpl(Res.string.implementation_plan, TablerIcons.Rocket),
         ModuleImpl(Res.string.academic_progress, TablerIcons.ChartLine),
-        ModuleImpl(Res.string.otp, Icons.Outlined.VerifiedUser),
     )
 
     Scaffold(contentWindowInsets = WindowInsets.statusBars) { innerPadding ->

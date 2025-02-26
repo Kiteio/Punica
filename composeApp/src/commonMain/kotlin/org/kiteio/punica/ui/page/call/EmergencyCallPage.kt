@@ -32,7 +32,7 @@ import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.*
 
 /**
- * 紧急电话路由。
+ * 紧急电话页面路由。
  */
 @Serializable
 object EmergencyCallRoute : ModuleRoute {

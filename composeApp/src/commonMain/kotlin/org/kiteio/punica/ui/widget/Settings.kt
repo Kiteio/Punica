@@ -39,7 +39,7 @@ fun SettingsGroup(
 @Composable
 fun SettingsMenuLink(
     title: @Composable () -> Unit,
-    subtitle: @Composable () -> Unit,
+    subtitle: (@Composable () -> Unit)?,
     icon: @Composable () -> Unit,
     onClick: () -> Unit,
 ) {
@@ -51,12 +51,14 @@ fun SettingsMenuLink(
                 content = title,
             )
         },
-        subtitle = {
-            // 设置字体透明度 0.6f
-            CompositionLocalProvider(
-                LocalContentColor provides LocalContentColor.current.copy(0.6f),
-                content = subtitle,
-            )
+        subtitle = subtitle?.run {
+            {
+                // 设置字体透明度 0.6f
+                CompositionLocalProvider(
+                    LocalContentColor provides LocalContentColor.current.copy(0.6f),
+                    content = subtitle,
+                )
+            }
         },
         icon = icon,
         onClick = onClick,

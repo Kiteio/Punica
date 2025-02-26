@@ -26,7 +26,7 @@ import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.academic_notice
 
 /**
- * 教学通知路由。
+ * 教学通知页面路由。
  */
 @Serializable
 object AcademicNoticeRoute : ModuleRoute {

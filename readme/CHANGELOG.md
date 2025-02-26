@@ -1,8 +1,15 @@
 # 1.0.0
 
+### 2025.2.26
+
+- **添加**：OTP 账号
+    <p align="center">
+        <img width="30%" src="img/2025.2.26-0.jpg" alt="screenshot" />
+    </p>
+
 ### 2025.2.25
 
-- **添加**：常用网站页面
+- [**添加**：常用网站页面](https://github.com/Kiteio/Punica-CMP/commit/1fdfe230ecd903f78c6922015b7b9d79ce54aaff)
   ![screenshot](img/2025.2.25-2.png)
 - [**添加**：教学通知页面](https://github.com/Kiteio/Punica-CMP/commit/97053aef7c8fcee2329bc096b85251bea1101fc0)
     ![screenshot](img/2025.2.25-1.png)

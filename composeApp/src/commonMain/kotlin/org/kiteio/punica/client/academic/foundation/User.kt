@@ -10,6 +10,7 @@ import kotlinx.serialization.Serializable
  * @property password 门户密码
  * @property secondClassPwd 第二课堂密码
  * @property networkPwd 校园网密码
+ * @property otpSecret OTP 密钥
  * @property cookies Cookie
  */
 @Serializable
@@ -18,5 +19,6 @@ data class User(
     val password: String = "",
     val secondClassPwd: String = "",
     val networkPwd: String = "",
+    val otpSecret: String = "",
     val cookies: MutableMap<String, MutableList<Cookie>> = mutableMapOf(),
 )
