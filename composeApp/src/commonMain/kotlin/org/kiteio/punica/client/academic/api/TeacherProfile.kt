@@ -84,7 +84,7 @@ suspend fun AcademicSystem.getTeacherProfile(teacherId: String): TeacherProfile 
                             courses.add(
                                 TCourse(
                                     name = tds[tdIndex + 1].text(),
-                                    sort = tds[tdIndex + 2].text(),
+                                    category = tds[tdIndex + 2].text(),
                                     term = Term.parse(tds[tdIndex + 3].text()),
                                 )
                             )
@@ -162,10 +162,10 @@ data class TeacherProfile(
  * 主讲课程。
  *
  * @property name 课程名称
- * @property sort 课程类别
+ * @property category 课程类别
  * @property term 学期
  */
-data class TCourse(val name: String, val sort: String, val term: Term)
+data class TCourse(val name: String, val category: String, val term: Term)
 
 
 /**

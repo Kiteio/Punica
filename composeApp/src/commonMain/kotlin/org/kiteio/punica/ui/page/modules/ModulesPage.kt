@@ -18,7 +18,6 @@ import compose.icons.cssggicons.Slack
 import compose.icons.cssggicons.Time
 import compose.icons.tablericons.Book
 import compose.icons.tablericons.ChartLine
-import compose.icons.tablericons.Id
 import compose.icons.tablericons.Rocket
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.StringResource
@@ -32,6 +31,7 @@ import org.kiteio.punica.ui.page.grades.GradesRoute
 import org.kiteio.punica.ui.page.home.TopLevelRoute
 import org.kiteio.punica.ui.page.notice.AcademicNoticeRoute
 import org.kiteio.punica.ui.page.secondclass.SecondClassRoute
+import org.kiteio.punica.ui.page.teacher.TeacherProfileRoute
 import org.kiteio.punica.ui.page.websites.WebsitesRoute
 import punica.composeapp.generated.resources.*
 
@@ -68,7 +68,7 @@ private fun Content() {
         CETRoute,
         GradesRoute,
         SecondClassRoute,
-        ModuleImpl(Res.string.teacher_profile, TablerIcons.Id),
+        TeacherProfileRoute,
         ModuleImpl(Res.string.course_timetable, TablerIcons.Book),
         ModuleImpl(Res.string.implementation_plan, TablerIcons.Rocket),
         ModuleImpl(Res.string.academic_progress, TablerIcons.ChartLine),

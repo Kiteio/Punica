@@ -1,8 +1,12 @@
 # 1.0.0
 
+### 2025.2.27
+
+- **添加**：教师信息页面
+
 ### 2025.2.26
 
-- **添加**：第二课堂页面
+- [**添加**：第二课堂页面](https://github.com/Kiteio/Punica-CMP/commit/c88af99e2f7d6fbae627e12a4b20f9a3a66d02f2)
     <p align="center">
         <img width="30%" src="img/2025.2.26-2.jpg" alt="screenshot" />
         <img width="30%" src="img/2025.2.26-3.jpg" alt="screenshot" />

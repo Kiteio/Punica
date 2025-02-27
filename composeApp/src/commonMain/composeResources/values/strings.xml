@@ -17,6 +17,27 @@
     <string name="nothing_provided">什么也没有</string>
     <string name="error">出现了点问题</string>
 
+    <!-- TeacherProfilePage.kt -->
+    <string name="gender">性别</string>
+    <string name="politics">政治面貌</string>
+    <string name="nation">民族</string>
+    <string name="duty">职务</string>
+    <string name="title">职称</string>
+    <string name="staff_category">教职工类别</string>
+    <string name="faculty">部门（院系）</string>
+    <string name="office">科室（系）</string>
+    <string name="qualification">最高学历</string>
+    <string name="degree">学位</string>
+    <string name="field">研究方向</string>
+    <string name="qq" translatable="false">QQ</string>
+    <string name="wechat">微信</string>
+    <string name="email">邮箱</string>
+    <string name="biography">个人简介</string>
+    <string name="taught_course">近期开设课程</string>
+    <string name="teaching_course">计划开设课程</string>
+    <string name="philosophy">教育理念</string>
+    <string name="slogan">最想对学生说的话</string>
+
     <!-- SecondClasPage.kt -->
     <string name="activity">活动</string>
     <string name="log">记录</string>
@@ -29,7 +50,7 @@
     <string name="admin">管理员</string>
     <string name="phone_number">手机号</string>
     <string name="coach">指导老师</string>
-    <string name="training_hours">指导学时</string>
+    <string name="training_hours">培训时间</string>
     <string name="host">主办方</string>
 
     <!-- GradesPage.kt -->
@@ -107,12 +128,12 @@
     <string name="course_timetable">课程课表</string>
     <string name="implementation_plan">执行计划</string>
     <string name="academic_progress">学业进度</string>
-    <string name="otp">OTP</string>
 
     <!-- SettingsPage.kt -->
     <string name="account">账号</string>
     <string name="academic_system">教务系统</string>
     <string name="campus_network">校园网</string>
+    <string name="otp" translatable="false">OTP</string>
     <string name="not_logged_in">未登录</string>
     <string name="common">常用</string>
     <string name="current_week">当前周次</string>

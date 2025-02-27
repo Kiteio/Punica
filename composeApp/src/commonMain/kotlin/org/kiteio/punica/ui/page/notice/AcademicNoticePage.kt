@@ -44,7 +44,7 @@ fun AcademicNoticePage() = viewModel { AcademicNoticeVM() }.Content()
 
 @Composable
 private fun AcademicNoticeVM.Content() {
-    val notices = noticePager.collectAsLazyPagingItems()
+    val notices = noticesPagerFlow.collectAsLazyPagingItems()
 
     Scaffold(
         topBar = { NavBackAppBar(title = { Text(stringResource(AcademicNoticeRoute.nameRes)) }) }
@@ -55,8 +55,7 @@ private fun AcademicNoticeVM.Content() {
                 contentPadding = PaddingValues(4.dp)
             ) {
                 items(notices.itemCount) { index ->
-                    val notice = notices[index]
-                    notice?.let {
+                    notices[index]?.let {
                         Notice(
                             notice = it,
                             modifier = Modifier.padding(4.dp),

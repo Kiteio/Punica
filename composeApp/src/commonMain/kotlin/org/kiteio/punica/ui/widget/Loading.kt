@@ -29,10 +29,7 @@ fun <T> LoadingNotNullOrEmpty(any: T?, isLoading: Boolean, modifier: Modifier = 
         when {
             isLoading -> LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             any != null && (any !is List<*> || any.isNotEmpty()) -> content(any)
-            else -> Empty(
-                icon = Icons.Outlined.Inbox,
-                text = stringResource(Res.string.nothing_provided),
-            )
+            else -> Empty()
         }
     }
 }
@@ -65,9 +62,9 @@ fun Loading(
  * 空内容。
  */
 @Composable
-private fun Empty(
-    icon: ImageVector,
-    text: String,
+fun Empty(
+    icon: ImageVector = Icons.Outlined.Inbox,
+    text: String = stringResource(Res.string.nothing_provided),
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),

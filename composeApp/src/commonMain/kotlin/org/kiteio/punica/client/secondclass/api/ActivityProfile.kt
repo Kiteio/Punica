@@ -40,7 +40,7 @@ suspend fun SecondClass.getActivityProfile(activityId: Int): ActivityProfile {
  * @property admin 管理员
  * @property phoneNumber 手机号
  * @property teacher 指导老师
- * @property trainingHours 指导学时
+ * @property trainingHours 培训时间
  * @property duration 持续时间
  * @property needSubmit 是否必须提交作业
  * @property total 最大人数

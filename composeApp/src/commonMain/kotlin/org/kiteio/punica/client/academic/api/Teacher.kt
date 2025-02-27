@@ -23,6 +23,11 @@ suspend fun AcademicSystem.getTeachers(name: String, pageIndex: Int = 1): Teache
     val doc = Ksoup.parse(text)
     val tds = doc.getElementsByTag("td")
 
+    // 搜索结果为空
+    if (tds.size == 2) {
+        return Teachers(0, emptyList())
+    }
+
     val teachers = mutableListOf<Teacher>()
     // 范围排除 Logo
     for (index in 1..<tds.size step 5) {
@@ -30,7 +35,7 @@ suspend fun AcademicSystem.getTeachers(name: String, pageIndex: Int = 1): Teache
             Teacher(
                 id = tds[index + 1].text(),
                 name = tds[index + 2].text(),
-                faculty = tds[index + 3].text(),
+                faculty = tds[index + 3].text().ifEmpty { null },
             )
         )
     }
@@ -67,5 +72,5 @@ data class Teachers(
 data class Teacher(
     val id: String,
     val name: String,
-    val faculty: String,
+    val faculty: String?,
 )

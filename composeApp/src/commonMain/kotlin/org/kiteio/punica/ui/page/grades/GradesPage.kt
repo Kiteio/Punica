@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -63,18 +61,13 @@ private fun GradesVM.Content() {
                 title = { Text(stringResource(GradesRoute.nameRes)) },
                 actions = {
                     // 搜索
-                    IconButton(
+                    SearchButton(
+                        searchBarVisible,
                         onClick = {
                             searchBarVisible = !searchBarVisible
                             if (!searchBarVisible) query = ""
-                        }
-                    ) {
-                        Icon(
-                            if (searchBarVisible) Icons.Outlined.SearchOff
-                            else Icons.Outlined.Search,
-                            contentDescription = stringResource(Res.string.search),
-                        )
-                    }
+                        },
+                    )
                     // 备注
                     IconButton(onClick = { noteDialogVisible = true }) {
                         Icon(
@@ -86,22 +79,16 @@ private fun GradesVM.Content() {
             )
         }
     ) { innerPadding ->
-        LoadingNotNullOrEmpty(
-            grades,
-            isLoading = isGradesLoading,
-            modifier = Modifier.padding(innerPadding)
-        ) { grades ->
-            Column {
-                // 搜索
-                AnimatedVisibility(searchBarVisible && state.currentPage == 0) {
-                    SearchTextField(
-                        query,
-                        onQueryChange = {
-                            query = it
-                        },
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
+        Column(modifier = Modifier.padding(innerPadding)) {
+            // 搜索
+            AnimatedVisibility(searchBarVisible && state.currentPage == 0) {
+                SearchTextField(
+                    query,
+                    onQueryChange = { query = it },
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
+            LoadingNotNullOrEmpty(grades, isLoading = isGradesLoading) { grades ->
                 // 成绩
                 HorizontalTabPager(
                     state = state,

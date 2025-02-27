@@ -18,6 +18,9 @@ import org.kiteio.punica.client.secondclass.api.ActivityProfile
 import org.kiteio.punica.client.secondclass.api.getActivities
 import org.kiteio.punica.client.secondclass.api.getActivityProfile
 import org.kiteio.punica.ui.widget.LoadingNotNullOrEmpty
+import org.kiteio.punica.ui.widget.ModalBottomSheet
+import org.kiteio.punica.ui.widget.ProvideBodyMedium
+import org.kiteio.punica.ui.widget.SpaceBetween
 import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.*
 
@@ -116,7 +119,6 @@ private fun Activity(activity: Activity, onClick: () -> Unit, modifier: Modifier
 /**
  * 活动详情模态对话框。
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SecondClassVM.ActivityBottomSheet(
     visible: Boolean,
@@ -132,13 +134,11 @@ private fun SecondClassVM.ActivityBottomSheet(
             }
         }
 
-        activityProfile?.let {
-            ModalBottomSheet(
-                onDismissRequest = onDismissRequest,
-                sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-            ) {
-                ActivityProfile(it)
-            }
+        ModalBottomSheet(
+            visible = activityProfile != null,
+            onDismissRequest = onDismissRequest,
+        ) {
+            ActivityProfile(activityProfile!!)
         }
     }
 }
@@ -156,7 +156,7 @@ private fun ActivityProfile(activityProfile: ActivityProfile) = with(activityPro
             Spacer(modifier = Modifier.height(8.dp))
         }
         item {
-            ProvideMediumText {
+            ProvideBodyMedium {
                 // 时间
                 Text("${duration.start} - ${duration.endInclusive}")
                 // 地点
@@ -164,7 +164,7 @@ private fun ActivityProfile(activityProfile: ActivityProfile) = with(activityPro
             }
         }
         item {
-            ProvideMediumText {
+            ProvideBodyMedium {
                 // 分类、分数
                 Text(
                     buildAnnotatedString {
@@ -191,7 +191,7 @@ private fun ActivityProfile(activityProfile: ActivityProfile) = with(activityPro
             Spacer(modifier = Modifier.height(8.dp))
         }
         item {
-            ProvideMediumText {
+            ProvideBodyMedium {
                 // 报名截止时间
                 SpaceBetween {
                     Text(stringResource(Res.string.application_deadline))
@@ -205,7 +205,7 @@ private fun ActivityProfile(activityProfile: ActivityProfile) = with(activityPro
             }
         }
         item {
-            ProvideMediumText {
+            ProvideBodyMedium {
                 // 管理员
                 SpaceBetween {
                     Text(stringResource(Res.string.admin))
@@ -219,7 +219,7 @@ private fun ActivityProfile(activityProfile: ActivityProfile) = with(activityPro
             }
         }
         item {
-            ProvideMediumText {
+            ProvideBodyMedium {
                 // 指导老师
                 teacher?.let {
                     SpaceBetween {
@@ -227,7 +227,7 @@ private fun ActivityProfile(activityProfile: ActivityProfile) = with(activityPro
                         Text(it)
                     }
                 }
-                // 指导学时
+                // 培训时间
                 if (trainingHours > 0) {
                     SpaceBetween {
                         Text(stringResource(Res.string.training_hours))
@@ -237,7 +237,7 @@ private fun ActivityProfile(activityProfile: ActivityProfile) = with(activityPro
             }
         }
         item {
-            ProvideMediumText {
+            ProvideBodyMedium {
                 // 主办方
                 SpaceBetween {
                     Text(stringResource(Res.string.host))
@@ -256,26 +256,6 @@ private fun ActivityProfile(activityProfile: ActivityProfile) = with(activityPro
 }
 
 
-/**
- * 提供中等字体。
- */
-@Composable
-private fun ProvideMediumText(content: @Composable () -> Unit) {
-    CompositionLocalProvider(
-        LocalTextStyle provides MaterialTheme.typography.bodyMedium,
-        content = content,
-    )
-}
 
 
-/**
- * 两端对齐。
- */
-@Composable
-private fun SpaceBetween(content: @Composable RowScope. () -> Unit) {
-    Row(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        content = content,
-    )
-}
+
