@@ -27,7 +27,7 @@ fun CommonSettingsGroup() {
         ThemeModeSetting(scope = scope)
 
         // 当前周次
-        WeeKSetting(scope = scope)
+        WeekSetting(scope = scope)
 
         // 校区
         val campus by AppVM.campus.collectAsState(Campus.CANTON)
@@ -110,14 +110,14 @@ private fun ThemeModeSetting(scope: CoroutineScope) {
  * 当前周次设置。
  */
 @Composable
-private fun WeeKSetting(scope: CoroutineScope) {
+private fun WeekSetting(scope: CoroutineScope) {
     var expanded by remember { mutableStateOf(false) }
     val week by AppVM.week.collectAsState(1)
 
     Box {
         SettingsMenuLink(
             title = { Text(stringResource(Res.string.current_week)) },
-            subtitle = { Text(stringResource(Res.string.week, week)) },
+            subtitle = { Text(stringResource(Res.string.week_of, week)) },
             icon = {
                 Icon(
                     Icons.Outlined.DateRange,
@@ -133,7 +133,7 @@ private fun WeeKSetting(scope: CoroutineScope) {
                 DropdownMenuItem(
                     text = {
                         Text(
-                            stringResource(Res.string.week, it),
+                            stringResource(Res.string.week_of, it),
                             color = if (it == week) MaterialTheme.colorScheme.primary
                             else LocalContentColor.current,
                         )

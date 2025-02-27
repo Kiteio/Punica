@@ -21,7 +21,7 @@ class TimetableVM : ViewModel() {
         private set
 
     /** 课表是否在加载中 */
-    var isTimetableLoading by mutableStateOf(false)
+    var isLoading by mutableStateOf(false)
         private set
 
     /** 是否在课表底部显示备注 */
@@ -38,12 +38,12 @@ class TimetableVM : ViewModel() {
      */
     suspend fun updateTimetable() {
         AppVM.academicUserId.first()?.let { userId ->
-            isTimetableLoading = true
+            isLoading = true
             // 本地获取
             timetable = Stores.timetable.data.map {
                 it.get<Timetable>("$userId$term")
-            }.first().also {
-                if (it != null) isTimetableLoading = false
+            }.first()?.also {
+                isLoading = false
             }
 
             try {
@@ -55,7 +55,7 @@ class TimetableVM : ViewModel() {
                     }
                 }
             } finally {
-                isTimetableLoading = false
+                isLoading = false
             }
         }
     }

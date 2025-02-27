@@ -3,7 +3,9 @@ package org.kiteio.punica.wrapper
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.kiteio.punica.ui.widget.showToast
 
 /**
@@ -11,10 +13,12 @@ import org.kiteio.punica.ui.widget.showToast
  */
 fun CoroutineScope.launchCatching(block: suspend CoroutineScope.() -> Unit) {
     launch {
-        try {
-            block()
-        } catch (e: Throwable) {
-            handleException(e)
+        withContext(Dispatchers.Default) {
+            try {
+                block()
+            } catch (e: Throwable) {
+                handleException(e)
+            }
         }
     }
 }
@@ -26,10 +30,12 @@ fun CoroutineScope.launchCatching(block: suspend CoroutineScope.() -> Unit) {
 @Composable
 fun LaunchedEffectCatching(vararg keys: Any?, block: suspend CoroutineScope.() -> Unit) {
     LaunchedEffect(keys) {
-        try {
-            block()
-        } catch (e: Throwable) {
-            handleException(e)
+        withContext(Dispatchers.Default) {
+            try {
+                block()
+            } catch (e: Throwable) {
+                handleException(e)
+            }
         }
     }
 }

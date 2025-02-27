@@ -48,7 +48,7 @@ fun Grades(grades: List<Grade>) {
                             ) MaterialTheme.colorScheme.error
                             else LocalContentColor.current,
                             fontWeight = FontWeight.SemiBold,
-                            style = MaterialTheme.typography.bodyMedium
+                            style = MaterialTheme.typography.bodyMedium,
                         )
                     },
                 )

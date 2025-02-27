@@ -49,8 +49,8 @@ class SecondClassVM : ViewModel() {
             // 本地获取
             grades = Stores.secondClassGrades.data.map {
                 it.get<SecondClassGrades>(userId)
-            }.first().also {
-                if (it != null) isGradesLoading = false
+            }.first()?.also {
+                isGradesLoading = false
             }
 
             try {

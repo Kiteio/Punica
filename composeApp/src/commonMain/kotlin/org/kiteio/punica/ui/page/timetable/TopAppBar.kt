@@ -13,7 +13,7 @@ import org.kiteio.punica.client.academic.foundation.Term
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.note
 import punica.composeapp.generated.resources.reset
-import punica.composeapp.generated.resources.week
+import punica.composeapp.generated.resources.week_of
 
 /**
  * 课表顶部导航栏。
@@ -78,7 +78,7 @@ private fun Week(currentPage: Int, onPageChange: (Int) -> Unit, enabled: Boolean
     Box {
         TextButton(onClick = { expanded = true }, enabled = enabled) {
             Text(
-                stringResource(Res.string.week, currentPage),
+                stringResource(Res.string.week_of, currentPage),
                 style = MaterialTheme.typography.titleMedium,
             )
         }
@@ -87,7 +87,7 @@ private fun Week(currentPage: Int, onPageChange: (Int) -> Unit, enabled: Boolean
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             repeat(AppVM.TIMETABLE_MAX_PAGE) {
                 DropdownMenuItem(
-                    text = { Text(stringResource(Res.string.week, it)) },
+                    text = { Text(stringResource(Res.string.week_of, it)) },
                     onClick = {
                         onPageChange(it)
                         expanded = false

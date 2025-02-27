@@ -2,7 +2,8 @@
 
 ### 2025.2.27
 
-- **添加**：教师信息页面
+- **添加**：课程课表页面
+- [**添加**：教师信息页面](https://github.com/Kiteio/Punica-CMP/commit/4be506e5a9d46d30ec0cbf5fbe18aa06926a6073)
 
 ### 2025.2.26
 

@@ -33,8 +33,8 @@ class GradesVM : ViewModel() {
             // 本地获取
             grades = Stores.grades.data.map {
                 it.get<Grades>(userId)
-            }.first().also {
-                if (it != null) isGradesLoading = false
+            }.first()?.also {
+                isGradesLoading = false
             }
 
             try {

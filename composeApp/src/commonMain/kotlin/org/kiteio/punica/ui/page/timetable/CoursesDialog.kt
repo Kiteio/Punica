@@ -10,7 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlinx.datetime.isoDayNumber
+import org.jetbrains.compose.resources.stringArrayResource
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.client.academic.foundation.ICourse
 import punica.composeapp.generated.resources.*
@@ -74,10 +74,20 @@ private fun Course(course: ICourse, modifier: Modifier = Modifier) {
             Text("${stringResource(Res.string.weeks)}  ${course.weeksString}")
             // 节次
             Text(
-                "${stringResource(Res.string.sections)}  ${course.sections.run { "${first()}-${last()}" }}"
+                buildString {
+                    append(stringResource(Res.string.sections))
+                    append("  ")
+                    append(course.sections.run { "${first()}-${last()}" })
+                },
             )
             // 星期
-            Text("${stringResource(Res.string.day_of_week)}  ${course.dayOfWeek.isoDayNumber}")
+            Text(
+                buildString {
+                    append(stringResource(Res.string.day_of_week))
+                    append("  ")
+                    append(stringArrayResource(Res.array.days_of_week)[course.dayOfWeek.ordinal])
+                },
+            )
         }
     }
 }

@@ -74,7 +74,7 @@ private fun Content() {
                 SearchTextField(
                     query,
                     onQueryChange = { query = it },
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier.padding(8.dp),
                 )
             }
 

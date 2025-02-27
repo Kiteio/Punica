@@ -17,6 +17,9 @@
     <string name="nothing_provided">什么也没有</string>
     <string name="error">出现了点问题</string>
 
+    <!-- CourseTimetablePage.kt -->
+    <string name="section_of">%1$s节</string>
+
     <!-- TeacherProfilePage.kt -->
     <string name="gender">性别</string>
     <string name="politics">政治面貌</string>
@@ -95,7 +98,7 @@
     <string name="invisible">不可见</string>
 
     <!-- TimetablePage.kt -->
-    <string name="week">第%1$d周</string>
+    <string name="week_of">第%1$d周</string>
     <string name="reset">重置</string>
     <string name="note">备注</string>
     <string name="close">关闭</string>

@@ -74,7 +74,7 @@ private fun TimetableVM.Content() {
     ) { innerPadding ->
         LoadingNotNullOrEmpty(
             timetable,
-            isLoading = isTimetableLoading,
+            isLoading = isLoading,
             modifier = Modifier.padding(innerPadding),
         ) { timetable ->
             val spacing = 2.dp

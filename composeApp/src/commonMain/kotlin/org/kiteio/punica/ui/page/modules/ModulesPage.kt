@@ -16,7 +16,6 @@ import compose.icons.CssGgIcons
 import compose.icons.TablerIcons
 import compose.icons.cssggicons.Slack
 import compose.icons.cssggicons.Time
-import compose.icons.tablericons.Book
 import compose.icons.tablericons.ChartLine
 import compose.icons.tablericons.Rocket
 import kotlinx.serialization.Serializable
@@ -32,6 +31,7 @@ import org.kiteio.punica.ui.page.home.TopLevelRoute
 import org.kiteio.punica.ui.page.notice.AcademicNoticeRoute
 import org.kiteio.punica.ui.page.secondclass.SecondClassRoute
 import org.kiteio.punica.ui.page.teacher.TeacherProfileRoute
+import org.kiteio.punica.ui.page.timetables.CourseTimetableRoute
 import org.kiteio.punica.ui.page.websites.WebsitesRoute
 import punica.composeapp.generated.resources.*
 
@@ -69,7 +69,7 @@ private fun Content() {
         GradesRoute,
         SecondClassRoute,
         TeacherProfileRoute,
-        ModuleImpl(Res.string.course_timetable, TablerIcons.Book),
+        CourseTimetableRoute,
         ModuleImpl(Res.string.implementation_plan, TablerIcons.Rocket),
         ModuleImpl(Res.string.academic_progress, TablerIcons.ChartLine),
     )

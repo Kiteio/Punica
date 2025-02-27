@@ -85,7 +85,7 @@ private fun GradesVM.Content() {
                 SearchTextField(
                     query,
                     onQueryChange = { query = it },
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier.padding(8.dp),
                 )
             }
             LoadingNotNullOrEmpty(grades, isLoading = isGradesLoading) { grades ->

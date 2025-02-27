@@ -20,6 +20,9 @@ object Stores {
 
     /** 第二课堂成绩 */
     val secondClassGrades by lazy { dataStore("second_class_grades") }
+
+    /** 课程课表 */
+    val courseTimetable by lazy { dataStore("course_timetable") }
 }
 
 

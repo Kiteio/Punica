@@ -13,7 +13,7 @@ import org.kiteio.punica.client.academic.foundation.Term
 /**
  * 返回学期 [term] 的课程课表。
  */
-suspend fun AcademicSystem.getCourseSchedule(term: Term): CourseSchedule {
+suspend fun AcademicSystem.getCourseTimetable(term: Term): CourseTimetable {
     val text = submitForm(
         "jsxsd/kbcx/kbxx_kc_ifr",
         parameters { append("xnxqh", "$term") }
@@ -61,7 +61,7 @@ suspend fun AcademicSystem.getCourseSchedule(term: Term): CourseSchedule {
         courses.add(sameCourses)
     }
 
-    return CourseSchedule(term, courses)
+    return CourseTimetable(term, courses)
 }
 
 
@@ -72,7 +72,7 @@ suspend fun AcademicSystem.getCourseSchedule(term: Term): CourseSchedule {
  * @property courses 课程。每一项是包含多个相同课程的列表。
  */
 @Serializable
-data class CourseSchedule(
+data class CourseTimetable(
     val term: Term,
     val courses: List<List<CCourse>>,
 )
