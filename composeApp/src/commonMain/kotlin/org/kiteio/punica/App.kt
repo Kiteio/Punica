@@ -23,8 +23,12 @@ import org.kiteio.punica.ui.page.grades.GradesPage
 import org.kiteio.punica.ui.page.grades.GradesRoute
 import org.kiteio.punica.ui.page.home.HomePage
 import org.kiteio.punica.ui.page.home.HomeRoute
-import org.kiteio.punica.ui.page.notice.AcademicNoticePage
-import org.kiteio.punica.ui.page.notice.AcademicNoticeRoute
+import org.kiteio.punica.ui.page.notice.NoticePage
+import org.kiteio.punica.ui.page.notice.NoticeRoute
+import org.kiteio.punica.ui.page.plan.PlanPage
+import org.kiteio.punica.ui.page.plan.PlanRoute
+import org.kiteio.punica.ui.page.progress.ProgressPage
+import org.kiteio.punica.ui.page.progress.ProgressRoute
 import org.kiteio.punica.ui.page.secondclass.SecondClassPage
 import org.kiteio.punica.ui.page.secondclass.SecondClassRoute
 import org.kiteio.punica.ui.page.teacher.TeacherProfilePage
@@ -62,13 +66,15 @@ fun App(windowSizeClass: WindowSizeClass, snackbarHostState: SnackbarHostState? 
                 composable<HomeRoute> { HomePage() }
                 composable<AccountRoute> { AccountPage(it.toRoute<AccountRoute>()) }
                 composable<EmergencyCallRoute> { EmergencyCallPage() }
-                composable<AcademicNoticeRoute> { AcademicNoticePage() }
+                composable<NoticeRoute> { NoticePage() }
                 composable<WebsitesRoute> { WebsitesPage() }
                 composable<CETRoute> { CETPage() }
                 composable<GradesRoute> { GradesPage() }
                 composable<SecondClassRoute> { SecondClassPage() }
                 composable<TeacherProfileRoute> { TeacherProfilePage() }
                 composable<CourseTimetableRoute> { CourseTimetablePage() }
+                composable<PlanRoute> { PlanPage() }
+                composable<ProgressRoute> { ProgressPage() }
             }
         }
     }

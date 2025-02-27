@@ -2,6 +2,8 @@ package org.kiteio.punica.client.course.api
 
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kiteio.punica.client.course.CourseSystem
 import org.kiteio.punica.client.course.foundation.CourseCategory
 import org.kiteio.punica.client.course.foundation.CourseOperateBody
@@ -15,14 +17,16 @@ suspend fun CourseSystem.select(
     category: CourseCategory,
     priority: CoursePriority?,
 ) {
-    val body = get("jsxsd/xsxkkc/${category.operate}xkOper") {
-        parameter("jx0404id", sCourseId)
-        parameter("xkzy", priority?.id ?: "")
-        parameter("trjf", "")
-        parameter("cxxdlx", "1")
-    }.body<CourseOperateBody>()
+    return withContext(Dispatchers.Default) {
+        val body = get("jsxsd/xsxkkc/${category.operate}xkOper") {
+            parameter("jx0404id", sCourseId)
+            parameter("xkzy", priority?.id ?: "")
+            parameter("trjf", "")
+            parameter("cxxdlx", "1")
+        }.body<CourseOperateBody>()
 
-    require(body.isSuccess) { body.message }
+        require(body.isSuccess) { body.message }
+    }
 }
 
 

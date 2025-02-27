@@ -1,6 +1,7 @@
 package org.kiteio.punica.ui.page.grades
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -22,6 +23,7 @@ fun Grades(grades: List<Grade>) {
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Adaptive(200.dp),
         contentPadding = PaddingValues(4.dp),
+        modifier = Modifier.fillMaxSize(),
     ) {
         items(grades) { grade ->
             ElevatedCard(

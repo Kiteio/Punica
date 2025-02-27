@@ -3,33 +3,37 @@ package org.kiteio.punica.client.course.api
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.select.Evaluator
 import io.ktor.client.statement.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kiteio.punica.client.course.CourseSystem
 
 /**
  * 返回选课总览。
  */
 suspend fun CourseSystem.getOverview(): Overview {
-    val text = get("jsxsd/xsxk/xsxk_tzsm").bodyAsText()
+    return withContext(Dispatchers.Default) {
+        val text = get("jsxsd/xsxk/xsxk_tzsm").bodyAsText()
 
-    val doc = Ksoup.parse(text)
-    val tds = doc.getElementsByTag("td")
+        val doc = Ksoup.parse(text)
+        val tds = doc.getElementsByTag("td")
 
-    val rowSize = tds.size / 3
-    val progresses = mutableListOf<CreditProgress>()
-    for (index in 0..<rowSize) {
-        progresses.add(
-            CreditProgress(
-                name = tds[index].text(),
-                have = tds[index + rowSize].text(),
-                limit = tds[index + rowSize * 2].text(),
+        val rowSize = tds.size / 3
+        val progresses = mutableListOf<CreditProgress>()
+        for (index in 0..<rowSize) {
+            progresses.add(
+                CreditProgress(
+                    name = tds[index].text(),
+                    have = tds[index + rowSize].text(),
+                    limit = tds[index + rowSize * 2].text(),
+                )
             )
+        }
+
+        return@withContext Overview(
+            doc.selectFirst(Evaluator.Tag("div"))!!.text(),
+            emptyList(),
         )
     }
-
-    return Overview(
-        doc.selectFirst(Evaluator.Tag("div"))!!.text(),
-        emptyList(),
-    )
 }
 
 

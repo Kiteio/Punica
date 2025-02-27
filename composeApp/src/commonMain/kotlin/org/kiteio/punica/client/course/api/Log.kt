@@ -2,37 +2,43 @@ package org.kiteio.punica.client.course.api
 
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.statement.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kiteio.punica.client.course.CourseSystem
 
 /**
  * 返回退课日志。
  */
-suspend fun CourseSystem.getWithdrawalLogs() {
-    val text = get("jsxsd/xsxkjg/getTkrzList").bodyAsText()
+suspend fun CourseSystem.getWithdrawalLogs(): List<WithdrawalLog> {
+    return withContext(Dispatchers.Default) {
+        val text = get("jsxsd/xsxkjg/getTkrzList").bodyAsText()
 
-    val doc = Ksoup.parse(text)
-    val tds = doc.getElementsByTag("td")
+        val doc = Ksoup.parse(text)
+        val tds = doc.getElementsByTag("td")
 
-    val withdrawalLogs = mutableListOf<WithdrawalLog>()
-    for (index in tds.indices step 11) {
-        withdrawalLogs.add(
-            WithdrawalLog(
-                courseId = tds[index].text(),
-                courseName = tds[index + 1].text(),
-                credits = tds[index + 2].text().toDouble(),
-                courseCategory = tds[index + 3].text(),
-                courseTeacher = tds[index + 4].text(),
-                courseTime = tds[index + 5].run {
-                    if(text().isBlank()) emptyList()
-                    else textNodes().map { textNode -> textNode.text() }
-                },
-                courseType = tds[index + 6].text(),
-                operationType = tds[index + 7].text(),
-                time = tds[index + 8].text(),
-                operator = tds[index + 9].text(),
-                description = tds[index + 10].text(),
+        val withdrawalLogs = mutableListOf<WithdrawalLog>()
+        for (index in tds.indices step 11) {
+            withdrawalLogs.add(
+                WithdrawalLog(
+                    courseId = tds[index].text(),
+                    courseName = tds[index + 1].text(),
+                    credits = tds[index + 2].text().toDouble(),
+                    courseCategory = tds[index + 3].text(),
+                    courseTeacher = tds[index + 4].text(),
+                    courseTime = tds[index + 5].run {
+                        if (text().isBlank()) emptyList()
+                        else textNodes().map { textNode -> textNode.text() }
+                    },
+                    courseType = tds[index + 6].text(),
+                    operationType = tds[index + 7].text(),
+                    time = tds[index + 8].text(),
+                    operator = tds[index + 9].text(),
+                    description = tds[index + 10].text(),
+                )
             )
-        )
+        }
+
+        return@withContext withdrawalLogs
     }
 }
 

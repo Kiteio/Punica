@@ -2,6 +2,8 @@ package org.kiteio.punica.client.secondclass
 
 import io.ktor.client.call.*
 import io.ktor.http.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.client.secondclass.foundation.SecondClassBody
@@ -27,32 +29,34 @@ interface SecondClass : HttpClientWrapper {
  * 返回 [userId]、[password] 登录的第二课堂客户端。
  */
 suspend fun SecondClass(userId: String, password: String): SecondClass {
-    val client = Client("http://2ketang.gdufe.edu.cn")
+    return withContext(Dispatchers.Default) {
+        val client = Client("http://2ketang.gdufe.edu.cn")
 
-    val response = client.submitForm(
-        "apps/common/login",
-        parameters {
-            append(
-                "para",
-                Json.encodeToString(
-                    LoginParameter(
-                        schoolId = "10018",
-                        userId = userId,
-                        password = password.ifEmpty { userId },
+        val response = client.submitForm(
+            "apps/common/login",
+            parameters {
+                append(
+                    "para",
+                    Json.encodeToString(
+                        LoginParameter(
+                            schoolId = "10018",
+                            userId = userId,
+                            password = password.ifEmpty { userId },
+                        ),
                     ),
-                ),
-            )
+                )
+            }
+        )
+        val body = response.body<LoginBody>()
+
+        require(body.code == 200) { body.msg }
+
+        return@withContext object : SecondClass {
+            override val httpClient = client.httpClient
+            override val id = body.data.id
+            override val token = response.headers["X-token"]!!
+            override val userId = userId
         }
-    )
-    val body = response.body<LoginBody>()
-
-    require(body.code == 200) { body.msg }
-
-    return object : SecondClass {
-        override val httpClient = client.httpClient
-        override val id = body.data.id
-        override val token = response.headers["X-token"]!!
-        override val userId = userId
     }
 }
 

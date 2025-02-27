@@ -29,7 +29,7 @@ import punica.composeapp.generated.resources.academic_notice
  * 教学通知页面路由。
  */
 @Serializable
-object AcademicNoticeRoute : ModuleRoute {
+object NoticeRoute : ModuleRoute {
     override val nameRes = Res.string.academic_notice
     override val icon = CssGgIcons.Bell
 }
@@ -39,15 +39,15 @@ object AcademicNoticeRoute : ModuleRoute {
  * 教学通知页面。
  */
 @Composable
-fun AcademicNoticePage() = viewModel { AcademicNoticeVM() }.Content()
+fun NoticePage() = viewModel { NoticeVM() }.Content()
 
 
 @Composable
-private fun AcademicNoticeVM.Content() {
+private fun NoticeVM.Content() {
     val notices = noticesPagerFlow.collectAsLazyPagingItems()
 
     Scaffold(
-        topBar = { NavBackAppBar(title = { Text(stringResource(AcademicNoticeRoute.nameRes)) }) }
+        topBar = { NavBackAppBar(title = { Text(stringResource(NoticeRoute.nameRes)) }) }
     ) { innerPadding ->
         Loading(notices.loadState.refresh, modifier = Modifier.padding(innerPadding)) {
             LazyVerticalStaggeredGrid(

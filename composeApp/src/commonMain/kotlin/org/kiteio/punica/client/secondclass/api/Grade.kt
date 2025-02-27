@@ -2,6 +2,8 @@ package org.kiteio.punica.client.secondclass.api
 
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -12,14 +14,16 @@ import org.kiteio.punica.client.secondclass.foundation.SecondClassBody
  * 返回成绩。
  */
 suspend fun SecondClass.getGrades(): SecondClassGrades {
-    val body = get("apps/user/achievement/by-classify-list") {
-        parameter("para", Json.encodeToString(mapOf("userId" to id)))
-        header("X-Token", token)
-    }.body<GradesBody>()
+    return withContext(Dispatchers.Default) {
+        val body = get("apps/user/achievement/by-classify-list") {
+            parameter("para", Json.encodeToString(mapOf("userId" to id)))
+            header("X-Token", token)
+        }.body<GradesBody>()
 
-    require(body.code == 200) { body.msg }
+        require(body.code == 200) { body.msg }
 
-    return SecondClassGrades(userId, body.data as List<SecondClassGrade>)
+        return@withContext SecondClassGrades(userId, body.data)
+    }
 }
 
 

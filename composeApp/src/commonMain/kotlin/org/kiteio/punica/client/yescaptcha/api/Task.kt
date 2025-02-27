@@ -3,6 +3,8 @@ package org.kiteio.punica.client.yescaptcha.api
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.client.yescaptcha.YesCaptcha
 
@@ -12,10 +14,12 @@ import org.kiteio.punica.client.yescaptcha.YesCaptcha
  * [参阅](https://yescaptcha.atlassian.net/wiki/spaces/YESCAPTCHA/pages/33351/createTask)。
  */
 suspend fun YesCaptcha.createTask(base64: String): String {
-    return post("createTask") {
-        setBody(TaskRequestBody(key, Task("ImageToTextTaskMuggle", base64)))
-        header(HttpHeaders.ContentType, ContentType.Application.Json)
-    }.body<TaskResultBody>().solution["text"]!!
+    return withContext(Dispatchers.Default) {
+        return@withContext post("createTask") {
+            setBody(TaskRequestBody(key, Task("ImageToTextTaskMuggle", base64)))
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+        }.body<TaskResultBody>().solution["text"]!!
+    }
 }
 
 

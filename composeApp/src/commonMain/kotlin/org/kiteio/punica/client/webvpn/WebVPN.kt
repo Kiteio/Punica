@@ -10,6 +10,8 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.util.*
 import io.ktor.utils.io.core.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.client.academic.foundation.User
 import org.kiteio.punica.http.Client
@@ -29,62 +31,64 @@ interface WebVPN : HttpClientWrapper
  */
 @OptIn(DelicateCryptographyApi::class)
 suspend fun WebVPN(user: User, onNeedTOTP: () -> String): WebVPN {
-    val client = Client("https://authserver.gdufe.edu.cn", user.cookies)
-    val text = client.get("authserver/login").bodyAsText()
+    return withContext(Dispatchers.Default) {
+        val client = Client("https://authserver.gdufe.edu.cn", user.cookies)
+        val text = client.get("authserver/login").bodyAsText()
 
-    val doc = Ksoup.parse(text)
-    val form = doc.getElementById("pwdFromId")!!
+        val doc = Ksoup.parse(text)
+        val form = doc.getElementById("pwdFromId")!!
 
-    // AES CCB key
-    val key = form.child(5).value()
-    val execution = form.child(6).value()
+        // AES CCB key
+        val key = form.child(5).value()
+        val execution = form.child(6).value()
 
-    // AES CCB
-    val encodedPassword = CryptographyProvider.Default.get(AES.CBC)
-        .keyDecoder().decodeFromByteArray(AES.Key.Format.RAW, key.toByteArray())
-        .cipher().encryptWithIv(
-            iv = randomString(16).toByteArray(),
-            plaintext = "${randomString(64)}${user.password}".toByteArray(),
-        ).encodeBase64()
+        // AES CCB
+        val encodedPassword = CryptographyProvider.Default.get(AES.CBC)
+            .keyDecoder().decodeFromByteArray(AES.Key.Format.RAW, key.toByteArray())
+            .cipher().encryptWithIv(
+                iv = randomString(16).toByteArray(),
+                plaintext = "${randomString(64)}${user.password}".toByteArray(),
+            ).encodeBase64()
 
-    // 登录
-    var headers = client.submitForm(
-        "authserver/login",
-        parameters {
-            append("username", user.id)
-            append("password", encodedPassword)
-            append("_eventId", "submit")
-            append("cllt", "userNameLogin")
-            append("dllt", "generalLogin")
-            append("execution", execution)
+        // 登录
+        var headers = client.submitForm(
+            "authserver/login",
+            parameters {
+                append("username", user.id)
+                append("password", encodedPassword)
+                append("_eventId", "submit")
+                append("cllt", "userNameLogin")
+                append("dllt", "generalLogin")
+                append("execution", execution)
+            }
+        ).headers
+
+        // 跟随重定向
+        client.get(headers[HttpHeaders.Location]!!)
+
+        // TOTP
+        val body = client.submitForm(
+            "authserver/reAuthCheck/reAuthSubmit.do",
+            parameters {
+                append("reAuthType", "10")
+                append("isMultifactor", "true")
+                append("otpCode", onNeedTOTP())
+            }
+        ).body<AuthBody>()
+
+        require(body.code == "reAuth_success") { body.msg }
+
+        // 登录
+        headers = client.get("authserver/login") {
+            parameter("service", "https://imy.gdufe.edu.cn/shiro-cas")
+        }.headers
+
+        // 跟随重定向
+        client.get(headers[HttpHeaders.Location]!!)
+
+        return@withContext object : WebVPN {
+            override val httpClient = client.httpClient
         }
-    ).headers
-
-    // 跟随重定向
-    client.get(headers[HttpHeaders.Location]!!)
-
-    // TOTP
-    val body = client.submitForm(
-        "authserver/reAuthCheck/reAuthSubmit.do",
-        parameters {
-            append("reAuthType", "10")
-            append("isMultifactor", "true")
-            append("otpCode", onNeedTOTP())
-        }
-    ).body<AuthBody>()
-
-    require(body.code == "reAuth_success") { body.msg }
-
-    // 登录
-    headers = client.get("authserver/login") {
-        parameter("service", "https://imy.gdufe.edu.cn/shiro-cas")
-    }.headers
-
-    // 跟随重定向
-    client.get(headers[HttpHeaders.Location]!!)
-
-    return object : WebVPN {
-        override val httpClient = client.httpClient
     }
 }
 

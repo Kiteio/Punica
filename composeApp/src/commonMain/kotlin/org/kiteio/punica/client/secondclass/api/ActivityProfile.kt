@@ -2,6 +2,8 @@ package org.kiteio.punica.client.secondclass.api
 
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.client.secondclass.SecondClass
@@ -12,17 +14,19 @@ import org.kiteio.punica.serialization.Json
  * 返回 [activityId] 活动详情。
  */
 suspend fun SecondClass.getActivityProfile(activityId: Int): ActivityProfile {
-    val body = get("apps/activityImpl/detail") {
-        parameter(
-            "para",
-            Json.encodeToString(mapOf("activityId" to activityId)),
-        )
-        header("X-Token", token)
-    }.body<ActivityProfileBody>()
+    return withContext(Dispatchers.Default) {
+        val body = get("apps/activityImpl/detail") {
+            parameter(
+                "para",
+                Json.encodeToString(mapOf("activityId" to activityId)),
+            )
+            header("X-Token", token)
+        }.body<ActivityProfileBody>()
 
-    require(body.code == 200) { body.msg }
+        require(body.code == 200) { body.msg }
 
-    return body.data
+        return@withContext body.data
+    }
 }
 
 

@@ -2,6 +2,8 @@ package org.kiteio.punica.client.secondclass.api
 
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.client.secondclass.SecondClass
@@ -31,17 +33,19 @@ private suspend fun SecondClass.getActivities(
     urlString: String,
     type: ActivityType? = null,
 ): List<Activity> {
-    val mutableMap = mutableMapOf("cur" to 1, "size" to 20)
-    type?.let { mutableMap["type"] = it.ordinal }
+    return withContext(Dispatchers.Default) {
+        val mutableMap = mutableMapOf("cur" to 1, "size" to 20)
+        type?.let { mutableMap["type"] = it.ordinal }
 
-    val body = get(urlString) {
-        parameter("para", Json.encodeToString(mutableMap))
-        header("X-Token", token)
-    }.body<ActivitiesBody>()
+        val body = get(urlString) {
+            parameter("para", Json.encodeToString(mutableMap))
+            header("X-Token", token)
+        }.body<ActivitiesBody>()
 
-    require(body.code == 200) { body.msg }
+        require(body.code == 200) { body.msg }
 
-    return body.data.records
+        return@withContext body.data.records
+    }
 }
 
 

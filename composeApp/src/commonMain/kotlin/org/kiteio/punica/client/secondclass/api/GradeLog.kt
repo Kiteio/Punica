@@ -2,6 +2,8 @@ package org.kiteio.punica.client.secondclass.api
 
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.client.secondclass.SecondClass
@@ -12,13 +14,15 @@ import org.kiteio.punica.wrapper.timestampToString
  * 返回成绩获取记录。
  */
 suspend fun SecondClass.getGradeLogs(): List<GradeLog> {
-    val body = get("apps/user/achievement/by-classify-list-detail") {
-        header("X-Token", token)
-    }.body<GradeLogsBody>()
+    return withContext(Dispatchers.Default) {
+        val body = get("apps/user/achievement/by-classify-list-detail") {
+            header("X-Token", token)
+        }.body<GradeLogsBody>()
 
-    require(body.code == 200) { body.msg }
+        require(body.code == 200) { body.msg }
 
-    return body.data
+        return@withContext body.data
+    }
 }
 
 

@@ -2,6 +2,7 @@ package org.kiteio.punica.ui.page.call
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridScope
@@ -80,6 +81,7 @@ private fun Content() {
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(200.dp),
                 contentPadding = PaddingValues(4.dp),
+                modifier = Modifier.fillMaxSize(),
             ) {
                 separateCampus(
                     page = page,

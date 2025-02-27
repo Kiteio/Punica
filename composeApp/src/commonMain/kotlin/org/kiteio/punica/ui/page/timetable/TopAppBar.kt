@@ -121,7 +121,7 @@ private fun TimetableVM.Term(userId: String?) {
         // 下拉菜单
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             userId?.let {
-                val terms = Term.list(it)
+                val terms = Term.list(it, addition = true)
 
                 for (item in terms) {
                     DropdownMenuItem(

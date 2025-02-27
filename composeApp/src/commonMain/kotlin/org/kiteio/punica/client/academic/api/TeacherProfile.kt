@@ -4,6 +4,8 @@ import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.select.Evaluator
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kiteio.punica.client.academic.AcademicSystem
 import org.kiteio.punica.client.academic.foundation.Term
 
@@ -11,99 +13,101 @@ import org.kiteio.punica.client.academic.foundation.Term
  * 返回工号为 [teacherId] 的教师信息。
  */
 suspend fun AcademicSystem.getTeacherProfile(teacherId: String): TeacherProfile {
-    val text = get("jsxsd/jsxx/jsxx_query_detail") {
-        parameter("jg0101id", teacherId)
-    }.bodyAsText()
+    return withContext(Dispatchers.Default) {
+        val text = get("jsxsd/jsxx/jsxx_query_detail") {
+            parameter("jg0101id", teacherId)
+        }.bodyAsText()
 
-    val doc = Ksoup.parse(text)
-    val trs = doc.selectFirst(Evaluator.Class("no_border_table"))!!
-        .child(0).children()
+        val doc = Ksoup.parse(text)
+        val trs = doc.selectFirst(Evaluator.Class("no_border_table"))!!
+            .child(0).children()
 
-    return TeacherProfileBuilder().apply {
-        var hasContact = false
+        return@withContext TeacherProfileBuilder().apply {
+            var hasContact = false
 
-        // 范围排除“基本信息”
-        for (index in 1..<trs.size) {
-            when (index) {
-                1 -> {
-                    name = trs[index].child(2).text()
-                    gender = trs[index].child(4).text().takeIf { it != "未说明的性别" }
-                }
-
-                2 -> {
-                    politics = trs[index].child(1).text().ifEmpty { null }
-                    nation = trs[index].child(3).text().ifEmpty { null }
-                }
-
-                3 -> {
-                    duty = trs[index].child(1).text().ifEmpty { null }
-                    title = trs[index].child(3).text().ifEmpty { null }
-                }
-
-                4 -> {
-                    category = trs[index].child(1).text().ifEmpty { null }
-                    faculty = trs[index].child(3).text()
-                }
-
-                5 -> {
-                    office = trs[index].child(1).text().takeIf { it != "无" }
-                    qualification = trs[index].child(3).text().ifEmpty { null }
-                }
-
-                6 -> {
-                    degree = trs[index].child(2).text().ifEmpty { null }
-                    field = trs[index].child(4).text().ifEmpty { null }
-                }
-
-                7 -> {
-                    if (trs[index].child(1).text() != "联系方式：") {
-                        hasContact = true
-                        phoneNumber = trs[index].child(2).text().ifEmpty { null }
-                        qq = trs[index].child(4).text().ifEmpty { null }
+            // 范围排除“基本信息”
+            for (index in 1..<trs.size) {
+                when (index) {
+                    1 -> {
+                        name = trs[index].child(2).text()
+                        gender = trs[index].child(4).text().takeIf { it != "未说明的性别" }
                     }
-                }
 
-                8 -> {
-                    if (hasContact) {
-                        weChat = trs[index].child(2).text().ifEmpty { null }
-                        email = trs[index].child(4).text().ifEmpty { null }
+                    2 -> {
+                        politics = trs[index].child(1).text().ifEmpty { null }
+                        nation = trs[index].child(3).text().ifEmpty { null }
                     }
-                }
 
-                trs.lastIndex - 8 -> {
-                    // 个人简介
-                    biography = trs[index].text().takeIf { it != "暂无数据" }
-                }
+                    3 -> {
+                        duty = trs[index].child(1).text().ifEmpty { null }
+                        title = trs[index].child(3).text().ifEmpty { null }
+                    }
 
-                trs.lastIndex - 6, trs.lastIndex - 4 -> {
-                    // 近四个学期主讲课程、下学期计划开设课程
-                    val tds = trs[index].selectFirst(Evaluator.Tag("tbody"))!!.getElementsByTag("td")
-                    if (tds.size != 1) {
-                        val courses = if (index == trs.lastIndex - 6) teaching else taught
-                        for (tdIndex in tds.indices step 4) {
-                            courses.add(
-                                TCourse(
-                                    name = tds[tdIndex + 1].text(),
-                                    category = tds[tdIndex + 2].text(),
-                                    term = Term.parse(tds[tdIndex + 3].text()),
-                                )
-                            )
+                    4 -> {
+                        category = trs[index].child(1).text().ifEmpty { null }
+                        faculty = trs[index].child(3).text()
+                    }
+
+                    5 -> {
+                        office = trs[index].child(1).text().takeIf { it != "无" }
+                        qualification = trs[index].child(3).text().ifEmpty { null }
+                    }
+
+                    6 -> {
+                        degree = trs[index].child(2).text().ifEmpty { null }
+                        field = trs[index].child(4).text().ifEmpty { null }
+                    }
+
+                    7 -> {
+                        if (trs[index].child(1).text() != "联系方式：") {
+                            hasContact = true
+                            phoneNumber = trs[index].child(2).text().ifEmpty { null }
+                            qq = trs[index].child(4).text().ifEmpty { null }
                         }
                     }
-                }
 
-                trs.lastIndex - 2 -> {
-                    // 教育理念
-                    philosophy = trs[index].text().takeIf { it != "暂无数据" }
-                }
+                    8 -> {
+                        if (hasContact) {
+                            weChat = trs[index].child(2).text().ifEmpty { null }
+                            email = trs[index].child(4).text().ifEmpty { null }
+                        }
+                    }
 
-                trs.lastIndex -> {
-                    // 最想对学生说的话
-                    slogan = trs[index].text().takeIf { it != "暂无数据" }
+                    trs.lastIndex - 8 -> {
+                        // 个人简介
+                        biography = trs[index].text().takeIf { it != "暂无数据" }
+                    }
+
+                    trs.lastIndex - 6, trs.lastIndex - 4 -> {
+                        // 近四个学期主讲课程、下学期计划开设课程
+                        val tds = trs[index].selectFirst(Evaluator.Tag("tbody"))!!.getElementsByTag("td")
+                        if (tds.size != 1) {
+                            val courses = if (index == trs.lastIndex - 6) teaching else taught
+                            for (tdIndex in tds.indices step 4) {
+                                courses.add(
+                                    TCourse(
+                                        name = tds[tdIndex + 1].text(),
+                                        category = tds[tdIndex + 2].text(),
+                                        term = Term.parse(tds[tdIndex + 3].text()),
+                                    )
+                                )
+                            }
+                        }
+                    }
+
+                    trs.lastIndex - 2 -> {
+                        // 教育理念
+                        philosophy = trs[index].text().takeIf { it != "暂无数据" }
+                    }
+
+                    trs.lastIndex -> {
+                        // 最想对学生说的话
+                        slogan = trs[index].text().takeIf { it != "暂无数据" }
+                    }
                 }
             }
-        }
-    }.build(teacherId)
+        }.build(teacherId)
+    }
 }
 
 

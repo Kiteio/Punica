@@ -3,6 +3,8 @@ package org.kiteio.punica.client.course.api
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.isoDayNumber
 import kotlinx.serialization.KSerializer
@@ -26,30 +28,35 @@ suspend fun CourseSystem.search(
     parameters: SearchParameters = SearchParameters.Empty,
     pageIndex: Int = 0,
     pageSize: Int = 15,
-) = submitForm(
-    "jsxsd/xsxkkc/xsxk${courseCategory.search}xk",
-    parameters {
-        append("iDisplayStart", "${pageSize * pageIndex}")
-        append("iDisplayLength", "$pageSize")
-    },
-) {
-    when(courseCategory) {
-        GENERAL, PROFESSIONAL, CROSS_GRADE, INTERPROFESSIONAL -> {
-            with(parameters) {
-                parameter("kcxx", name?.encodeURLParameter() ?: "")
-                parameter("skls", teacher?.encodeURLParameter() ?: "")
-                parameter("skxq", dayOfWeek?.isoDayNumber ?: "")
-                parameter("skjc", section?.let { "$it-" } ?: "")
-                parameter("sfym", filterFull)
-                parameter("sfct", filterConflicts)
-                if (courseCategory == GENERAL) {
-                    parameter("xq", campus?.run { ordinal + 1 } ?: "")
+): List<SCourse> {
+    return withContext(Dispatchers.Default) {
+        return@withContext submitForm(
+            "jsxsd/xsxkkc/xsxk${courseCategory.search}xk",
+            parameters {
+                append("iDisplayStart", "${pageSize * pageIndex}")
+                append("iDisplayLength", "$pageSize")
+            },
+        ) {
+            when (courseCategory) {
+                GENERAL, PROFESSIONAL, CROSS_GRADE, INTERPROFESSIONAL -> {
+                    with(parameters) {
+                        parameter("kcxx", name?.encodeURLParameter() ?: "")
+                        parameter("skls", teacher?.encodeURLParameter() ?: "")
+                        parameter("skxq", dayOfWeek?.isoDayNumber ?: "")
+                        parameter("skjc", section?.let { "$it-" } ?: "")
+                        parameter("sfym", filterFull)
+                        parameter("sfct", filterConflicts)
+                        if (courseCategory == GENERAL) {
+                            parameter("xq", campus?.run { ordinal + 1 } ?: "")
+                        }
+                    }
                 }
+
+                else -> {}
             }
-        }
-        else -> {}
+        }.body<SearchBody>().list
     }
-}.body<SearchBody>().list
+}
 
 
 /**

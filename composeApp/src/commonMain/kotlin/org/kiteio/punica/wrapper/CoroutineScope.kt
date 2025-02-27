@@ -3,9 +3,7 @@ package org.kiteio.punica.wrapper
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.kiteio.punica.ui.widget.showToast
 
 /**
@@ -13,12 +11,10 @@ import org.kiteio.punica.ui.widget.showToast
  */
 fun CoroutineScope.launchCatching(block: suspend CoroutineScope.() -> Unit) {
     launch {
-        withContext(Dispatchers.Default) {
-            try {
-                block()
-            } catch (e: Throwable) {
-                handleException(e)
-            }
+        try {
+            block()
+        } catch (e: Throwable) {
+            handleException(e)
         }
     }
 }
@@ -30,21 +26,20 @@ fun CoroutineScope.launchCatching(block: suspend CoroutineScope.() -> Unit) {
 @Composable
 fun LaunchedEffectCatching(vararg keys: Any?, block: suspend CoroutineScope.() -> Unit) {
     LaunchedEffect(keys) {
-        withContext(Dispatchers.Default) {
-            try {
-                block()
-            } catch (e: Throwable) {
-                handleException(e)
-            }
+        try {
+            block()
+        } catch (e: Throwable) {
+            handleException(e)
         }
     }
 }
 
 
 private fun handleException(e: Throwable) {
-    // 过滤协程被取消
+    // 过滤无关异常
     if (
         e.message != "rememberCoroutineScope left the composition" &&
-        e.message != "The coroutine scope left the composition"
+        e.message != "The coroutine scope left the composition" &&
+        e.message != "Mutation interrupted"
     ) showToast(e)
 }

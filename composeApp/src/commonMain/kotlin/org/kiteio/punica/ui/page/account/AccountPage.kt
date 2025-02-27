@@ -41,14 +41,7 @@ data class AccountRoute(val typeOrdinal: Int)
  */
 @Composable
 fun AccountPage(route: AccountRoute) = viewModel {
-    AccountVM(
-        when (route.typeOrdinal) {
-            SecondClass.ordinal -> SecondClass
-            Network.ordinal -> Network
-            OTP.ordinal -> OTP
-            else -> Academic
-        }
-    )
+    AccountVM(PasswordType.entries[route.typeOrdinal])
 }.Content()
 
 

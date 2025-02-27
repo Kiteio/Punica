@@ -23,6 +23,12 @@ object Stores {
 
     /** 课程课表 */
     val courseTimetable by lazy { dataStore("course_timetable") }
+
+    /** 执行计划 */
+    val plans by lazy { dataStore("plans") }
+
+    /** 学业进度 */
+    val progresses by lazy { dataStore("progresses") }
 }
 
 

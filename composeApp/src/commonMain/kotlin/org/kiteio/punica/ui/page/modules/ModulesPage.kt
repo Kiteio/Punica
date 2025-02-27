@@ -13,11 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import compose.icons.CssGgIcons
-import compose.icons.TablerIcons
 import compose.icons.cssggicons.Slack
 import compose.icons.cssggicons.Time
-import compose.icons.tablericons.ChartLine
-import compose.icons.tablericons.Rocket
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -28,12 +25,17 @@ import org.kiteio.punica.ui.page.call.EmergencyCallRoute
 import org.kiteio.punica.ui.page.cet.CETRoute
 import org.kiteio.punica.ui.page.grades.GradesRoute
 import org.kiteio.punica.ui.page.home.TopLevelRoute
-import org.kiteio.punica.ui.page.notice.AcademicNoticeRoute
+import org.kiteio.punica.ui.page.notice.NoticeRoute
+import org.kiteio.punica.ui.page.plan.PlanRoute
+import org.kiteio.punica.ui.page.progress.ProgressRoute
 import org.kiteio.punica.ui.page.secondclass.SecondClassRoute
 import org.kiteio.punica.ui.page.teacher.TeacherProfileRoute
 import org.kiteio.punica.ui.page.timetables.CourseTimetableRoute
 import org.kiteio.punica.ui.page.websites.WebsitesRoute
-import punica.composeapp.generated.resources.*
+import punica.composeapp.generated.resources.Res
+import punica.composeapp.generated.resources.course_system
+import punica.composeapp.generated.resources.exam
+import punica.composeapp.generated.resources.modules
 
 /**
  * 模块页面路由。
@@ -61,7 +63,7 @@ private fun Content() {
 
     val modules = listOf(
         EmergencyCallRoute,
-        AcademicNoticeRoute,
+        NoticeRoute,
         WebsitesRoute,
         ModuleImpl(Res.string.course_system, CssGgIcons.Slack),
         ModuleImpl(Res.string.exam, CssGgIcons.Time),
@@ -70,8 +72,8 @@ private fun Content() {
         SecondClassRoute,
         TeacherProfileRoute,
         CourseTimetableRoute,
-        ModuleImpl(Res.string.implementation_plan, TablerIcons.Rocket),
-        ModuleImpl(Res.string.academic_progress, TablerIcons.ChartLine),
+        PlanRoute,
+        ProgressRoute,
     )
 
     Scaffold(contentWindowInsets = WindowInsets.statusBars) { innerPadding ->

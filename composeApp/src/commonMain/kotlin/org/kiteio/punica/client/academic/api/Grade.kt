@@ -2,6 +2,8 @@ package org.kiteio.punica.client.academic.api
 
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.statement.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.client.academic.AcademicSystem
@@ -11,13 +13,15 @@ import org.kiteio.punica.client.academic.foundation.Term
  * 返回课程考试和资质认证考试成绩。
  */
 suspend fun AcademicSystem.getGrades(): Grades {
-    val pair = getCourseGrades()
-    return Grades(
-        userId,
-        pair.first.reversed(),
-        pair.second,
-        getQualificationGrades().reversed(),
-    )
+    return withContext(Dispatchers.Default) {
+        val pair = getCourseGrades()
+        return@withContext Grades(
+            userId,
+            pair.first.reversed(),
+            pair.second,
+            getQualificationGrades().reversed(),
+        )
+    }
 }
 
 
@@ -54,24 +58,26 @@ sealed interface Grade {
  * 返回资质认证考试成绩。
  */
 private suspend fun AcademicSystem.getQualificationGrades(): List<QualificationGrade> {
-    val text = get("jsxsd/kscj/djkscj_list").bodyAsText()
+    return withContext(Dispatchers.Default) {
+        val text = get("jsxsd/kscj/djkscj_list").bodyAsText()
 
-    val doc = Ksoup.parse(text)
-    val tds = doc.getElementsByTag("td")
+        val doc = Ksoup.parse(text)
+        val tds = doc.getElementsByTag("td")
 
-    val grades = mutableListOf<QualificationGrade>()
-    // 范围排除 Logo 和尾部加载中
-    for (index in 1..<tds.size - 1 step 9) {
-        grades.add(
-            QualificationGrade(
-                name = tds[index + 1].text(),
-                score = tds[index + 4].text(),
-                date = LocalDate.parse(tds[index + 8].text()),
+        val grades = mutableListOf<QualificationGrade>()
+        // 范围排除 Logo 和尾部加载中
+        for (index in 1..<tds.size - 1 step 9) {
+            grades.add(
+                QualificationGrade(
+                    name = tds[index + 1].text(),
+                    score = tds[index + 4].text(),
+                    date = LocalDate.parse(tds[index + 8].text()),
+                )
             )
-        )
-    }
+        }
 
-    return grades
+        return@withContext grades
+    }
 }
 
 
@@ -92,49 +98,51 @@ data class QualificationGrade(
  * 返回课程考试成绩和概览。
  */
 private suspend fun AcademicSystem.getCourseGrades(): Pair<List<CourseGrade>, String> {
-    val text = get("jsxsd/kscj/cjcx_list").bodyAsText()
+    return withContext(Dispatchers.Default) {
+        val text = get("jsxsd/kscj/cjcx_list").bodyAsText()
 
-    val doc = Ksoup.parse(text)
-    val tds = doc.getElementsByTag("td")
+        val doc = Ksoup.parse(text)
+        val tds = doc.getElementsByTag("td")
 
-    val grades = mutableListOf<CourseGrade>()
-    // 范围排除 Logo
-    for (index in 1..<tds.size step 17) {
-        grades.add(
-            CourseGrade(
-                name = tds[index + 3].text(),
-                score = tds[index + 7].text(),
-                term = Term.parse(tds[index + 1].text()),
-                courseId = tds[index + 2].text(),
-                dailyScore = tds[index + 4].text().ifEmpty { null },
-                labScore = tds[index + 5].text().ifEmpty { null },
-                finalScore = tds[index + 6].text().ifEmpty { null },
-                credits = tds[index + 8].text().toDouble(),
-                hours = tds[index + 9].text(),
-                assessmentMethod = tds[index + 10].text(),
-                category = tds[index + 11].text(),
-                type = tds[index + 12].text(),
-                electiveCategory = tds[index + 13].text().ifEmpty { null },
-                examType = tds[index + 14].text(),
-                mark = tds[index + 15].text().ifEmpty { null },
-                note = tds[index + 16].text().ifEmpty { null },
+        val grades = mutableListOf<CourseGrade>()
+        // 范围排除 Logo
+        for (index in 1..<tds.size step 17) {
+            grades.add(
+                CourseGrade(
+                    name = tds[index + 3].text(),
+                    score = tds[index + 7].text(),
+                    term = Term.parse(tds[index + 1].text()),
+                    courseId = tds[index + 2].text(),
+                    dailyScore = tds[index + 4].text().ifEmpty { null },
+                    labScore = tds[index + 5].text().ifEmpty { null },
+                    finalScore = tds[index + 6].text().ifEmpty { null },
+                    credits = tds[index + 8].text().toDouble(),
+                    hours = tds[index + 9].text(),
+                    assessmentMethod = tds[index + 10].text(),
+                    category = tds[index + 11].text(),
+                    type = tds[index + 12].text(),
+                    electiveCategory = tds[index + 13].text().ifEmpty { null },
+                    examType = tds[index + 14].text(),
+                    mark = tds[index + 15].text().ifEmpty { null },
+                    note = tds[index + 16].text().ifEmpty { null },
+                )
             )
-        )
-    }
+        }
 
-    // <div class="Nsb_pw">
-    val overview = doc.body().child(4).run {
-        // 移除 <br>
-        firstElementChild()?.remove()
-        // 移除 <div>
-        firstElementChild()?.remove()
-        // 移除 <table>
-        lastElementChild()?.remove()
-        // 去除“查询条件：全部 ”
-        text().replace("查询条件：全部 ", "")
-    }
+        // <div class="Nsb_pw">
+        val overview = doc.body().child(4).run {
+            // 移除 <br>
+            firstElementChild()?.remove()
+            // 移除 <div>
+            firstElementChild()?.remove()
+            // 移除 <table>
+            lastElementChild()?.remove()
+            // 去除“查询条件：全部 ”
+            text().replace("查询条件：全部 ", "")
+        }
 
-    return grades to overview
+        return@withContext grades to overview
+    }
 }
 
 

@@ -3,22 +3,26 @@ package org.kiteio.punica.client.cet.api
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Element
 import io.ktor.client.statement.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kiteio.punica.client.cet.CET
 
 /**
  * 返回考试安排。
  */
 suspend fun CET.getExam(): CETExam {
-    val text = get("project/CET/IndexEdu.css").bodyAsText()
+    return withContext(Dispatchers.Default) {
+        val text = get("project/CET/IndexEdu.css").bodyAsText()
 
-    val doc = Ksoup.parse(text)
-    val divs = doc.getElementsByClass("main_info_l")
+        val doc = Ksoup.parse(text)
+        val divs = doc.getElementsByClass("main_info_l")
 
-    return CETExam(
-        time = divs[0].parseText(),
-        note = divs[1].parseText(),
-        pdfUrlString = "https://resource.neea.edu.cn/project/CET/News/TestDataPlan-CET.pdf",
-    )
+        return@withContext CETExam(
+            time = divs[0].parseText(),
+            note = divs[1].parseText(),
+            pdfUrlString = "https://resource.neea.edu.cn/project/CET/News/TestDataPlan-CET.pdf",
+        )
+    }
 }
 
 
