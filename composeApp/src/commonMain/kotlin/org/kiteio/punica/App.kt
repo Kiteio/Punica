@@ -19,6 +19,8 @@ import org.kiteio.punica.ui.page.call.EmergencyCallPage
 import org.kiteio.punica.ui.page.call.EmergencyCallRoute
 import org.kiteio.punica.ui.page.cet.CETPage
 import org.kiteio.punica.ui.page.cet.CETRoute
+import org.kiteio.punica.ui.page.exam.ExamPage
+import org.kiteio.punica.ui.page.exam.ExamRoute
 import org.kiteio.punica.ui.page.grades.GradesPage
 import org.kiteio.punica.ui.page.grades.GradesRoute
 import org.kiteio.punica.ui.page.home.HomePage
@@ -68,6 +70,7 @@ fun App(windowSizeClass: WindowSizeClass, snackbarHostState: SnackbarHostState? 
                 composable<EmergencyCallRoute> { EmergencyCallPage() }
                 composable<NoticeRoute> { NoticePage() }
                 composable<WebsitesRoute> { WebsitesPage() }
+                composable<ExamRoute> { ExamPage() }
                 composable<CETRoute> { CETPage() }
                 composable<GradesRoute> { GradesPage() }
                 composable<SecondClassRoute> { SecondClassPage() }

@@ -123,10 +123,15 @@ object AppVM : ViewModel() {
                 Network -> PrefsKeys.NETWORK_USER_ID
                 OTP -> error("")
             }
+            // 删除数据
+            Stores.timetable.edit { prefs -> prefs.removeAll { it.contains(userId) } }
+            Stores.exams.edit { prefs -> prefs.removeAll { it == userId } }
+            Stores.grades.edit { prefs -> prefs.removeAll { it == userId } }
+            Stores.secondClassGrades.edit { prefs -> prefs.removeAll { it == userId } }
+            Stores.plans.edit { prefs -> prefs.removeAll { it == userId } }
+            Stores.progresses.edit { prefs -> prefs.removeAll { it == userId } }
             // 删除用户
             Stores.users.edit { it.remove(userId) }
-            // 删除课表
-            Stores.timetable.edit { prefs -> prefs.removeAll { it.contains(userId) } }
             // 删除学号
             Stores.prefs.edit {
                 if (it[key] == userId) {

@@ -18,15 +18,25 @@ fun LocalDateTime.Companion.now() =
 
 
 /**
- * 时间戳转化为“yyyy-MM-dd HH:MM”
+ * yyyy-MM-dd HH:MM。
+ */
+private val localDateTimeFormat = LocalDateTime.Format {
+    year(); char('-')
+    monthNumber();char('-')
+    dayOfMonth(); char(' ')
+    hour(); char(':')
+    minute()
+}
+
+
+/**
+ * 时间戳转化为“yyyy-MM-dd HH:MM”。
  */
 fun timestampToString(timestamp: Long) = Instant.fromEpochMilliseconds(timestamp)
-    .toLocalDateTime(TimeZone.currentSystemDefault()).format(
-        LocalDateTime.Format {
-            year(); char('-')
-            monthNumber();char('-')
-            dayOfMonth(); char(' ')
-            hour(); char(':')
-            minute()
-        }
-    )
+    .toLocalDateTime(TimeZone.currentSystemDefault()).format(localDateTimeFormat )
+
+
+/**
+ * 转化为“yyyy-MM-dd HH:MM”。
+ */
+fun LocalDateTime.format() = format(localDateTimeFormat)

@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import compose.icons.CssGgIcons
 import compose.icons.cssggicons.Slack
-import compose.icons.cssggicons.Time
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -23,6 +22,7 @@ import org.kiteio.punica.ui.compositionlocal.LocalWindowSizeClass
 import org.kiteio.punica.ui.compositionlocal.isCompactWidth
 import org.kiteio.punica.ui.page.call.EmergencyCallRoute
 import org.kiteio.punica.ui.page.cet.CETRoute
+import org.kiteio.punica.ui.page.exam.ExamRoute
 import org.kiteio.punica.ui.page.grades.GradesRoute
 import org.kiteio.punica.ui.page.home.TopLevelRoute
 import org.kiteio.punica.ui.page.notice.NoticeRoute
@@ -34,7 +34,6 @@ import org.kiteio.punica.ui.page.timetables.CourseTimetableRoute
 import org.kiteio.punica.ui.page.websites.WebsitesRoute
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.course_system
-import punica.composeapp.generated.resources.exam
 import punica.composeapp.generated.resources.modules
 
 /**
@@ -66,7 +65,7 @@ private fun Content() {
         NoticeRoute,
         WebsitesRoute,
         ModuleImpl(Res.string.course_system, CssGgIcons.Slack),
-        ModuleImpl(Res.string.exam, CssGgIcons.Time),
+        ExamRoute,
         CETRoute,
         GradesRoute,
         SecondClassRoute,
