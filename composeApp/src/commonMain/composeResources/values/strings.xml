@@ -17,6 +17,9 @@
     <string name="nothing_provided">什么也没有</string>
     <string name="error">出现了点问题</string>
 
+    <!-- ProgressPage.kt -->
+    <string name="recommended_term_index">建议修读学期</string>
+
     <!-- CourseSystemPage.kt -->
     <string name="category_basic">必修课</string>
     <string name="category_optional">选修课</string>

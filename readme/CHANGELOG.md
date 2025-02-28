@@ -2,7 +2,8 @@
 
 ### 2025.2.28
 
-- **添加**：成绩详情
+- **添加**：学业进度详情
+- [**添加**：成绩详情](https://github.com/Kiteio/Punica-CMP/commit/c4353246da9b8076ebbe49483a6cbdbf6228f7c6)
 - [**添加**：选课系统页面](https://github.com/Kiteio/Punica-CMP/commit/a1399f51d5ef1b9c6141023fe350b79b996a0efe)
 
 ### 2025.2.27

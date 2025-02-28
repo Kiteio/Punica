@@ -39,7 +39,7 @@ suspend fun AcademicSystem.getProgresses(): Progresses {
                         courseName = tds[index + 3].text(),
                         credits = tds[index + 4].text().toDouble(),
                         termIndex = tds[index + 5].text().toIntOrNull(),
-                        note = tds[index + 6].text(),
+                        note = tds[index + 6].text().ifBlank { null },
                         requiredCredits = tds[index + 7].text().toDoubleOrNull(),
                         earnedCredits = tds[index + 8].text().toDoubleOrNull(),
                     )

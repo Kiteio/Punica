@@ -1,5 +1,6 @@
 package org.kiteio.punica.ui.page.progress
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -44,6 +45,9 @@ fun ProgressPage() = viewModel { ProgressVM() }.Content()
 
 @Composable
 private fun ProgressVM.Content() {
+    var moduleBottomSheetVisible by remember { mutableStateOf(false) }
+    var module by remember { mutableStateOf<ProgressModule?>(null) }
+
     LaunchedEffectCatching(AppVM.academicSystem) {
         updateProgresses()
     }
@@ -60,7 +64,7 @@ private fun ProgressVM.Content() {
 
             LaunchedEffectCatching(Unit) {
                 withContext(Dispatchers.Default) {
-                    val map = modules.flatMap { it.progresses }.groupBy { "${it.moduleName} - ${it.category}" }
+                    val map = modules.flatMap { it.progresses }.groupBy { "${it.moduleName}  ${it.category}" }
 
                     val progressModules = mutableListOf<ProgressModule>()
                     map.forEach { (key, value) ->
@@ -77,12 +81,20 @@ private fun ProgressVM.Content() {
                 }
             }
 
-            LazyVerticalGrid(columns = GridCells.Adaptive(200.dp)) {
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(200.dp),
+                contentPadding = PaddingValues(4.dp),
+            ) {
                 items(modules) {
                     Progress(
                         name = it.moduleName,
                         earnedCredits = it.earnedCredits,
                         requiredCredits = it.requiredCredits,
+                        onClick = {
+                            module = it
+                            moduleBottomSheetVisible = true
+                        },
+                        modifier = Modifier.padding(4.dp),
                         fontWeight = FontWeight.SemiBold,
                     )
                 }
@@ -91,6 +103,11 @@ private fun ProgressVM.Content() {
                         Progress(
                             name = it.moduleName,
                             earnedCredits = it.earnedCredits,
+                            onClick = {
+                                module = it
+                                moduleBottomSheetVisible = true
+                            },
+                            modifier = Modifier.padding(4.dp),
                             requiredCredits = it.requiredCredits,
                         )
                     }
@@ -98,36 +115,40 @@ private fun ProgressVM.Content() {
             }
         }
     }
-}
 
-
-@Composable
-private fun Progress(name: String, earnedCredits: Double?, requiredCredits: Double?, fontWeight: FontWeight? = null) {
-    ListItem(
-        headlineContent = { Text(name, fontWeight = fontWeight) },
-        trailingContent = {
-            Text(
-                "${earnedCredits ?: ""} / ${requiredCredits ?: ""}",
-                color = if (
-                    earnedCredits != null &&
-                    requiredCredits != null &&
-                    earnedCredits / requiredCredits < 1
-                ) MaterialTheme.colorScheme.error
-                else LocalContentColor.current,
-                fontWeight = FontWeight.SemiBold,
-                style = MaterialTheme.typography.bodyMedium,
-            )
-        },
+    ModuleBottomSheet(
+        moduleBottomSheetVisible,
+        onDismissRequest = { moduleBottomSheetVisible = false },
+        module = module,
     )
 }
 
 
-private fun MutableMap<String, Pair<Double?, Double?>>.upsert(key: String, pair: Pair<Double?, Double?>) {
-    val oldPair = this[key]
-    if (oldPair == null) this[key] = pair
-    else {
-        val first = pair.first?.let { (oldPair.first ?: 0.0) + it } ?: oldPair.first
-        val second = oldPair.second ?: pair.second
-        this[key] = first to second
+@Composable
+private fun Progress(
+    name: String,
+    earnedCredits: Double?,
+    requiredCredits: Double?,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    fontWeight: FontWeight? = null,
+) {
+    ElevatedCard(onClick = onClick, modifier = modifier) {
+        ListItem(
+            headlineContent = { Text(name, fontWeight = fontWeight) },
+            trailingContent = {
+                Text(
+                    "${earnedCredits ?: ""} / ${requiredCredits ?: ""}",
+                    color = if (
+                        earnedCredits != null &&
+                        requiredCredits != null &&
+                        earnedCredits / requiredCredits < 1
+                    ) MaterialTheme.colorScheme.error
+                    else LocalContentColor.current,
+                    fontWeight = FontWeight.SemiBold,
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+            },
+        )
     }
 }
