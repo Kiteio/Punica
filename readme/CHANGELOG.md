@@ -2,11 +2,12 @@
 
 ### 2025.2.28
 
-- **添加**：选课系统页面
+- **添加**：成绩详情
+- [**添加**：选课系统页面](https://github.com/Kiteio/Punica-CMP/commit/a1399f51d5ef1b9c6141023fe350b79b996a0efe)
 
 ### 2025.2.27
 
-- [**添加**：考试安排页面](https://github.com/Kiteio/Punica-CMP/commit/https://github.com/Kiteio/Punica-CMP/commit/)
+- [**添加**：考试安排页面](https://github.com/Kiteio/Punica-CMP/commit/c9cce9db03e5992013fb24e25e9588f103ff1f21)
 - [**添加**：执行计划、学业进度页面](https://github.com/Kiteio/Punica-CMP/commit/78cebb4cea82109913a0bc5bb1c9ed457190096c)
 - [**添加**：课程课表页面](https://github.com/Kiteio/Punica-CMP/commit/581b3dc08c6f9788a415c2d8ebdd601279c943d0)
 - [**添加**：教师信息页面](https://github.com/Kiteio/Punica-CMP/commit/4be506e5a9d46d30ec0cbf5fbe18aa06926a6073)

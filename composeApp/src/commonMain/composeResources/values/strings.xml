@@ -83,6 +83,15 @@
     <string name="search">搜索</string>
     <string name="course_grades">课程成绩</string>
     <string name="qualification_grades">资质认证成绩</string>
+    <string name="daily_score">平时成绩</string>
+    <string name="lab_score">实验成绩</string>
+    <string name="final_score">期末成绩</string>
+    <string name="credits">学分</string>
+    <string name="assessment_method">考核方式</string>
+    <string name="type">性质</string>
+    <string name="elective_category">通识课分类</string>
+    <string name="exam_type">考试性质</string>
+    <string name="mark">成绩标识</string>
 
     <!-- WebsitesPage.kt -->
     <string name="gdufe_portal">融合门户</string>

@@ -7,7 +7,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -20,6 +20,9 @@ import org.kiteio.punica.client.academic.api.QualificationGrade
  */
 @Composable
 fun Grades(grades: List<Grade>) {
+    var gradeBottomSheetVisible by remember { mutableStateOf(false) }
+    var courseGrade by remember { mutableStateOf<CourseGrade?>(null) }
+
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Adaptive(200.dp),
         contentPadding = PaddingValues(4.dp),
@@ -27,7 +30,12 @@ fun Grades(grades: List<Grade>) {
     ) {
         items(grades) { grade ->
             ElevatedCard(
-                onClick = {},
+                onClick = {
+                    if (grade is CourseGrade) {
+                        courseGrade = grade
+                        gradeBottomSheetVisible = true
+                    }
+                },
                 modifier = Modifier.padding(4.dp),
             ) {
                 ListItem(
@@ -57,4 +65,13 @@ fun Grades(grades: List<Grade>) {
             }
         }
     }
+
+    GradeBottomSheet(
+        gradeBottomSheetVisible,
+        onDismissRequest = {
+            gradeBottomSheetVisible = false
+            courseGrade = null
+        },
+        grade = courseGrade,
+    )
 }
