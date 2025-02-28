@@ -1,7 +1,5 @@
 package org.kiteio.punica.ui.page.account
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Visibility
@@ -20,6 +18,7 @@ import org.kiteio.punica.client.academic.foundation.User
 import org.kiteio.punica.ui.page.account.PasswordType.*
 import org.kiteio.punica.ui.widget.Checkbox
 import org.kiteio.punica.ui.widget.ModalBottomSheet
+import org.kiteio.punica.wrapper.focusCleaner
 import punica.composeapp.generated.resources.*
 
 /**
@@ -56,10 +55,7 @@ fun AccountVM.AccountBottomSheet(
 
         Column(
             modifier = Modifier.fillMaxSize().padding(16.dp)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null
-                ) { focusManager.clearFocus() },
+                .focusCleaner(focusManager),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {

@@ -93,10 +93,10 @@ object AppVM : ViewModel() {
                                 }
                             }
                         }
-                    } catch (e: Exception) {
+                    } catch (throwable: Throwable) {
                         // 验证码错误重试
-                        if (e.message == "验证码错误!!") updateAcademicSystem(userId)
-                        else throw e
+                        if (throwable.message == "验证码错误!!") updateAcademicSystem(userId)
+                        else throw throwable
                     }
                 }
             }

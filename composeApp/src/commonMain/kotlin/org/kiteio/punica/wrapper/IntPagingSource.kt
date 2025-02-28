@@ -1,8 +1,8 @@
 package org.kiteio.punica.wrapper
 
+import androidx.paging.Pager
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import app.cash.paging.Pager
 import app.cash.paging.PagingConfig
 
 /**
@@ -10,9 +10,12 @@ import app.cash.paging.PagingConfig
  */
 abstract class IntPagingSource<Value : Any> : PagingSource<Int, Value>() {
     override fun getRefreshKey(state: PagingState<Int, Value>): Int? {
+        println(111111)
+        println(state.anchorPosition)
         val anchorPosition = state.anchorPosition ?: return null
         val page = state.closestPageToPosition(anchorPosition)
-        return page?.run { prevKey?.plus(1) ?: nextKey?.minus(1) }
+        println(page)
+        return page?.run { prevKey?.plus(1) ?: nextKey?.minus(1) }.also { println(it) }
     }
 }
 

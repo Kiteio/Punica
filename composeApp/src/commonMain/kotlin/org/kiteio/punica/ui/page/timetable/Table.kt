@@ -23,7 +23,7 @@ import org.kiteio.punica.client.academic.foundation.ICourse
  */
 @Composable
 fun TimetableTable(
-    currentPage: Int?,
+    currentPage: Int,
     courses: List<List<ICourse>?>,
     onItemClick: (Int) -> Unit,
     spacing: Dp,
@@ -39,7 +39,7 @@ fun TimetableTable(
         val index = count + row
         // 过滤出当前周次的课程，若 week == null，则返回第一个课程
         val course = courses[index]?.firstOrNull {
-            currentPage != null && it.weeks.contains(currentPage)
+            currentPage == 0 || it.weeks.contains(currentPage)
         }
 
         // 通过节次数量或上一个课程的权重获取权重

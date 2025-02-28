@@ -12,6 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.androidpasswordstore.sublimefuzzy.Fuzzy
@@ -23,6 +24,7 @@ import org.kiteio.punica.AppVM
 import org.kiteio.punica.ui.page.modules.ModuleRoute
 import org.kiteio.punica.ui.widget.*
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
+import org.kiteio.punica.wrapper.focusCleaner
 import punica.composeapp.generated.resources.*
 
 /**
@@ -44,6 +46,8 @@ fun GradesPage() = viewModel { GradesVM() }.Content()
 
 @Composable
 private fun GradesVM.Content() {
+    val focusManager = LocalFocusManager.current
+
     val tabs = listOf(Res.string.course_grades, Res.string.qualification_grades)
     val state = rememberPagerState { tabs.size }
     var searchBarVisible by remember { mutableStateOf(false) }
@@ -63,10 +67,8 @@ private fun GradesVM.Content() {
                     // 搜索
                     SearchButton(
                         searchBarVisible,
-                        onClick = {
-                            searchBarVisible = !searchBarVisible
-                            if (!searchBarVisible) query = ""
-                        },
+                        isQueryBlank = query.isBlank(),
+                        onClick = { searchBarVisible = !searchBarVisible },
                     )
                     // 备注
                     IconButton(onClick = { noteDialogVisible = true }) {
@@ -77,7 +79,8 @@ private fun GradesVM.Content() {
                     }
                 }
             )
-        }
+        },
+        modifier = Modifier.focusCleaner(focusManager),
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             // 搜索

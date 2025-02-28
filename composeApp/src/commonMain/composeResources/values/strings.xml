@@ -17,6 +17,24 @@
     <string name="nothing_provided">什么也没有</string>
     <string name="error">出现了点问题</string>
 
+    <!-- CourseSystemPage.kt -->
+    <string name="category_basic">必修课</string>
+    <string name="category_optional">选修课</string>
+    <string name="category_general">通识课</string>
+    <string name="category_professional">专业内计划</string>
+    <string name="category_cross_grade">跨年级</string>
+    <string name="category_interprofessional">跨专业</string>
+    <string name="select_course">选课</string>
+    <string name="select_course_successful">选课成功</string>
+    <string name="withdraw_course">退课</string>
+    <string name="withdraw_course_successful">退课成功</string>
+    <string name="filter">过滤</string>
+    <string name="filter_full">只看有剩余</string>
+    <string name="filter_conflicts">只看不冲突</string>
+    <string name="course">课程</string>
+    <string name="checked">已选中</string>
+    <string name="selected_courses">已选课程</string>
+
     <!-- PlanScreen.kt -->
     <string name="course_id">编号</string>
     <string name="class_hours">学时</string>

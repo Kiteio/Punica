@@ -24,4 +24,7 @@ object PrefsKeys {
 
     /** 校园网学号 */
     val NETWORK_USER_ID = stringPreferencesKey("network_user_id")
+
+    /** 选课系统 id */
+    val COURSE_SYSTEM_ID = stringPreferencesKey("course_system_id")
 }

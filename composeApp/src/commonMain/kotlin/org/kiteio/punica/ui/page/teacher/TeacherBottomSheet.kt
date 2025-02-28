@@ -3,6 +3,7 @@ package org.kiteio.punica.ui.page.teacher
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
@@ -266,7 +267,10 @@ private fun TeachCourses(key: String, tCourses: List<TCourse>) {
     ProvideBodyMedium {
         // 名称
         Text(key, fontWeight = FontWeight.SemiBold)
-        HorizontalDivider(modifier = Modifier.padding(2.dp))
+        HorizontalDivider(
+            modifier = Modifier.padding(2.dp),
+            color = MaterialTheme.colorScheme.surfaceVariant,
+        )
         // 课程
         tCourses.forEach {
             Row(
@@ -294,7 +298,10 @@ private fun TeachCourses(key: String, tCourses: List<TCourse>) {
                     textAlign = TextAlign.Center,
                 )
             }
-            HorizontalDivider(modifier = Modifier.padding(2.dp))
+            HorizontalDivider(
+                modifier = Modifier.padding(2.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant,
+            )
         }
     }
 }

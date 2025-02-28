@@ -247,7 +247,7 @@ private fun ActivityProfile(activityProfile: ActivityProfile) = with(activityPro
             Spacer(modifier = Modifier.height(8.dp))
         }
         item {
-            HorizontalDivider()
+            HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant)
             Spacer(modifier = Modifier.height(8.dp))
             // 描述
             Text(description, style = MaterialTheme.typography.bodySmall)

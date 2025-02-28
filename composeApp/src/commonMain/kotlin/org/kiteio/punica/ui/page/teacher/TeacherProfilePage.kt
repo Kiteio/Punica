@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import app.cash.paging.compose.collectAsLazyPagingItems
@@ -21,6 +22,7 @@ import org.kiteio.punica.client.academic.api.Teacher
 import org.kiteio.punica.ui.page.modules.ModuleRoute
 import org.kiteio.punica.ui.widget.*
 import org.kiteio.punica.wrapper.Pager
+import org.kiteio.punica.wrapper.focusCleaner
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.teacher_profile
 
@@ -42,6 +44,8 @@ fun TeacherProfilePage() = Content()
 
 @Composable
 private fun Content() {
+    val focusManager = LocalFocusManager.current
+
     var query by remember { mutableStateOf("") }
     val teachers = remember(AppVM.academicSystem, query) {
         Pager(pageSize = 1) { TeachersPagingSource(query) }.flow
@@ -59,14 +63,13 @@ private fun Content() {
                     // 搜索
                     SearchButton(
                         searchBarVisible,
-                        onClick = {
-                            searchBarVisible = !searchBarVisible
-                            if (!searchBarVisible) query = ""
-                        },
+                        isQueryBlank = query.isBlank(),
+                        onClick = { searchBarVisible = !searchBarVisible },
                     )
                 }
             )
-        }
+        },
+        modifier = Modifier.focusCleaner(focusManager),
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             // 搜索

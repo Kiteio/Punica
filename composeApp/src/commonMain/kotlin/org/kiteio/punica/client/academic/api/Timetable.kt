@@ -77,7 +77,7 @@ suspend fun AcademicSystem.getTimetable(term: Term): Timetable {
                         )
                     )
                 }
-                cells.add(cell.takeIf { it.size > 0 })
+                cells.add(cell.takeIf { it.isNotEmpty() })
             } else cells.add(null)
         }
 

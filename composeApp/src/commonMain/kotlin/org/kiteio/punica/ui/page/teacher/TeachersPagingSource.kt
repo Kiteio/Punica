@@ -18,8 +18,8 @@ class TeachersPagingSource(private val name: String) : IntPagingSource<Teacher>(
                 prevKey = params.key?.let { it - 1 },
                 nextKey = if (index == teachers.pageCount) null else index + 1,
             )
-        } catch (e: Exception) {
-            LoadResult.Error(e)
+        } catch (throwable: Throwable) {
+            LoadResult.Error(throwable)
         }
     }
 }

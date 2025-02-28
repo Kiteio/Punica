@@ -2,10 +2,10 @@ package org.kiteio.punica.ui.page.account
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Login
-import androidx.compose.material.icons.automirrored.outlined.Logout
+import androidx.compose.material.icons.filled.LocalOffer
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.DeleteOutline
+import androidx.compose.material.icons.outlined.LocalOffer
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -124,8 +124,8 @@ fun AccountVM.User(user: User, isCurrentAccount: Boolean, onClick: () -> Unit, m
                         },
                     ) {
                         Icon(
-                            if (isCurrentAccount) Icons.AutoMirrored.Outlined.Logout
-                            else Icons.AutoMirrored.Outlined.Login,
+                            if (isCurrentAccount) Icons.Filled.LocalOffer
+                            else Icons.Outlined.LocalOffer,
                             contentDescription = stringResource(
                                 if (isCurrentAccount) Res.string.remove_current_account
                                 else Res.string.set_up_current_account,

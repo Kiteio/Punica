@@ -40,8 +40,8 @@ suspend fun CourseSystem.search(
             when (courseCategory) {
                 GENERAL, PROFESSIONAL, CROSS_GRADE, INTERPROFESSIONAL -> {
                     with(parameters) {
-                        parameter("kcxx", name?.encodeURLParameter() ?: "")
-                        parameter("skls", teacher?.encodeURLParameter() ?: "")
+                        parameter("kcxx", name.encodeURLParameter())
+                        parameter("skls", teacher.encodeURLParameter())
                         parameter("skxq", dayOfWeek?.isoDayNumber ?: "")
                         parameter("skjc", section?.let { "$it-" } ?: "")
                         parameter("sfym", filterFull)
@@ -71,8 +71,8 @@ suspend fun CourseSystem.search(
  * @property filterConflicts 是否过滤冲突课程
  */
 data class SearchParameters(
-    val name: String? = null,
-    val teacher: String? = null,
+    val name: String = "",
+    val teacher: String = "",
     val dayOfWeek: DayOfWeek? = null,
     val section: Section? = null,
     val campus: Campus? = null,
@@ -103,7 +103,7 @@ private data class SearchBody(
  * @property courseId 课程编号
  * @property name 课程名称
  * @property credits 学分
- * @property campusId 校区 id：0，1
+ * @property campusId 校区 id：1，2
  * @property time 上课时间
  * @property classroom 教室
  * @property total 课堂人数

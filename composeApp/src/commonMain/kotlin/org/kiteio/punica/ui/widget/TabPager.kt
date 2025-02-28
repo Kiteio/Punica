@@ -21,6 +21,7 @@ import org.kiteio.punica.wrapper.launchCatching
 fun HorizontalTabPager(
     state: PagerState,
     tabContent: @Composable (Int) -> Unit,
+    tabScrollable: Boolean = false,
     modifier: Modifier = Modifier,
     pageContent: @Composable PagerScope.(Int) -> Unit,
 ) {
@@ -29,7 +30,7 @@ fun HorizontalTabPager(
     Column(modifier = modifier) {
         // TabRow
         Surface(shadowElevation = 1.dp) {
-            PrimaryTabRow(
+            TabRow(
                 selectedTabIndex = state.currentPage,
                 indicator = {
                     // 底部指示设置为圆形短线
@@ -40,7 +41,7 @@ fun HorizontalTabPager(
                         shape = CircleShape,
                     )
                 },
-                divider = {},
+                scrollable = tabScrollable,
             ) {
                 // Tabs
                 repeat(state.pageCount) {
@@ -58,6 +59,32 @@ fun HorizontalTabPager(
         HorizontalPager(
             state = state,
             pageContent = pageContent,
+        )
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TabRow(
+    selectedTabIndex: Int,
+    indicator: @Composable TabIndicatorScope.() -> Unit = {},
+    scrollable: Boolean,
+    tabs: @Composable () -> Unit,
+) {
+    if (scrollable) {
+        PrimaryScrollableTabRow(
+            selectedTabIndex = selectedTabIndex,
+            indicator = indicator,
+            divider = {},
+            tabs = tabs,
+        )
+    } else {
+        PrimaryTabRow(
+            selectedTabIndex = selectedTabIndex,
+            indicator = indicator,
+            divider = {},
+            tabs = tabs,
         )
     }
 }

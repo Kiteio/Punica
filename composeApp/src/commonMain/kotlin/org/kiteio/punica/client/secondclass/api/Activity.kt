@@ -94,7 +94,7 @@ private data class Records(val records: List<ActivityImpl>)
  * 活动
  */
 @Serializable
-data class ActivityImpl(
+private data class ActivityImpl(
     override val id: Int,
     override val name: String,
     override val category: String,

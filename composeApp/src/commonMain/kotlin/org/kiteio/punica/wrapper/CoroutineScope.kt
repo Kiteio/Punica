@@ -13,8 +13,8 @@ fun CoroutineScope.launchCatching(block: suspend CoroutineScope.() -> Unit) {
     launch {
         try {
             block()
-        } catch (e: Throwable) {
-            handleException(e)
+        } catch (throwable: Throwable) {
+            handleException(throwable)
         }
     }
 }
@@ -28,18 +28,21 @@ fun LaunchedEffectCatching(vararg keys: Any?, block: suspend CoroutineScope.() -
     LaunchedEffect(keys) {
         try {
             block()
-        } catch (e: Throwable) {
-            handleException(e)
+        } catch (throwable: Throwable) {
+            handleException(throwable)
         }
     }
 }
 
 
-private fun handleException(e: Throwable) {
+private fun handleException(throwable: Throwable) {
     // 过滤无关异常
     if (
-        e.message != "rememberCoroutineScope left the composition" &&
-        e.message != "The coroutine scope left the composition" &&
-        e.message != "Mutation interrupted"
-    ) showToast(e)
+        throwable.message !in listOf(
+            "rememberCoroutineScope left the composition",
+            "The coroutine scope left the composition",
+            "Mutation interrupted",
+            "Job was cancelled"
+        )
+    ) showToast(throwable)
 }

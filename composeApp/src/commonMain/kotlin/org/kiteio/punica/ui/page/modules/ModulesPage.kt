@@ -12,8 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import compose.icons.CssGgIcons
-import compose.icons.cssggicons.Slack
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -22,6 +20,7 @@ import org.kiteio.punica.ui.compositionlocal.LocalWindowSizeClass
 import org.kiteio.punica.ui.compositionlocal.isCompactWidth
 import org.kiteio.punica.ui.page.call.EmergencyCallRoute
 import org.kiteio.punica.ui.page.cet.CETRoute
+import org.kiteio.punica.ui.page.course.CourseSystemRoute
 import org.kiteio.punica.ui.page.exam.ExamRoute
 import org.kiteio.punica.ui.page.grades.GradesRoute
 import org.kiteio.punica.ui.page.home.TopLevelRoute
@@ -33,7 +32,6 @@ import org.kiteio.punica.ui.page.teacher.TeacherProfileRoute
 import org.kiteio.punica.ui.page.timetables.CourseTimetableRoute
 import org.kiteio.punica.ui.page.websites.WebsitesRoute
 import punica.composeapp.generated.resources.Res
-import punica.composeapp.generated.resources.course_system
 import punica.composeapp.generated.resources.modules
 
 /**
@@ -64,7 +62,7 @@ private fun Content() {
         EmergencyCallRoute,
         NoticeRoute,
         WebsitesRoute,
-        ModuleImpl(Res.string.course_system, CssGgIcons.Slack),
+        CourseSystemRoute,
         ExamRoute,
         CETRoute,
         GradesRoute,
@@ -136,9 +134,3 @@ interface ModuleRoute {
     val nameRes: StringResource
     val icon: ImageVector
 }
-
-
-private data class ModuleImpl(
-    override val nameRes: StringResource,
-    override val icon: ImageVector,
-) : ModuleRoute

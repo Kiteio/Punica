@@ -19,8 +19,8 @@ class NoticePagingSource : IntPagingSource<Notice>() {
                 prevKey = params.key?.let { it - 1 },
                 nextKey = index + 1,
             )
-        } catch (e: Exception) {
-            LoadResult.Error(e)
+        } catch (throwable: Throwable) {
+            LoadResult.Error(throwable)
         }
     }
 }
