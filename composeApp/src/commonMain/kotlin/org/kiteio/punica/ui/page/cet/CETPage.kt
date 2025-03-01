@@ -18,8 +18,8 @@ import org.kiteio.punica.client.cet.CET
 import org.kiteio.punica.client.cet.api.CETExam
 import org.kiteio.punica.client.cet.api.getExam
 import org.kiteio.punica.ui.page.modules.ModuleRoute
-import org.kiteio.punica.ui.widget.LoadingNotNullOrEmpty
-import org.kiteio.punica.ui.widget.NavBackAppBar
+import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
+import org.kiteio.punica.ui.component.NavBackAppBar
 import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.cet

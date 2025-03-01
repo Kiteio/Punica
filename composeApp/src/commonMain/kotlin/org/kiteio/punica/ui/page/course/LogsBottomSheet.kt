@@ -12,8 +12,8 @@ import androidx.compose.ui.unit.dp
 import org.kiteio.punica.client.course.CourseSystem
 import org.kiteio.punica.client.course.api.WithdrawalLog
 import org.kiteio.punica.client.course.api.getWithdrawalLogs
-import org.kiteio.punica.ui.widget.LoadingNotNullOrEmpty
-import org.kiteio.punica.ui.widget.ModalBottomSheet
+import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
+import org.kiteio.punica.ui.component.ModalBottomSheet
 import org.kiteio.punica.wrapper.launchCatching
 
 @Composable

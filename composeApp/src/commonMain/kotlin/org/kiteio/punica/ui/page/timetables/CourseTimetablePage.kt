@@ -21,10 +21,10 @@ import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.foundation.CCourse
 import org.kiteio.punica.ui.page.modules.ModuleRoute
-import org.kiteio.punica.ui.widget.LoadingNotNullOrEmpty
-import org.kiteio.punica.ui.widget.NavBackAppBar
-import org.kiteio.punica.ui.widget.SearchButton
-import org.kiteio.punica.ui.widget.SearchTextField
+import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
+import org.kiteio.punica.ui.component.NavBackAppBar
+import org.kiteio.punica.ui.component.SearchButton
+import org.kiteio.punica.ui.component.SearchTextField
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 import org.kiteio.punica.wrapper.focusCleaner
 import punica.composeapp.generated.resources.Res

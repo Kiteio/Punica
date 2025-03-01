@@ -34,6 +34,8 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.appdirs)
             implementation(libs.cryptography.provider.jdk)
+            implementation(libs.glance.appwidget)
+            implementation(libs.glance.material3)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.otp)
             implementation(libs.startup.runtine)

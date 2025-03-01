@@ -17,10 +17,10 @@ import org.kiteio.punica.client.secondclass.api.Activity
 import org.kiteio.punica.client.secondclass.api.ActivityProfile
 import org.kiteio.punica.client.secondclass.api.getActivities
 import org.kiteio.punica.client.secondclass.api.getActivityProfile
-import org.kiteio.punica.ui.widget.LoadingNotNullOrEmpty
-import org.kiteio.punica.ui.widget.ModalBottomSheet
-import org.kiteio.punica.ui.widget.ProvideBodyMedium
-import org.kiteio.punica.ui.widget.SpaceBetween
+import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
+import org.kiteio.punica.ui.component.ModalBottomSheet
+import org.kiteio.punica.ui.component.ProvideBodyMedium
+import org.kiteio.punica.ui.component.SpaceBetween
 import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.*
 

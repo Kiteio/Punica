@@ -1,4 +1,4 @@
-package org.kiteio.punica.ui.widget
+package org.kiteio.punica.ui.component
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth

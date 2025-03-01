@@ -12,8 +12,8 @@ import compose.icons.cssggicons.Dribbble
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.ui.page.modules.ModuleRoute
-import org.kiteio.punica.ui.widget.HorizontalTabPager
-import org.kiteio.punica.ui.widget.NavBackAppBar
+import org.kiteio.punica.ui.component.HorizontalTabPager
+import org.kiteio.punica.ui.component.NavBackAppBar
 import punica.composeapp.generated.resources.*
 
 /**

@@ -21,9 +21,9 @@ import org.kiteio.punica.ui.compositionlocal.isMediumHeight
 import org.kiteio.punica.ui.page.timetable.TimetableHeader
 import org.kiteio.punica.ui.page.timetable.TimetableTable
 import org.kiteio.punica.ui.page.timetable.TimetableTimeline
-import org.kiteio.punica.ui.widget.HorizontalTabPager
-import org.kiteio.punica.ui.widget.LoadingNotNullOrEmpty
-import org.kiteio.punica.ui.widget.ModalBottomSheet
+import org.kiteio.punica.ui.component.HorizontalTabPager
+import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
+import org.kiteio.punica.ui.component.ModalBottomSheet
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.Res

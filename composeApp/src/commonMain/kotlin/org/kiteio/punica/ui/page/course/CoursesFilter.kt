@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.client.course.api.SearchParameters
-import org.kiteio.punica.ui.widget.Checkbox
+import org.kiteio.punica.ui.component.Checkbox
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.filter
 import punica.composeapp.generated.resources.filter_conflicts

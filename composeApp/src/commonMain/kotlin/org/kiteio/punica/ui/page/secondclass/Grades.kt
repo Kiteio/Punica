@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import org.kiteio.punica.ui.widget.LoadingNotNullOrEmpty
+import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 
 /**

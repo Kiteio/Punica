@@ -26,9 +26,9 @@ import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.foundation.Campus
 import org.kiteio.punica.ui.page.modules.ModuleRoute
 import org.kiteio.punica.ui.rememberRBlocking
-import org.kiteio.punica.ui.widget.HorizontalTabPager
-import org.kiteio.punica.ui.widget.NavBackAppBar
-import org.kiteio.punica.ui.widget.showToast
+import org.kiteio.punica.ui.component.HorizontalTabPager
+import org.kiteio.punica.ui.component.NavBackAppBar
+import org.kiteio.punica.ui.component.showToast
 import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.*
 

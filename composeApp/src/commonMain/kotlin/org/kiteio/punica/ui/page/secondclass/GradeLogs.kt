@@ -16,7 +16,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import org.kiteio.punica.client.secondclass.api.GradeLog
 import org.kiteio.punica.client.secondclass.api.getGradeLogs
-import org.kiteio.punica.ui.widget.LoadingNotNullOrEmpty
+import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
 import org.kiteio.punica.wrapper.launchCatching
 
 /**

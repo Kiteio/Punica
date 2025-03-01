@@ -18,7 +18,7 @@ import org.kiteio.punica.ui.page.account.PasswordType
 import org.kiteio.punica.ui.page.account.PasswordType.*
 import org.kiteio.punica.ui.theme.ThemeMode
 import org.kiteio.punica.ui.theme.ThemeMode.*
-import org.kiteio.punica.ui.widget.showToast
+import org.kiteio.punica.ui.component.showToast
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.delete_successful
 

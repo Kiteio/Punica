@@ -10,7 +10,7 @@ import org.kiteio.punica.client.academic.foundation.ICourse
 import org.kiteio.punica.ui.compositionlocal.LocalWindowSizeClass
 import org.kiteio.punica.ui.compositionlocal.isCompactWidth
 import org.kiteio.punica.ui.compositionlocal.isMediumHeight
-import org.kiteio.punica.ui.widget.HorizontalPager
+import org.kiteio.punica.ui.component.HorizontalPager
 
 /**
  * 课表分页。

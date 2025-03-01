@@ -12,8 +12,8 @@ import org.kiteio.punica.ui.compositionlocal.LocalNavController
 import org.kiteio.punica.ui.page.account.AccountRoute
 import org.kiteio.punica.ui.page.account.PasswordType
 import org.kiteio.punica.ui.page.account.PasswordType.*
-import org.kiteio.punica.ui.widget.SettingsGroup
-import org.kiteio.punica.ui.widget.SettingsMenuLink
+import org.kiteio.punica.ui.component.SettingsGroup
+import org.kiteio.punica.ui.component.SettingsMenuLink
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.account
 import punica.composeapp.generated.resources.not_logged_in

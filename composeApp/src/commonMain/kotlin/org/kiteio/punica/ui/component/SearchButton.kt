@@ -1,4 +1,4 @@
-package org.kiteio.punica.ui.widget
+package org.kiteio.punica.ui.component
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search

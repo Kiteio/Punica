@@ -6,7 +6,7 @@ import io.ktor.client.plugins.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
-import org.kiteio.punica.ui.widget.showToast
+import org.kiteio.punica.ui.component.showToast
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.connect_timeout
 

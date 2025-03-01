@@ -20,9 +20,9 @@ import org.kiteio.punica.client.academic.api.TCourse
 import org.kiteio.punica.client.academic.api.Teacher
 import org.kiteio.punica.client.academic.api.TeacherProfile
 import org.kiteio.punica.client.academic.api.getTeacherProfile
-import org.kiteio.punica.ui.widget.ModalBottomSheet
-import org.kiteio.punica.ui.widget.ProvideBodyMedium
-import org.kiteio.punica.ui.widget.SpaceBetween
+import org.kiteio.punica.ui.component.ModalBottomSheet
+import org.kiteio.punica.ui.component.ProvideBodyMedium
+import org.kiteio.punica.ui.component.SpaceBetween
 import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.*
 

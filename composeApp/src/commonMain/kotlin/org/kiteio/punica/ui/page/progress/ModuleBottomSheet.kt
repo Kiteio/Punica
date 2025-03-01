@@ -13,7 +13,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.api.ProgressModule
 import org.kiteio.punica.client.academic.foundation.Term
-import org.kiteio.punica.ui.widget.ModalBottomSheet
+import org.kiteio.punica.ui.component.ModalBottomSheet
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.recommended_term_index
 

@@ -16,8 +16,8 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.client.academic.foundation.User
 import org.kiteio.punica.ui.page.account.PasswordType.*
-import org.kiteio.punica.ui.widget.Checkbox
-import org.kiteio.punica.ui.widget.ModalBottomSheet
+import org.kiteio.punica.ui.component.Checkbox
+import org.kiteio.punica.ui.component.ModalBottomSheet
 import org.kiteio.punica.wrapper.focusCleaner
 import punica.composeapp.generated.resources.*
 

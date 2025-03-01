@@ -17,7 +17,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.client.academic.foundation.Campus
 import org.kiteio.punica.client.course.api.SearchParameters
 import org.kiteio.punica.client.course.foundation.Section
-import org.kiteio.punica.ui.widget.ModalBottomSheet
+import org.kiteio.punica.ui.component.ModalBottomSheet
 import org.kiteio.punica.wrapper.focusCleaner
 import punica.composeapp.generated.resources.*
 

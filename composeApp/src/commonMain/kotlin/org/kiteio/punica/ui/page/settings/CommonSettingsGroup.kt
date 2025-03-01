@@ -10,8 +10,8 @@ import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.foundation.Campus
 import org.kiteio.punica.ui.theme.ThemeMode
-import org.kiteio.punica.ui.widget.SettingsGroup
-import org.kiteio.punica.ui.widget.SettingsMenuLink
+import org.kiteio.punica.ui.component.SettingsGroup
+import org.kiteio.punica.ui.component.SettingsMenuLink
 import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.*
 

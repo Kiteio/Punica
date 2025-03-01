@@ -1,4 +1,4 @@
-package org.kiteio.punica.ui.widget
+package org.kiteio.punica.ui.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

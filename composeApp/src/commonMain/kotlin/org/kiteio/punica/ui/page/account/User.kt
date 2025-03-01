@@ -19,7 +19,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.foundation.User
 import org.kiteio.punica.tool.TOTP
-import org.kiteio.punica.ui.widget.showToast
+import org.kiteio.punica.ui.component.showToast
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 import org.kiteio.punica.wrapper.launchCatching
 import org.kiteio.punica.wrapper.now

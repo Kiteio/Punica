@@ -20,8 +20,8 @@ import org.kiteio.punica.client.course.api.delete
 import org.kiteio.punica.client.course.api.select
 import org.kiteio.punica.client.course.foundation.CourseCategory
 import org.kiteio.punica.ui.page.account.DeleteDialog
-import org.kiteio.punica.ui.widget.Loading
-import org.kiteio.punica.ui.widget.showToast
+import org.kiteio.punica.ui.component.Loading
+import org.kiteio.punica.ui.component.showToast
 import org.kiteio.punica.wrapper.Pager
 import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.*

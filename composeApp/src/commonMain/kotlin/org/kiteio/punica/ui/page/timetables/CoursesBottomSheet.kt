@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringArrayResource
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.client.academic.foundation.CCourse
-import org.kiteio.punica.ui.widget.ModalBottomSheet
+import org.kiteio.punica.ui.component.ModalBottomSheet
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.day_of_week
 import punica.composeapp.generated.resources.days_of_week

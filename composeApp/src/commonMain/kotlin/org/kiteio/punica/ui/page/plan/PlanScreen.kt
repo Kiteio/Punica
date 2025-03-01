@@ -17,9 +17,9 @@ import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.foundation.Term
 import org.kiteio.punica.ui.page.modules.ModuleRoute
-import org.kiteio.punica.ui.widget.HorizontalTabPager
-import org.kiteio.punica.ui.widget.LoadingNotNullOrEmpty
-import org.kiteio.punica.ui.widget.NavBackAppBar
+import org.kiteio.punica.ui.component.HorizontalTabPager
+import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
+import org.kiteio.punica.ui.component.NavBackAppBar
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 import punica.composeapp.generated.resources.*
 

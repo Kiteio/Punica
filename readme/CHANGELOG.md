@@ -2,7 +2,8 @@
 
 ### 2025.3.1
 
-- **修改**：准备发行版
+- **添加（Android）**：课表小组件
+- [**修改**：准备发行版](https://github.com/Kiteio/Punica-CMP/commit/56245f07beb6d83b7bea532c0428eccad2c14fc0)
 
 ### 2025.2.28
 

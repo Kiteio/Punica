@@ -17,9 +17,9 @@ import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.foundation.ICourse
 import org.kiteio.punica.ui.page.home.TopLevelRoute
 import org.kiteio.punica.ui.rememberRBlocking
-import org.kiteio.punica.ui.widget.Checkbox
-import org.kiteio.punica.ui.widget.LoadingNotNullOrEmpty
-import org.kiteio.punica.ui.widget.NoteDialog
+import org.kiteio.punica.ui.component.Checkbox
+import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
+import org.kiteio.punica.ui.component.NoteDialog
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.Res

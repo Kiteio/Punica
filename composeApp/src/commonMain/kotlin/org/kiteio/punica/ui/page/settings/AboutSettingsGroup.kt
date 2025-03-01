@@ -15,9 +15,9 @@ import compose.icons.simpleicons.Github
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.Build
-import org.kiteio.punica.ui.widget.SettingsGroup
-import org.kiteio.punica.ui.widget.SettingsMenuLink
-import org.kiteio.punica.ui.widget.showToast
+import org.kiteio.punica.ui.component.SettingsGroup
+import org.kiteio.punica.ui.component.SettingsMenuLink
+import org.kiteio.punica.ui.component.showToast
 import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.*
 

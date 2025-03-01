@@ -22,7 +22,7 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.ui.page.modules.ModuleRoute
-import org.kiteio.punica.ui.widget.*
+import org.kiteio.punica.ui.component.*
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 import org.kiteio.punica.wrapper.focusCleaner
 import punica.composeapp.generated.resources.*

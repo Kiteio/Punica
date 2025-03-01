@@ -21,7 +21,7 @@ import compose.icons.tablericons.Wifi
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.ui.page.modules.ModuleRoute
-import org.kiteio.punica.ui.widget.NavBackAppBar
+import org.kiteio.punica.ui.component.NavBackAppBar
 import punica.composeapp.generated.resources.*
 
 /**

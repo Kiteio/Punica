@@ -9,8 +9,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.client.academic.api.CourseGrade
-import org.kiteio.punica.ui.widget.ModalBottomSheet
-import org.kiteio.punica.ui.widget.ProvideBodyMedium
+import org.kiteio.punica.ui.component.ModalBottomSheet
+import org.kiteio.punica.ui.component.ProvideBodyMedium
 import punica.composeapp.generated.resources.*
 
 @Composable

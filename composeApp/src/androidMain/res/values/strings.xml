@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">小石榴</string>
+
+    <string name="timetable">课表</string>
+    <string name="no_timetable">无课表</string>
+    <string name="week_of">第%1$d周</string>
+    <string-array name="days_of_week">
+        <item>星期一</item>
+        <item>星期二</item>
+        <item>星期三</item>
+        <item>星期四</item>
+        <item>星期五</item>
+        <item>星期六</item>
+        <item>星期日</item>
+    </string-array>
+    <string name="holiday">今天放假</string>
 </resources>

@@ -20,7 +20,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.api.Teacher
 import org.kiteio.punica.ui.page.modules.ModuleRoute
-import org.kiteio.punica.ui.widget.*
+import org.kiteio.punica.ui.component.*
 import org.kiteio.punica.wrapper.Pager
 import org.kiteio.punica.wrapper.focusCleaner
 import punica.composeapp.generated.resources.Res
