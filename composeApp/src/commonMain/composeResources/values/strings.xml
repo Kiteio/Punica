@@ -2,6 +2,18 @@
 <resources>
     <string name="app_name">小石榴</string>
 
+    <string name="welcome">欢迎(｡•ㅅ•｡)♡</string>
+
+    <string name="intro">    嘿，欢迎使用《小石榴》跨平台版本（目前支持 Android、Windows）。
+    石榴是一款开源的广财教务系统三方工具，让你远离繁杂的教务系统。
+    石榴的数据解析可能会存在问题，在使用时请注意：
+
+    1. 检查信息准确性，必要时请先与教务系统比对
+    2. 选课系统目前未经测试，请谨慎使用
+    3. 学业进度必须再结合培养方案，其中有额外的修读要求
+
+    嗯...就这样啦，有问题请联系 @Chanwing Chow。现在，进入设置，打开教务系统账号，点击右上角加号登录教务系统吧。</string>
+
     <string name="campus_canton">广州校区</string>
     <string name="campus_foshan">佛山校区</string>
     <string name="course_system_inaccessible">选课系统无法访问</string>
@@ -16,6 +28,8 @@
 
     <string name="nothing_provided">什么也没有</string>
     <string name="error">出现了点问题</string>
+
+    <string name="connect_timeout">连接超时</string>
 
     <!-- ProgressPage.kt -->
     <string name="recommended_term_index">建议修读学期</string>
@@ -184,6 +198,8 @@
     <string name="theme_mode_dark">暗色</string>
     <string name="about">关于</string>
     <string name="version">版本</string>
+    <string name="github" translatable="false">GitHub</string>
+    <string name="little_red_book">小红书</string>
 
     <!-- HomePage.kt -->
     <string name="timetable">课表</string>

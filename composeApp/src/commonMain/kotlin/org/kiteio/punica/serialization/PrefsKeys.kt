@@ -1,5 +1,6 @@
 package org.kiteio.punica.serialization
 
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 
@@ -7,6 +8,9 @@ import androidx.datastore.preferences.core.stringPreferencesKey
  * Preferences 键。
  */
 object PrefsKeys {
+    /** 首次启动 */
+    val FIRST_START = booleanPreferencesKey("first_start")
+
     /** 周次 */
     val WEEK = intPreferencesKey("week")
 

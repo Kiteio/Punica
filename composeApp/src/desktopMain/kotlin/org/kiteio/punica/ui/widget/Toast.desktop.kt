@@ -10,5 +10,10 @@ private val scope = CoroutineScope(SupervisorJob())
 val snackbarHostState = SnackbarHostState()
 
 actual fun showToast(message: String) {
-    scope.launchCatching { snackbarHostState.showSnackbar(message) }
+    scope.launchCatching {
+        snackbarHostState.showSnackbar(
+            message,
+            withDismissAction = true,
+        )
+    }
 }

@@ -60,7 +60,7 @@ fun Courses(courseSystem: CourseSystem, category: CourseCategory, query: String)
         // 课程
         Loading(courses.loadState.refresh) {
             LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Adaptive(200.dp),
+                columns = StaggeredGridCells.Adaptive(280.dp),
                 contentPadding = PaddingValues(4.dp),
             ) {
                 items(courses.itemCount) {

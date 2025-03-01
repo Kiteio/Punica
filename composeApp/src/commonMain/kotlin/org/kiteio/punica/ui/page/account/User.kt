@@ -106,11 +106,7 @@ fun AccountVM.User(user: User, isCurrentAccount: Boolean, onClick: () -> Unit, m
     ElevatedCard(onClick = onClick, modifier = modifier) {
         ListItem(
             headlineContent = {
-                Text(
-                    user.id,
-                    color = if (isCurrentAccount) MaterialTheme.colorScheme.primary
-                    else LocalContentColor.current,
-                )
+                Text(user.id)
             },
             trailingContent = {
                 Row {
@@ -130,6 +126,8 @@ fun AccountVM.User(user: User, isCurrentAccount: Boolean, onClick: () -> Unit, m
                                 if (isCurrentAccount) Res.string.remove_current_account
                                 else Res.string.set_up_current_account,
                             ),
+                            tint = if (isCurrentAccount) MaterialTheme.colorScheme.primary
+                            else LocalContentColor.current,
                         )
                     }
 

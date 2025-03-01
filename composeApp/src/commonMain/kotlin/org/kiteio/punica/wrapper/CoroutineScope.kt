@@ -2,9 +2,13 @@ package org.kiteio.punica.wrapper
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import io.ktor.client.plugins.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
 import org.kiteio.punica.ui.widget.showToast
+import punica.composeapp.generated.resources.Res
+import punica.composeapp.generated.resources.connect_timeout
 
 /**
  * [launch] try ... catch。
@@ -35,7 +39,7 @@ fun LaunchedEffectCatching(vararg keys: Any?, block: suspend CoroutineScope.() -
 }
 
 
-private fun handleException(throwable: Throwable) {
+private suspend fun handleException(throwable: Throwable) {
     // 过滤无关异常
     if (
         throwable.message !in listOf(
@@ -44,5 +48,15 @@ private fun handleException(throwable: Throwable) {
             "Mutation interrupted",
             "Job was cancelled"
         )
-    ) showToast(throwable)
+    ) {
+        when (throwable) {
+            is HttpRequestTimeoutException -> {
+                showToast(getString(Res.string.connect_timeout))
+            }
+
+            else -> {
+                showToast(throwable)
+            }
+        }
+    }
 }

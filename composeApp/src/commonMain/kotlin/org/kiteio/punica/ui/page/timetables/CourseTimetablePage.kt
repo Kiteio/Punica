@@ -92,7 +92,7 @@ private fun CourseTimetableVM.Content() {
                 isLoading = isLoading,
             ) { timetable ->
                 LazyVerticalStaggeredGrid(
-                    columns = StaggeredGridCells.Adaptive(200.dp),
+                    columns = StaggeredGridCells.Adaptive(280.dp),
                     contentPadding = PaddingValues(4.dp),
                 ) {
                     items(

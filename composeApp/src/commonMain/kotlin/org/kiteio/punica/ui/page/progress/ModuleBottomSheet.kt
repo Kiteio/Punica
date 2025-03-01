@@ -29,7 +29,7 @@ fun ModuleBottomSheet(visible: Boolean, onDismissRequest: () -> Unit, module: Pr
                 Text(moduleName, fontWeight = FontWeight.SemiBold)
                 Spacer(modifier = Modifier.height(8.dp))
                 LazyVerticalStaggeredGrid(
-                    columns = StaggeredGridCells.Adaptive(200.dp),
+                    columns = StaggeredGridCells.Adaptive(280.dp),
                 ) {
                     items(progresses) {
                         Card(modifier = Modifier.padding(4.dp)) {

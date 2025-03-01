@@ -125,8 +125,15 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "org.kiteio.punica"
+            packageName = "Punica"
             packageVersion = libs.versions.punica.versionName.get()
+            outputBaseDir = project.file("release")
+            modules("jdk.unsupported")
+            windows.iconFile = project.file("icons/windows.ico")
+        }
+        buildTypes.release.proguard {
+            isEnabled.set(false)
+            configurationFiles.from(project.file("proguard-rules.pro"))
         }
     }
 }
