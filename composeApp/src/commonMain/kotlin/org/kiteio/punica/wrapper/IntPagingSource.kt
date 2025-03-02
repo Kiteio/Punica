@@ -10,12 +10,9 @@ import app.cash.paging.PagingConfig
  */
 abstract class IntPagingSource<Value : Any> : PagingSource<Int, Value>() {
     override fun getRefreshKey(state: PagingState<Int, Value>): Int? {
-        println(111111)
-        println(state.anchorPosition)
         val anchorPosition = state.anchorPosition ?: return null
         val page = state.closestPageToPosition(anchorPosition)
-        println(page)
-        return page?.run { prevKey?.plus(1) ?: nextKey?.minus(1) }.also { println(it) }
+        return page?.run { prevKey?.plus(1) ?: nextKey?.minus(1) }
     }
 }
 

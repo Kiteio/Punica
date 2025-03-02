@@ -4,14 +4,12 @@ import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.select.Evaluator
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.util.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kiteio.punica.client.academic.foundation.User
-import org.kiteio.punica.client.yescaptcha.YesCaptcha
-import org.kiteio.punica.client.yescaptcha.api.createTask
 import org.kiteio.punica.http.Client
 import org.kiteio.punica.http.HttpClientWrapper
+import org.kiteio.punica.tool.readText
 
 /**
  * [教务系统](http://jwxt.gdufe.edu.cn/jsxsd/)。
@@ -31,8 +29,11 @@ suspend fun AcademicSystem(user: User): AcademicSystem {
         val client = Client("http://jwxt.gdufe.edu.cn", user.cookies)
 
         // 获取并识别验证码
-        val base64 = client.get("jsxsd/verifycode.servlet").readRawBytes().encodeBase64()
-        val captcha = YesCaptcha().createTask(base64)
+        val captcha = client.get("jsxsd/verifycode.servlet")
+            .readRawBytes().readText()
+            .filter { it.isLetterOrDigit() }
+
+        require(captcha.length == 4) { "验证码错误!!" }
 
         // 发送登录请求
         val text = client.submitForm(

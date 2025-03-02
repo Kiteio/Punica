@@ -8,17 +8,18 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import org.jetbrains.compose.resources.getString
+import org.kiteio.punica.AppVM.academicSystem
 import org.kiteio.punica.client.academic.AcademicSystem
 import org.kiteio.punica.client.academic.api.getNetworkPwd
 import org.kiteio.punica.client.academic.foundation.Campus.CANTON
 import org.kiteio.punica.client.academic.foundation.Campus.FO_SHAN
 import org.kiteio.punica.client.academic.foundation.User
 import org.kiteio.punica.serialization.*
+import org.kiteio.punica.ui.component.showToast
 import org.kiteio.punica.ui.page.account.PasswordType
 import org.kiteio.punica.ui.page.account.PasswordType.*
 import org.kiteio.punica.ui.theme.ThemeMode
 import org.kiteio.punica.ui.theme.ThemeMode.*
-import org.kiteio.punica.ui.component.showToast
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.delete_successful
 

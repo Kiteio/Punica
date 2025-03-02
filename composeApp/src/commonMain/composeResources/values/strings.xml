@@ -187,6 +187,7 @@
     <string name="campus_network">校园网</string>
     <string name="otp" translatable="false">OTP</string>
     <string name="not_logged_in">未登录</string>
+    <string name="login">登录</string>
     <string name="common">常用</string>
     <string name="current_week">当前周次</string>
     <string name="campus">校区</string>

@@ -41,6 +41,7 @@ fun SettingsMenuLink(
     title: @Composable () -> Unit,
     subtitle: (@Composable () -> Unit)?,
     icon: @Composable () -> Unit,
+    action: (@Composable () -> Unit)? = null,
     onClick: () -> Unit,
 ) {
     SettingsMenuLink(
@@ -61,6 +62,7 @@ fun SettingsMenuLink(
             }
         },
         icon = icon,
+        action = action,
         onClick = onClick,
     )
 }

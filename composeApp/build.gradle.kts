@@ -39,6 +39,7 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.otp)
             implementation(libs.startup.runtine)
+            implementation(libs.tess4Android)
         }
         commonMain.dependencies {
             implementation(compose.components.resources)
@@ -76,6 +77,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.otp)
+            implementation(libs.tess4j)
         }
         iosMain.dependencies {
             implementation(libs.cryptography.provider.apple)
@@ -109,6 +111,14 @@ android {
                 outputFileName =
                     "punica-android-${defaultConfig.versionName}.apk"
             }
+        }
+    }
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            // noinspection ChromeOsAbiSupport
+            include("arm64-v8a")
         }
     }
     compileOptions {

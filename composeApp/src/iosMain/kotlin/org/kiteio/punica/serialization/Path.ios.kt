@@ -1,9 +1,8 @@
 package org.kiteio.punica.serialization
 
-import okio.Path
-import okio.Path.Companion.toPath
+import kotlinx.io.files.SystemPathSeparator
 
-actual fun fileDir(path: String): Path {
+actual fun fileDir(path: String): String {
     val documentDirectory = NSFileManager.defaultManager.URLForDirectory(
         directory = NSDocumentDirectory,
         inDomain = NSUserDomainMask,
@@ -12,5 +11,5 @@ actual fun fileDir(path: String): Path {
         error = null,
     )!!
 
-    return "${documentDirectory.path}/$path".toPath()
+    return "${documentDirectory.path}$SystemPathSeparator$path"
 }
