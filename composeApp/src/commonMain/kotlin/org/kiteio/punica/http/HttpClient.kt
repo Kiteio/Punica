@@ -20,7 +20,7 @@ fun HttpClient(
     // 内容协商：Json
     install(ContentNegotiation) { json(Json) }
     // 超时：4000ms
-    install(HttpTimeout) { requestTimeoutMillis = 4000; connectTimeoutMillis = 4000 }
+    install(HttpTimeout) { requestTimeoutMillis = 10000; connectTimeoutMillis = 10000 }
     // Cookie 管理
     install(HttpCookies) { storage = CookiesCollector(cookies) }
 }

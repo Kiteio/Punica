@@ -11,30 +11,33 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.client.academic.foundation.MCourse
 import org.kiteio.punica.client.course.CourseSystem
+import org.kiteio.punica.client.course.api.delete
 import org.kiteio.punica.client.course.api.getCourses
-import org.kiteio.punica.ui.compositionlocal.LocalWindowSizeClass
-import org.kiteio.punica.ui.compositionlocal.isCompactWidth
-import org.kiteio.punica.ui.compositionlocal.isMediumHeight
-import org.kiteio.punica.ui.page.timetable.TimetableHeader
-import org.kiteio.punica.ui.page.timetable.TimetableTable
-import org.kiteio.punica.ui.page.timetable.TimetableTimeline
 import org.kiteio.punica.ui.component.HorizontalTabPager
 import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
 import org.kiteio.punica.ui.component.ModalBottomSheet
+import org.kiteio.punica.ui.component.showToast
+import org.kiteio.punica.ui.compositionlocal.LocalWindowSizeClass
+import org.kiteio.punica.ui.compositionlocal.isCompactWidth
+import org.kiteio.punica.ui.compositionlocal.isMediumHeight
+import org.kiteio.punica.ui.page.account.DeleteDialog
+import org.kiteio.punica.ui.page.timetable.TimetableHeader
+import org.kiteio.punica.ui.page.timetable.TimetableTable
+import org.kiteio.punica.ui.page.timetable.TimetableTimeline
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 import org.kiteio.punica.wrapper.launchCatching
-import punica.composeapp.generated.resources.Res
-import punica.composeapp.generated.resources.selected_courses
-import punica.composeapp.generated.resources.timetable
+import punica.composeapp.generated.resources.*
 
 @Composable
 fun MyCoursesBottomSheet(visible: Boolean, onDismissRequest: () -> Unit, courseSystem: CourseSystem?) {
     ModalBottomSheet(visible, onDismissRequest) {
         var isLoading by remember { mutableStateOf(true) }
-        val mCourses by produceState<List<MCourse>?>(null) {
+        var flag by remember { mutableStateOf(false) }
+        val mCourses by produceState<List<MCourse>?>(null, flag) {
             launchCatching {
                 try {
                     value = courseSystem?.getCourses()
@@ -53,7 +56,12 @@ fun MyCoursesBottomSheet(visible: Boolean, onDismissRequest: () -> Unit, courseS
                 tabContent = { Text(stringResource(tabs[it])) }
             ) { page ->
                 when (page) {
-                    0 -> List(courses)
+                    0 -> List(
+                        courses,
+                        courseSystem = courseSystem,
+                        onWitidrawCourse = { flag = !flag }
+                    )
+
                     1 -> Timetable(courses)
                 }
             }
@@ -63,16 +71,20 @@ fun MyCoursesBottomSheet(visible: Boolean, onDismissRequest: () -> Unit, courseS
 
 
 @Composable
-private fun List(courses: List<MCourse>) {
+private fun List(courses: List<MCourse>, courseSystem: CourseSystem?, onWitidrawCourse: () -> Unit) {
+    val scope = rememberCoroutineScope()
+    var deleteDialogVisible by remember { mutableStateOf(false) }
+    var mCourse by remember { mutableStateOf<MCourse?>(null) }
+
     LazyVerticalStaggeredGrid(
-        columns = StaggeredGridCells.Adaptive(200.dp),
-        contentPadding = PaddingValues(16.dp)
+        columns = StaggeredGridCells.Adaptive(256.dp),
+        contentPadding = PaddingValues(4.dp)
     ) {
         items(courses) {
             Card(modifier = Modifier.padding(4.dp)) {
                 ListItem(
                     headlineContent = { Text(it.name) },
-                    trailingContent = {
+                    supportingContent = {
                         Column {
                             CompositionLocalProvider(
                                 LocalTextStyle provides MaterialTheme.typography.bodySmall,
@@ -87,18 +99,53 @@ private fun List(courses: List<MCourse>) {
                                 // 教师
                                 Text(it.teacher)
                                 // 上课时间
-                                Text(it.time)
+                                it.time?.let { text -> Text(text) }
                                 // 上课地点
-                                Text(it.classroom)
+                                it.classroom?.let { text -> Text(text) }
                                 // 课程属性
                                 Text(it.category)
                             }
                         }
                     },
+                    trailingContent = {
+                        TextButton(
+                            onClick = {
+                                mCourse = it
+                                deleteDialogVisible = true
+                            }
+                        ) {
+                            Text(
+                                stringResource(Res.string.withdraw_course),
+                                color = MaterialTheme.colorScheme.error,
+                            )
+                        }
+                    }
                 )
             }
         }
     }
+
+    DeleteDialog(
+        deleteDialogVisible,
+        onDismissRequest = {
+            deleteDialogVisible = false
+            mCourse = null
+        },
+        onConfirm = {
+            // 退课
+            scope.launchCatching {
+                mCourse?.run {
+                    courseSystem?.run {
+                        delete(id)
+                        onWitidrawCourse()
+                        showToast(getString(Res.string.withdraw_course_successful))
+                        deleteDialogVisible = false
+                        mCourse = null
+                    }
+                }
+            }
+        },
+    )
 }
 
 
@@ -110,9 +157,11 @@ private fun Timetable(courses: List<MCourse>) {
         // 生成课表
         val list = MutableList<MutableList<MCourse>?>(42) { null }
         courses.forEach {
-            val index = it.dayOfWeek.ordinal * 6 + it.sections.minOf { it } - 1
+            if (it.dayOfWeek != null && it.sections != null) {
+                val index = it.dayOfWeek.ordinal * 6 + (it.sections.minOf { it } - 1) / 2
 
-            (list[index] ?: mutableListOf<MCourse>().also { list[index] = it }).add(it)
+                (list[index] ?: mutableListOf<MCourse>().also { list[index] = it }).add(it)
+            }
         }
         timetable = list
     }

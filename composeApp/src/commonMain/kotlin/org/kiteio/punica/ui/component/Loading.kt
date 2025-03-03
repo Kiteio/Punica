@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
+import app.cash.paging.compose.LazyPagingItems
 import org.jetbrains.compose.resources.stringResource
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.error
@@ -24,7 +25,12 @@ import punica.composeapp.generated.resources.nothing_provided
  * @param isLoading 是否正在加载中
  */
 @Composable
-fun <T> LoadingNotNullOrEmpty(any: T?, isLoading: Boolean, modifier: Modifier = Modifier, content: @Composable (T) -> Unit) {
+fun <T> LoadingNotNullOrEmpty(
+    any: T?,
+    isLoading: Boolean,
+    modifier: Modifier = Modifier,
+    content: @Composable (T) -> Unit,
+) {
     Box(modifier = modifier) {
         when {
             isLoading -> LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
@@ -40,19 +46,19 @@ fun <T> LoadingNotNullOrEmpty(any: T?, isLoading: Boolean, modifier: Modifier = 
  */
 @Composable
 fun Loading(
-    loadState: LoadState,
+    items: LazyPagingItems<*>,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
     Box(modifier = modifier) {
-        when (loadState) {
+        when (items.loadState.refresh) {
             LoadState.Loading -> LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             is LoadState.Error -> Empty(
                 icon = Icons.Outlined.ErrorOutline,
                 text = stringResource(Res.string.error)
             )
 
-            else -> content()
+            else -> if (items.itemCount == 0) Empty() else content()
         }
     }
 }

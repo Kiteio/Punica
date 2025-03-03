@@ -25,7 +25,7 @@ class CoursesPagingSource(
             LoadResult.Page(
                 data = courses,
                 prevKey = params.key?.let { it - 1 },
-                nextKey = index + 1,
+                nextKey = if (courses.size == params.loadSize) index + 1 else null,
             )
         } catch (throwable: Throwable) {
             LoadResult.Error(throwable)

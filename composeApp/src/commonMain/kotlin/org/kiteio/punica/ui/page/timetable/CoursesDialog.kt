@@ -81,13 +81,15 @@ private fun Course(course: ICourse, modifier: Modifier = Modifier) {
                 },
             )
             // 星期
-            Text(
-                buildString {
-                    append(stringResource(Res.string.day_of_week))
-                    append("  ")
-                    append(stringArrayResource(Res.array.days_of_week)[course.dayOfWeek.ordinal])
-                },
-            )
+            course.dayOfWeek?.ordinal?.let {
+                Text(
+                    buildString {
+                        append(stringResource(Res.string.day_of_week))
+                        append("  ")
+                        append(stringArrayResource(Res.array.days_of_week)[it])
+                    },
+                )
+            }
         }
     }
 }

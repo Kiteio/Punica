@@ -19,9 +19,9 @@ import org.kiteio.punica.client.course.api.SearchParameters
 import org.kiteio.punica.client.course.api.delete
 import org.kiteio.punica.client.course.api.select
 import org.kiteio.punica.client.course.foundation.CourseCategory
-import org.kiteio.punica.ui.page.account.DeleteDialog
 import org.kiteio.punica.ui.component.Loading
 import org.kiteio.punica.ui.component.showToast
+import org.kiteio.punica.ui.page.account.DeleteDialog
 import org.kiteio.punica.wrapper.Pager
 import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.*
@@ -58,7 +58,7 @@ fun Courses(courseSystem: CourseSystem, category: CourseCategory, query: String)
             )
         }
         // 课程
-        Loading(courses.loadState.refresh) {
+        Loading(courses) {
             LazyVerticalStaggeredGrid(
                 columns = StaggeredGridCells.Adaptive(280.dp),
                 contentPadding = PaddingValues(4.dp),
@@ -69,7 +69,7 @@ fun Courses(courseSystem: CourseSystem, category: CourseCategory, query: String)
                             query.isBlank() ||
                             Fuzzy.fuzzyMatchSimple(query, course.name) ||
                             Fuzzy.fuzzyMatchSimple(query, course.teacher) ||
-                            Fuzzy.fuzzyMatchSimple(query, course.classroom) ||
+                            course.classroom?.let { classroom -> Fuzzy.fuzzyMatchSimple(query, classroom) } == true ||
                             Fuzzy.fuzzyMatchSimple(query, course.courseProvider)
                         ) {
                             Course(
@@ -162,17 +162,15 @@ private fun Course(
                         // 教师
                         Text(course.teacher)
                         // 上课时间
-                        Text(course.time)
+                        course.time?.let { Text(it) }
                         // 上课地点
-                        Text(course.classroom)
+                        course.classroom?.let { Text(it) }
                         // 备注
-                        if (course.note != null && course.note != "拟开课时间:") {
-                            Text(course.note)
-                        }
+                        course.note?.let { Text(it) }
                         // 冲突说明
-                        if (course.conflict.isNotBlank()) {
+                        course.conflict?.let {
                             Spacer(modifier = Modifier.height(4.dp))
-                            Text(course.conflict)
+                            Text(it)
                         }
                     }
                 }
@@ -184,6 +182,8 @@ private fun Course(
                             if (course.isSelected) Res.string.withdraw_course
                             else Res.string.select_course,
                         ),
+                        color = if (course.isSelected) MaterialTheme.colorScheme.error
+                        else LocalContentColor.current
                     )
                 }
             },

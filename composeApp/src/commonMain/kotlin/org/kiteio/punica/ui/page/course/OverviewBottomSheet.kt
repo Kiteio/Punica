@@ -42,26 +42,26 @@ fun OverviewBottomSheet(
         }
 
         LoadingNotNullOrEmpty(overview, isLoading = isLoading) { overview ->
-            // 学分进度
-            LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Adaptive(200.dp),
-                contentPadding = PaddingValues(16.dp),
-            ) {
-                items(overview.progresses) {
-                    Card(modifier = Modifier.padding(4.dp)) {
-                        ListItem(
-                            headlineContent = { Text(it.name) },
-                            trailingContent = {
-                                Text(
-                                    "${it.have} / ${it.limit}",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                )
-                            },
-                        )
+            Column {
+                // 学分进度
+                LazyVerticalStaggeredGrid(
+                    columns = StaggeredGridCells.Adaptive(200.dp),
+                    contentPadding = PaddingValues(16.dp),
+                ) {
+                    items(overview.progresses) {
+                        Card(modifier = Modifier.padding(4.dp)) {
+                            ListItem(
+                                headlineContent = { Text(it.name) },
+                                trailingContent = {
+                                    Text(
+                                        "${it.have} / ${it.limit}",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                    )
+                                },
+                            )
+                        }
                     }
                 }
-            }
-            Column {
                 // 备注
                 Text(
                     overview.note,

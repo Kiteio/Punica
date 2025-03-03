@@ -1,12 +1,13 @@
 package org.kiteio.punica.client.course.api
 
-import io.ktor.client.call.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kiteio.punica.client.course.CourseSystem
 import org.kiteio.punica.client.course.foundation.CourseCategory
 import org.kiteio.punica.client.course.foundation.CourseOperateBody
+import org.kiteio.punica.serialization.Json
 
 /**
  * 选择操作 id 为 [sCourseId] 的 [category] 类型的课程。
@@ -23,7 +24,7 @@ suspend fun CourseSystem.select(
             parameter("xkzy", priority?.id ?: "")
             parameter("trjf", "")
             parameter("cxxdlx", "1")
-        }.body<CourseOperateBody>()
+        }.run { Json.decodeFromString<CourseOperateBody>(bodyAsText()) }
 
         require(body.isSuccess) { body.message }
     }

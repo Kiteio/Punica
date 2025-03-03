@@ -17,7 +17,7 @@ class NoticePagingSource : IntPagingSource<Notice>() {
             LoadResult.Page(
                 data = notices,
                 prevKey = params.key?.let { it - 1 },
-                nextKey = index + 1,
+                nextKey = if (notices.size == params.loadSize) index + 1 else null,
             )
         } catch (throwable: Throwable) {
             LoadResult.Error(throwable)

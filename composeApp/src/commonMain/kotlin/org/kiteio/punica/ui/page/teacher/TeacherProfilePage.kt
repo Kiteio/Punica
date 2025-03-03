@@ -19,8 +19,11 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.api.Teacher
+import org.kiteio.punica.ui.component.Loading
+import org.kiteio.punica.ui.component.NavBackAppBar
+import org.kiteio.punica.ui.component.SearchButton
+import org.kiteio.punica.ui.component.SearchTextField
 import org.kiteio.punica.ui.page.modules.ModuleRoute
-import org.kiteio.punica.ui.component.*
 import org.kiteio.punica.wrapper.Pager
 import org.kiteio.punica.wrapper.focusCleaner
 import punica.composeapp.generated.resources.Res
@@ -81,27 +84,22 @@ private fun Content() {
                 )
             }
 
-            Loading(teachers.loadState.refresh) {
-                if (teachers.itemCount == 0) {
-                    // 空
-                    Empty()
-                } else {
-                    // 教师
-                    LazyVerticalStaggeredGrid(
-                        columns = StaggeredGridCells.Adaptive(200.dp),
-                        contentPadding = PaddingValues(4.dp),
-                    ) {
-                        items(teachers.itemCount) { index ->
-                            teachers[index]?.let {
-                                Teacher(
-                                    it,
-                                    onClick = {
-                                        teacher = it
-                                        bottomSheetVisible = true
-                                    },
-                                    modifier = Modifier.padding(4.dp),
-                                )
-                            }
+            Loading(teachers) {
+                // 教师
+                LazyVerticalStaggeredGrid(
+                    columns = StaggeredGridCells.Adaptive(200.dp),
+                    contentPadding = PaddingValues(4.dp),
+                ) {
+                    items(teachers.itemCount) { index ->
+                        teachers[index]?.let {
+                            Teacher(
+                                it,
+                                onClick = {
+                                    teacher = it
+                                    bottomSheetVisible = true
+                                },
+                                modifier = Modifier.padding(4.dp),
+                            )
                         }
                     }
                 }

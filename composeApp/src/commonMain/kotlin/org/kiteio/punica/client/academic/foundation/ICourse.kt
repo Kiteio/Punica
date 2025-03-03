@@ -19,11 +19,11 @@ import org.kiteio.punica.client.academic.api.parseWeeksString
 sealed interface ICourse {
     val name: String
     val teacher: String?
-    val weeksString: String
-    val weeks: Set<Int>
+    val weeksString: String?
+    val weeks: Set<Int>?
     val classroom: String?
-    val sections: Set<Int>
-    val dayOfWeek: DayOfWeek
+    val sections: Set<Int>?
+    val dayOfWeek: DayOfWeek?
 }
 
 
@@ -78,30 +78,36 @@ data class MCourse(
     val credits: Double,
     val category: String,
     override val teacher: String,
-    val time: String,
-    override val classroom: String,
+    val time: String?,
+    override val classroom: String?,
     val id: String,
 ) : ICourse {
-    private val timeSplits = time.split(" ")
+    private val timeSplits = time?.split(" ")
 
-    override val weeksString = timeSplits[0]
+    override val weeksString = timeSplits?.get(0)
 
-    override val weeks = parseWeeksString(weeksString)
+    override val weeks = weeksString?.let { parseWeeksString(it) }
 
-    override val sections = Regex("\\d+")
-        .findAll(timeSplits[2])
-        .map { it.value.toInt() }
-        .toSet()
+    override val sections = timeSplits?.get(2)?.let { section ->
+        Regex("\\d+")
+            .findAll(section)
+            .map { it.value.toInt() }
+            .toList().sorted()
+            // 有些多节次的课只会显示开始和结束，如 1-4 节，而不是 1-2-3-4 节
+            .let { it[0]..it[1] }.toSet()
+    }
 
-    override val dayOfWeek = DayOfWeek(
-        when (timeSplits[1]) {
-            "星期一" -> 1
-            "星期二" -> 2
-            "星期三" -> 3
-            "星期四" -> 4
-            "星期五" -> 5
-            "星期六" -> 6
-            else -> 7
-        }
-    )
+    override val dayOfWeek = timeSplits?.get(1)?.let {
+        DayOfWeek(
+            when (it) {
+                "星期一" -> 1
+                "星期二" -> 2
+                "星期三" -> 3
+                "星期四" -> 4
+                "星期五" -> 5
+                "星期六" -> 6
+                else -> 7
+            }
+        )
+    }
 }

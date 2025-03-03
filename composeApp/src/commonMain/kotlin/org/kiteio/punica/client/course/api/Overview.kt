@@ -15,23 +15,22 @@ suspend fun CourseSystem.getOverview(): Overview {
         val text = get("jsxsd/xsxk/xsxk_tzsm").bodyAsText()
 
         val doc = Ksoup.parse(text)
-        val tds = doc.getElementsByTag("td")
+        val tds = doc.getElementsByTag("td").apply { removeAt(0) }
 
-        val rowSize = tds.size / 3
         val progresses = mutableListOf<CreditProgress>()
-        for (index in 0..<rowSize) {
+        for (index in 1..4) {
             progresses.add(
                 CreditProgress(
                     name = tds[index].text(),
-                    have = tds[index + rowSize].text(),
-                    limit = tds[index + rowSize * 2].text(),
+                    have = tds[index + 5 * 2].text(),
+                    limit = tds[index + 5].text(),
                 )
             )
         }
 
         return@withContext Overview(
             doc.selectFirst(Evaluator.Tag("div"))!!.text(),
-            emptyList(),
+            progresses,
         )
     }
 }

@@ -26,9 +26,9 @@ suspend fun CourseSystem.getCourses(): List<MCourse> {
                     credits = tds[index + 2].text().toDouble(),
                     category = tds[index + 3].text(),
                     teacher = tds[index + 4].text(),
-                    time = tds[index + 5].text(),
-                    classroom = tds[index + 6].text(),
-                    id = tds[index + 8].text(),
+                    time = tds[index + 5].text().takeIf { it.isNotEmpty() },
+                    classroom = tds[index + 6].text().takeIf { it.isNotEmpty() },
+                    id = tds[index + 8].child(0).attr("href").substring(21, 36),
                 )
             )
         }

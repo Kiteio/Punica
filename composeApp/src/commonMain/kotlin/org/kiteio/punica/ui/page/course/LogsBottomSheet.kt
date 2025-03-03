@@ -32,7 +32,7 @@ fun LogsBottomSheet(visible: Boolean, onDismissRequest: () -> Unit, courseSystem
 
         LoadingNotNullOrEmpty(withdrawalLogs, isLoading = isLoading) { logs ->
             LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Adaptive(200.dp),
+                columns = StaggeredGridCells.Adaptive(256.dp),
                 contentPadding = PaddingValues(16.dp),
             ) {
                 items(logs) {

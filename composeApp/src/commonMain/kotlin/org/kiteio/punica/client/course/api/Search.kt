@@ -1,7 +1,7 @@
 package org.kiteio.punica.client.course.api
 
-import io.ktor.client.call.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -19,6 +19,7 @@ import org.kiteio.punica.client.course.CourseSystem
 import org.kiteio.punica.client.course.foundation.CourseCategory
 import org.kiteio.punica.client.course.foundation.CourseCategory.*
 import org.kiteio.punica.client.course.foundation.Section
+import org.kiteio.punica.serialization.Json
 
 /**
  * 返回搜索到的课程列表。
@@ -54,7 +55,7 @@ suspend fun CourseSystem.search(
 
                 else -> {}
             }
-        }.body<SearchBody>().list
+        }.run { Json.decodeFromString<SearchBody>(bodyAsText()) }.list
     }
 }
 
@@ -92,7 +93,7 @@ data class SearchParameters(
  */
 @Serializable
 private data class SearchBody(
-    @SerialName("aaData") val list: List<SCourse>,
+    @SerialName("aaData") val list: List<SCourseImpl>,
 )
 
 
@@ -116,29 +117,56 @@ private data class SearchBody(
  * @property courseProvider 开课单位
  * @property arrangements 上课安排
  */
+interface SCourse {
+    val id: String
+    val courseId: String
+    val name: String
+    val credits: Double
+    val teacher: String
+    val campusId: Int
+    val time: String?
+    val classroom: String?
+    val total: Int
+    val leftover: Int
+    val note: String?
+    val conflict: String?
+    val type: String?
+    val isSelectable: Boolean
+    val isSelected: Boolean
+    val courseProvider: String
+    val assessmentMethod: String
+    val arrangements: List<CourseArrangement>?
+}
+
+
 @Serializable
-data class SCourse(
-    @SerialName("jx0404id") val id: String,
-    @SerialName("kch") val courseId: String,
-    @SerialName("kcmc") val name: String,
-    @SerialName("xf") val credits: Double,
-    @SerialName("skls") val teacher: String,
-    @SerialName("xqid") val campusId: Int,
-    @SerialName("sksj") val time: String,
-    @SerialName("skdd") val classroom: String,
-    @SerialName("xxrs") val total: Int,
-    @SerialName("syrs") val leftover: Int,
-    @SerialName("bj") val note: String?,
-    @SerialName("ctsm") val conflict: String,
-    @SerialName("szkcflmc") val type: String,
+data class SCourseImpl(
+    @SerialName("jx0404id") override val id: String,
+    @SerialName("kch") override val courseId: String,
+    @SerialName("kcmc") override val name: String,
+    @SerialName("xf") override val credits: Double,
+    @SerialName("skls") override val teacher: String,
+    @SerialName("xqid") override val campusId: Int,
+    val sksj: String,
+    val skdd: String,
+    @SerialName("xxrs") override val total: Int,
+    @SerialName("syrs") override val leftover: Int,
+    val bj: String?,
+    val ctsm: String? = null,
+    @SerialName("szkcflmc") override val type: String?,
     @SerialName("sfkfxk") @Serializable(BooleanSerializer::class)
-    val isSelectable: Boolean,
+    override val isSelectable: Boolean,
     @SerialName("sfYx") @Serializable(BooleanSerializer::class)
-    val isSelected: Boolean,
-    @SerialName("dwmc") val courseProvider: String,
-    @SerialName("ksfs") val assessmentMethod: String,
-    @SerialName("kkapList") val arrangements: List<CourseArrangement>,
-)
+    override val isSelected: Boolean,
+    @SerialName("dwmc") override val courseProvider: String,
+    @SerialName("ksfs") override val assessmentMethod: String,
+    @SerialName("kkapList") override val arrangements: List<CourseArrangement>? = null,
+) : SCourse {
+    override val time = sksj.takeIf { it != "&nbsp;" }
+    override val classroom = skdd.takeIf { it != "&nbsp;" }
+    override val note = bj.takeIf { it != "拟开课时间:" }
+    override val conflict = ctsm.takeIf { it?.isNotEmpty() == true }
+}
 
 
 /**

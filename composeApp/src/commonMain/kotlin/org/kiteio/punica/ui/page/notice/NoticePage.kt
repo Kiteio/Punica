@@ -19,9 +19,9 @@ import compose.icons.cssggicons.Bell
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.client.office.api.Notice
-import org.kiteio.punica.ui.page.modules.ModuleRoute
 import org.kiteio.punica.ui.component.Loading
 import org.kiteio.punica.ui.component.NavBackAppBar
+import org.kiteio.punica.ui.page.modules.ModuleRoute
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.academic_notice
 
@@ -49,7 +49,7 @@ private fun NoticeVM.Content() {
     Scaffold(
         topBar = { NavBackAppBar(title = { Text(stringResource(NoticeRoute.nameRes)) }) }
     ) { innerPadding ->
-        Loading(notices.loadState.refresh, modifier = Modifier.padding(innerPadding)) {
+        Loading(notices, modifier = Modifier.padding(innerPadding)) {
             LazyVerticalStaggeredGrid(
                 columns = StaggeredGridCells.Adaptive(200.dp),
                 contentPadding = PaddingValues(4.dp)
