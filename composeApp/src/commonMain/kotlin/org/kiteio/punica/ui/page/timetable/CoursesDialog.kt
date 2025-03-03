@@ -77,7 +77,8 @@ private fun Course(course: ICourse, modifier: Modifier = Modifier) {
                 buildString {
                     append(stringResource(Res.string.sections))
                     append("  ")
-                    append(course.sections.run { "${first()}-${last()}" })
+                    append(course.sections?.run { "${min()}-${max()}" } ?: "")
+                    println(course.sections)
                 },
             )
             // 星期

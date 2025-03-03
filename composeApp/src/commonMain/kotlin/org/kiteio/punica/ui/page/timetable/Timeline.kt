@@ -11,7 +11,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.flow.first
 import org.kiteio.punica.AppVM
-import org.kiteio.punica.client.academic.foundation.Campus
 import org.kiteio.punica.ui.rememberRBlocking
 
 /**
@@ -31,18 +30,11 @@ fun TimetableTimeline(spacing: Dp, modifier: Modifier = Modifier) {
                 val i = index * 2
 
                 with(campus) {
-                    if (this@with == Campus.CANTON) {
-                        // 广州校区
-                        Text(schedule[i].start)
-                        Text(schedule[i].endInclusive)
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(schedule[i + 1].start)
-                        Text(schedule[i + 1].endInclusive)
-                    } else {
-                        // 佛山校区
-                        Text(schedule[i].start)
-                        Text(schedule[i + 1].endInclusive)
-                    }
+                    Text(schedule[i].start)
+                    Text(schedule[i].endInclusive)
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(schedule[i + 1].start)
+                    Text(schedule[i + 1].endInclusive)
                 }
             }
         }

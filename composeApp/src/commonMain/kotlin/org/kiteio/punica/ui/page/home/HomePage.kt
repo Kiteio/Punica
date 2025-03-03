@@ -53,7 +53,10 @@ private fun Content() {
         useRail = !windowSizeClass.isCompactWidth,
         routes = routes,
         navDestination = backStackEntry?.destination,
-        onNavigate = { navController.navigate(it) },
+        onNavigate = {
+            navController.popBackStack()
+            navController.navigate(it)
+        },
     ) {
         NavHost(
             navController = navController,
