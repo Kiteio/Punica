@@ -7,13 +7,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.format.char
+import kotlinx.serialization.Serializable
 import org.kiteio.punica.client.academic.AcademicSystem
 import org.kiteio.punica.client.academic.foundation.Term
 
 /**
  * 返回学期 [term] 的日历。
  */
-suspend fun AcademicSystem.getTermDateRange(term: Term): ClosedRange<LocalDate> {
+suspend fun AcademicSystem.getTermDateRange(term: Term = Term.current): TermDateRange {
     return withContext(Dispatchers.Default) {
         val text = submitForm(
             "jsxsd/jxzl/jxzl_query",
@@ -39,6 +40,16 @@ suspend fun AcademicSystem.getTermDateRange(term: Term): ClosedRange<LocalDate> 
             formatter,
         )
 
-        return@withContext start..end
+        return@withContext TermDateRange(term, start..end)
     }
 }
+
+
+/**
+ * 学期日历。
+ */
+@Serializable
+data class TermDateRange(
+    val term: Term,
+    val range: ClosedRange<LocalDate>,
+)

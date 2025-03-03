@@ -18,6 +18,7 @@ import com.materialkolor.dynamicColorScheme
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.daysUntil
 import org.kiteio.punica.R
 import org.kiteio.punica.client.academic.api.Timetable
 import org.kiteio.punica.client.academic.foundation.Campus
@@ -43,7 +44,16 @@ class TimetableWidget : GlanceAppWidget() {
         val index = dayOfWeekOrdinal * 6
         val subTimetable = timetable?.cells?.subList(index, index + 6)
 
-        val week = Stores.prefs.data.map { it[PrefsKeys.WEEK] ?: 1 }.first()
+        val week = Stores.prefs.data.map { prefs ->
+            val now = LocalDate.now()
+            val date = prefs[PrefsKeys.TERM_START_DATE]?.let {
+                LocalDate.parse(it)
+            } ?: now
+            date.run {
+                (daysUntil(now) + (dayOfWeek.ordinal - now.dayOfWeek.ordinal))
+                    .toInt() / 7
+            }.coerceIn(0..20)
+        }.first()
         val campus = Stores.prefs.data.map { Campus.entries[it[PrefsKeys.CAMPUS] ?: 0] }.first()
         val colors = ColorProviders(
             dynamicColorScheme(

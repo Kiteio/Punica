@@ -7,10 +7,12 @@ import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.datetime.*
 import org.jetbrains.compose.resources.getString
 import org.kiteio.punica.AppVM.academicSystem
 import org.kiteio.punica.client.academic.AcademicSystem
 import org.kiteio.punica.client.academic.api.getNetworkPwd
+import org.kiteio.punica.client.academic.api.getTermDateRange
 import org.kiteio.punica.client.academic.foundation.Campus.CANTON
 import org.kiteio.punica.client.academic.foundation.Campus.FO_SHAN
 import org.kiteio.punica.client.academic.foundation.User
@@ -20,6 +22,7 @@ import org.kiteio.punica.ui.page.account.PasswordType
 import org.kiteio.punica.ui.page.account.PasswordType.*
 import org.kiteio.punica.ui.theme.ThemeMode
 import org.kiteio.punica.ui.theme.ThemeMode.*
+import org.kiteio.punica.wrapper.now
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.delete_successful
 
@@ -41,7 +44,16 @@ object AppVM : ViewModel() {
         private set
 
     /** 周次 */
-    val week = Stores.prefs.data.map { it[PrefsKeys.WEEK] ?: 1 }
+    val week = Stores.prefs.data.map { prefs ->
+        val now = LocalDate.now()
+        val date = prefs[PrefsKeys.TERM_START_DATE]?.let {
+            LocalDate.parse(it)
+        } ?: now
+        date.run {
+            (daysUntil(now) + (dayOfWeek.ordinal - now.dayOfWeek.ordinal))
+                .toInt() / 7
+        }.coerceIn(0..20)
+    }
 
     /** 主题模式 */
     val themeMode = Stores.prefs.data.map {
@@ -85,13 +97,21 @@ object AppVM : ViewModel() {
 
                     // 登录
                     try {
-                        academicSystem = AcademicSystem(user).also {
+                        academicSystem = AcademicSystem(user).apply {
                             // 获取并设置校园网密码
                             if (user.networkPwd.isEmpty()) {
-                                val u = user.copy(networkPwd = it.getNetworkPwd())
+                                val u = user.copy(networkPwd = getNetworkPwd())
                                 Stores.users.edit { prefs ->
                                     prefs[u.id] = u
                                 }
+                            }
+                            // 获取并设置开学日期
+                            val old = Stores.prefs.data.map { prefs ->
+                                prefs[PrefsKeys.TERM_START_DATE]?.let { LocalDate.parse(it) }
+                            }.first()
+                            val start = getTermDateRange().range.start.minus(DatePeriod(days = 7))
+                            if (old == null || old.monthsUntil(start) >= 4) {
+                                Stores.prefs.edit { it[PrefsKeys.TERM_START_DATE] = "$start" }
                             }
                         }
                     } catch (throwable: Throwable) {
@@ -153,7 +173,7 @@ object AppVM : ViewModel() {
      */
     suspend fun changeWeek(value: Int) {
         require(value in 0..<TIMETABLE_MAX_PAGE)
-        Stores.prefs.edit { it[PrefsKeys.WEEK] = value }
+        Stores.prefs.edit { it[PrefsKeys.TERM_START_DATE] = "${LocalDate.now().minus(DatePeriod(days = 7 * value))}" }
     }
 
 

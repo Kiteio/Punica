@@ -11,8 +11,8 @@ object PrefsKeys {
     /** 首次启动 */
     val FIRST_START = booleanPreferencesKey("first_start")
 
-    /** 周次 */
-    val WEEK = intPreferencesKey("week")
+    /** 开学日期（第 0 周） */
+    val TERM_START_DATE = stringPreferencesKey("term_start_date")
 
     /** 主题模式 */
     val THEME_MODE = intPreferencesKey("theme_mode")

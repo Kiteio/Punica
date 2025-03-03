@@ -15,9 +15,9 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.client.academic.foundation.User
-import org.kiteio.punica.ui.page.account.PasswordType.*
 import org.kiteio.punica.ui.component.Checkbox
 import org.kiteio.punica.ui.component.ModalBottomSheet
+import org.kiteio.punica.ui.page.account.PasswordType.*
 import org.kiteio.punica.wrapper.focusCleaner
 import punica.composeapp.generated.resources.*
 
@@ -107,7 +107,7 @@ fun AccountVM.AccountBottomSheet(
             )
             Spacer(modifier = Modifier.height(8.dp))
 
-            if (type != OTP) {
+            if (type == Academic) {
                 // 保存时登录
                 Checkbox(
                     checked = loginWhenSave,
@@ -115,7 +115,7 @@ fun AccountVM.AccountBottomSheet(
                     label = { Text(stringResource(Res.string.login_when_save)) },
                     modifier = Modifier.fillMaxWidth(0.8f),
                 )
-            } else {
+            } else if (type == OTP) {
                 // 如何获取 OTP 密钥
                 Text(
                     stringResource(Res.string.way_to_get_otp_secret),
