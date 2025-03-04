@@ -2,6 +2,7 @@ package org.kiteio.punica.ui.page.home
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -55,10 +56,11 @@ private fun NavigationBarItem(
                 tint = if (selected) MaterialTheme.colorScheme.primary else LocalContentColor.current,
             )
         },
-        label = if (selected) {
-            {
-                Text(stringResource(route.nameRes), color = MaterialTheme.colorScheme.primary)
-            }
-        } else null
+        label = {
+            Text(
+                stringResource(route.nameRes),
+                color = if (selected) MaterialTheme.colorScheme.primary else Color.Unspecified,
+            )
+        }
     )
 }
