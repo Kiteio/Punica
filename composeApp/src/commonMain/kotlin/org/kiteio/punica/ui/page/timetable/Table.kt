@@ -1,9 +1,7 @@
 package org.kiteio.punica.ui.page.timetable
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -13,6 +11,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.kiteio.punica.client.academic.foundation.ICourse
+import org.kiteio.punica.ui.component.BorderStroke
+import org.kiteio.punica.ui.component.PunicaCard
 
 /**
  * 课表表格。
@@ -98,15 +98,13 @@ private fun HorizontalGrid(
 @Composable
 private fun Cell(course: ICourse?, onClick: () -> Unit, spacing: Dp, modifier: Modifier = Modifier) {
     course?.run {
-        Surface(
+        PunicaCard(
             onClick = onClick,
             modifier = modifier,
             shape = MaterialTheme.shapes.small,
-            color = MaterialTheme.colorScheme.surfaceContainerLow,
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
             contentColor = MaterialTheme.colorScheme.primary,
-            tonalElevation = 1.dp,
-            shadowElevation = 1.dp,
-            border = BorderStroke(0.1.dp, MaterialTheme.colorScheme.outlineVariant),
+            border = BorderStroke(),
         ) {
             Column(
                 modifier = Modifier.fillMaxSize().padding(spacing),
@@ -117,18 +115,18 @@ private fun Cell(course: ICourse?, onClick: () -> Unit, spacing: Dp, modifier: M
                 Text(
                     name,
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.labelMedium,
+                    style = MaterialTheme.typography.labelSmall,
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis,
                 )
 
                 // 教室
                 classroom?.let {
-                    Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        it,
+                        it.replace(Regex("[(（].*?[）)]"), ""),
                         textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.labelMedium,
+                        style = MaterialTheme.typography.labelSmall,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                     )

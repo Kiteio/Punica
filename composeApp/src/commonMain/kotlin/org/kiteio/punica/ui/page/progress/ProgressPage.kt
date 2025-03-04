@@ -5,7 +5,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.*
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -19,9 +22,10 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.api.ProgressModule
-import org.kiteio.punica.ui.page.modules.ModuleRoute
+import org.kiteio.punica.ui.component.CardListItem
 import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
 import org.kiteio.punica.ui.component.NavBackAppBar
+import org.kiteio.punica.ui.page.modules.ModuleRoute
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.academic_progress
@@ -82,8 +86,8 @@ private fun ProgressVM.Content() {
             }
 
             LazyVerticalGrid(
-                columns = GridCells.Adaptive(200.dp),
-                contentPadding = PaddingValues(4.dp),
+                columns = GridCells.Adaptive(232.dp),
+                contentPadding = PaddingValues(8.dp),
             ) {
                 items(modules) {
                     Progress(
@@ -94,7 +98,7 @@ private fun ProgressVM.Content() {
                             module = it
                             moduleBottomSheetVisible = true
                         },
-                        modifier = Modifier.padding(4.dp),
+                        modifier = Modifier.padding(8.dp),
                         fontWeight = FontWeight.SemiBold,
                     )
                 }
@@ -107,7 +111,7 @@ private fun ProgressVM.Content() {
                                 module = it
                                 moduleBottomSheetVisible = true
                             },
-                            modifier = Modifier.padding(4.dp),
+                            modifier = Modifier.padding(8.dp),
                             requiredCredits = it.requiredCredits,
                         )
                     }
@@ -133,22 +137,22 @@ private fun Progress(
     modifier: Modifier = Modifier,
     fontWeight: FontWeight? = null,
 ) {
-    ElevatedCard(onClick = onClick, modifier = modifier) {
-        ListItem(
-            headlineContent = { Text(name, fontWeight = fontWeight) },
-            trailingContent = {
-                Text(
-                    "${earnedCredits ?: ""} / ${requiredCredits ?: ""}",
-                    color = if (
-                        earnedCredits != null &&
-                        requiredCredits != null &&
-                        earnedCredits / requiredCredits < 1
-                    ) MaterialTheme.colorScheme.error
-                    else LocalContentColor.current,
-                    fontWeight = FontWeight.SemiBold,
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-            },
-        )
-    }
+    CardListItem(
+        headlineContent = { Text(name, fontWeight = fontWeight) },
+        onClick = onClick,
+        modifier = modifier,
+        trailingContent = {
+            Text(
+                "${earnedCredits ?: ""} / ${requiredCredits ?: ""}",
+                color = if (
+                    earnedCredits != null &&
+                    requiredCredits != null &&
+                    earnedCredits / requiredCredits < 1
+                ) MaterialTheme.colorScheme.error
+                else LocalContentColor.current,
+                fontWeight = FontWeight.SemiBold,
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        },
+    )
 }

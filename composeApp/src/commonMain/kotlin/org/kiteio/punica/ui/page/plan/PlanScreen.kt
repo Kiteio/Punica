@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -16,12 +17,15 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.foundation.Term
-import org.kiteio.punica.ui.page.modules.ModuleRoute
+import org.kiteio.punica.ui.component.CardListItem
 import org.kiteio.punica.ui.component.HorizontalTabPager
 import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
 import org.kiteio.punica.ui.component.NavBackAppBar
+import org.kiteio.punica.ui.page.modules.ModuleRoute
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
-import punica.composeapp.generated.resources.*
+import punica.composeapp.generated.resources.Res
+import punica.composeapp.generated.resources.class_hours
+import punica.composeapp.generated.resources.implementation_plan
 
 /**
  * 执行计划页面路由。
@@ -47,7 +51,12 @@ private fun PlanVM.Content() {
     }
 
     Scaffold(
-        topBar = { NavBackAppBar(title = { Text(stringResource(PlanRoute.nameRes)) }) },
+        topBar = {
+            NavBackAppBar(
+                title = { Text(stringResource(PlanRoute.nameRes)) },
+                shadowElevation = 0.dp,
+            )
+        },
     ) { innerPadding ->
         LoadingNotNullOrEmpty(
             plans?.plans,
@@ -63,39 +72,49 @@ private fun PlanVM.Content() {
 
             HorizontalTabPager(
                 state,
-                tabContent = { Text("${tabs[it]}") },
+                tabContent = {
+                    Text(
+                        "${tabs[it]}",
+                        color = if (tabs[it] == Term.current) LocalContentColor.current
+                        else MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                    )
+                },
+                tabScrollable = true,
             ) { page ->
                 LazyVerticalGrid(
-                    columns = GridCells.Adaptive(200.dp),
-                    contentPadding = PaddingValues(4.dp),
+                    columns = GridCells.Adaptive(232.dp),
+                    contentPadding = PaddingValues(8.dp),
                     modifier = Modifier.fillMaxSize(),
                 ) {
                     items(plans.filter { it.term == tabs[page] }) {
-                        ElevatedCard(onClick = {}, modifier = Modifier.padding(4.dp)) {
-                            ListItem(
-                                headlineContent = { Text(it.courseName) },
-                                supportingContent = {
+                        CardListItem(
+                            headlineContent = { Text(it.courseName) },
+                            onClick = {},
+                            modifier = Modifier.padding(8.dp),
+                            supportingContent = {
+                                CompositionLocalProvider(
+                                    LocalTextStyle provides MaterialTheme.typography.bodySmall,
+                                ) {
                                     Column {
                                         Row {
                                             // 课程编号
-                                            Text("${stringResource(Res.string.course_id)} ${it.courseId}")
-                                            Spacer(modifier = Modifier.width(16.dp))
+                                            Text(it.courseId)
+                                            Spacer(modifier = Modifier.width(8.dp))
                                             // 总学时
-                                            Text("${stringResource(Res.string.class_hours)} ${it.hours}")
+                                            Text("${it.hours}${stringResource(Res.string.class_hours)}")
+                                            Spacer(modifier = Modifier.width(8.dp))
+                                            // 课程属性
+                                            Text(it.category)
                                         }
-                                        // 课程属性
-                                        Text("${stringResource(Res.string.course_category)} ${it.category}")
                                         Spacer(modifier = Modifier.height(4.dp))
                                         // 开课单位
-                                        Text(
-                                            it.courseProvider,
-                                            style = MaterialTheme.typography.bodySmall,
-                                        )
+                                        Text(it.courseProvider)
                                     }
-                                },
-                                trailingContent = { Text(it.assessmentMethod) },
-                            )
-                        }
+                                }
+                            },
+                            trailingContent = { Text(it.assessmentMethod) },
+                        )
                     }
                 }
             }

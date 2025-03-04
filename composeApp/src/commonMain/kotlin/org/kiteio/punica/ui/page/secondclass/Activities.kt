@@ -5,7 +5,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
-import androidx.compose.material3.*
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.buildAnnotatedString
@@ -17,10 +20,7 @@ import org.kiteio.punica.client.secondclass.api.Activity
 import org.kiteio.punica.client.secondclass.api.ActivityProfile
 import org.kiteio.punica.client.secondclass.api.getActivities
 import org.kiteio.punica.client.secondclass.api.getActivityProfile
-import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
-import org.kiteio.punica.ui.component.ModalBottomSheet
-import org.kiteio.punica.ui.component.ProvideBodyMedium
-import org.kiteio.punica.ui.component.SpaceBetween
+import org.kiteio.punica.ui.component.*
 import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.*
 
@@ -49,8 +49,8 @@ fun SecondClassVM.Activities() {
         modifier = Modifier.fillMaxSize(),
     ) { activities ->
         LazyVerticalStaggeredGrid(
-            columns = StaggeredGridCells.Adaptive(200.dp),
-            contentPadding = PaddingValues(4.dp),
+            columns = StaggeredGridCells.Adaptive(232.dp),
+            contentPadding = PaddingValues(8.dp),
         ) {
             items(activities) {
                 Activity(
@@ -59,7 +59,7 @@ fun SecondClassVM.Activities() {
                         activity = it
                         bottomSheetVisible = true
                     },
-                    modifier = Modifier.padding(4.dp),
+                    modifier = Modifier.padding(8.dp),
                 )
             }
         }
@@ -81,38 +81,38 @@ fun SecondClassVM.Activities() {
  */
 @Composable
 private fun Activity(activity: Activity, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    ElevatedCard(onClick = onClick, modifier = modifier) {
-        ListItem(
-            headlineContent = { Text(activity.name) },
-            supportingContent = {
-                Column {
-                    // 时间
-                    Text("${activity.duration.start} - ${activity.duration.endInclusive}")
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        buildAnnotatedString {
-                            // 分类和分数
-                            withStyle(
-                                LocalTextStyle.current.copy(
-                                    fontWeight = FontWeight.Bold
-                                ).toSpanStyle(),
-                            ) {
-                                append(activity.category)
-                                append("  ")
-                                append("${activity.score}")
-                                append("  ")
-                            }
-                            // 线上线下
-                            append(stringResource(if (activity.isOnline) Res.string.online else Res.string.offline))
+    CardListItem(
+        headlineContent = { Text(activity.name) },
+        onClick = onClick,
+        modifier = modifier,
+        supportingContent = {
+            Column {
+                // 时间
+                Text("${activity.duration.start} - ${activity.duration.endInclusive}")
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    buildAnnotatedString {
+                        // 分类和分数
+                        withStyle(
+                            LocalTextStyle.current.copy(
+                                fontWeight = FontWeight.Bold
+                            ).toSpanStyle(),
+                        ) {
+                            append(activity.category)
                             append("  ")
-                            // 活动类型
-                            append(activity.type)
-                        },
-                    )
-                }
-            },
-        )
-    }
+                            append("${activity.score}")
+                            append("  ")
+                        }
+                        // 线上线下
+                        append(stringResource(if (activity.isOnline) Res.string.online else Res.string.offline))
+                        append("  ")
+                        // 活动类型
+                        append(activity.type)
+                    },
+                )
+            }
+        },
+    )
 }
 
 

@@ -1,8 +1,6 @@
 package org.kiteio.punica.ui.page.home
 
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.ShortNavigationBar
-import androidx.compose.material3.ShortNavigationBarItem
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -50,7 +48,17 @@ private fun NavigationBarItem(
     ShortNavigationBarItem(
         selected = selected,
         onClick = onClick,
-        icon = { ToggleRouteIcon(selected, topLevelRoute = route) },
-        label = { ToggleText(selected, text = stringResource(route.nameRes)) },
+        icon = {
+            Icon(
+                imageVector = if (selected) route.toggledIcon else route.icon,
+                contentDescription = stringResource(route.nameRes),
+                tint = if (selected) MaterialTheme.colorScheme.primary else LocalContentColor.current,
+            )
+        },
+        label = if (selected) {
+            {
+                Text(stringResource(route.nameRes), color = MaterialTheme.colorScheme.primary)
+            }
+        } else null
     )
 }

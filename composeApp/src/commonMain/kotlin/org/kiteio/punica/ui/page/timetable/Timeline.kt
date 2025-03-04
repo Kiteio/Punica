@@ -27,14 +27,23 @@ fun TimetableTimeline(spacing: Dp, modifier: Modifier = Modifier) {
             TimetableMealSpacer(index)
 
             TimelineCard(spacing = spacing, modifier = Modifier.weight(1f)) {
-                val i = index * 2
+                val start = index * 2
 
                 with(campus) {
-                    Text(schedule[i].start)
-                    Text(schedule[i].endInclusive)
+                    // 节次
+                    Text(
+                        "${start + 1}-${start + 2}",
+                        style = LocalTextStyle.current.copy(
+                            color = MaterialTheme.colorScheme.onSurface,
+                        ),
+                    )
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text(schedule[i + 1].start)
-                    Text(schedule[i + 1].endInclusive)
+                    // 时间
+                    Text(schedule[start].start)
+                    Text(schedule[start].endInclusive)
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(schedule[start + 1].start)
+                    Text(schedule[start + 1].endInclusive)
                 }
             }
         }
@@ -53,10 +62,7 @@ private fun TimelineCard(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
-    Surface(
-        modifier = modifier,
-        color = MaterialTheme.colorScheme.secondaryContainer.copy(0.4f),
-    ) {
+    Surface(modifier = modifier) {
         Column(
             modifier = Modifier.fillMaxSize().padding(spacing),
             verticalArrangement = Arrangement.Center,
@@ -65,6 +71,7 @@ private fun TimelineCard(
             CompositionLocalProvider(
                 LocalTextStyle provides MaterialTheme.typography.labelSmall.copy(
                     fontSize = 10.sp,
+                    lineHeight = 12.sp,
                     color = LocalContentColor.current.copy(0.6f),
                 ),
                 content = content,

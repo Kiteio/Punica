@@ -6,7 +6,10 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.*
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -17,10 +20,7 @@ import org.kiteio.punica.client.academic.foundation.MCourse
 import org.kiteio.punica.client.course.CourseSystem
 import org.kiteio.punica.client.course.api.delete
 import org.kiteio.punica.client.course.api.getCourses
-import org.kiteio.punica.ui.component.HorizontalTabPager
-import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
-import org.kiteio.punica.ui.component.ModalBottomSheet
-import org.kiteio.punica.ui.component.showToast
+import org.kiteio.punica.ui.component.*
 import org.kiteio.punica.ui.compositionlocal.LocalWindowSizeClass
 import org.kiteio.punica.ui.compositionlocal.isCompactWidth
 import org.kiteio.punica.ui.compositionlocal.isMediumHeight
@@ -53,13 +53,13 @@ fun MyCoursesBottomSheet(visible: Boolean, onDismissRequest: () -> Unit, courseS
 
             HorizontalTabPager(
                 state,
-                tabContent = { Text(stringResource(tabs[it])) }
+                tabContent = { Text(stringResource(tabs[it])) },
             ) { page ->
                 when (page) {
                     0 -> List(
                         courses,
                         courseSystem = courseSystem,
-                        onWitidrawCourse = { flag = !flag }
+                        onWithdrawCourse = { flag = !flag }
                     )
 
                     1 -> Timetable(courses)
@@ -71,57 +71,57 @@ fun MyCoursesBottomSheet(visible: Boolean, onDismissRequest: () -> Unit, courseS
 
 
 @Composable
-private fun List(courses: List<MCourse>, courseSystem: CourseSystem?, onWitidrawCourse: () -> Unit) {
+private fun List(courses: List<MCourse>, courseSystem: CourseSystem?, onWithdrawCourse: () -> Unit) {
     val scope = rememberCoroutineScope()
     var deleteDialogVisible by remember { mutableStateOf(false) }
     var mCourse by remember { mutableStateOf<MCourse?>(null) }
 
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Adaptive(256.dp),
-        contentPadding = PaddingValues(4.dp)
+        contentPadding = PaddingValues(8.dp)
     ) {
         items(courses) {
-            Card(modifier = Modifier.padding(4.dp)) {
-                ListItem(
-                    headlineContent = { Text(it.name) },
-                    supportingContent = {
-                        Column {
-                            CompositionLocalProvider(
-                                LocalTextStyle provides MaterialTheme.typography.bodySmall,
-                            ) {
-                                Row {
-                                    // 课程编号
-                                    Text(it.courseId)
-                                    Spacer(modifier = Modifier.width(8.dp))
-                                    // 学分
-                                    Text("${it.credits}", fontWeight = FontWeight.Bold)
-                                }
-                                // 教师
-                                Text(it.teacher)
-                                // 上课时间
-                                it.time?.let { text -> Text(text) }
-                                // 上课地点
-                                it.classroom?.let { text -> Text(text) }
+            CardListItem(
+                headlineContent = { Text(it.name) },
+                modifier = Modifier.padding(8.dp),
+                supportingContent = {
+                    Column {
+                        CompositionLocalProvider(
+                            LocalTextStyle provides MaterialTheme.typography.bodySmall,
+                        ) {
+                            Row {
+                                // 课程编号
+                                Text(it.courseId)
+                                Spacer(modifier = Modifier.width(8.dp))
+                                // 学分
+                                Text("${it.credits}", fontWeight = FontWeight.Bold)
+                                Spacer(modifier = Modifier.width(8.dp))
                                 // 课程属性
                                 Text(it.category)
                             }
-                        }
-                    },
-                    trailingContent = {
-                        TextButton(
-                            onClick = {
-                                mCourse = it
-                                deleteDialogVisible = true
-                            }
-                        ) {
-                            Text(
-                                stringResource(Res.string.withdraw_course),
-                                color = MaterialTheme.colorScheme.error,
-                            )
+                            // 教师
+                            Text(it.teacher)
+                            // 上课时间
+                            it.time?.let { text -> Text(text) }
+                            // 上课地点
+                            it.classroom?.let { text -> Text(text) }
                         }
                     }
-                )
-            }
+                },
+                trailingContent = {
+                    TextButton(
+                        onClick = {
+                            mCourse = it
+                            deleteDialogVisible = true
+                        }
+                    ) {
+                        Text(
+                            stringResource(Res.string.withdraw_course),
+                            color = MaterialTheme.colorScheme.error,
+                        )
+                    }
+                },
+            )
         }
     }
 
@@ -135,9 +135,9 @@ private fun List(courses: List<MCourse>, courseSystem: CourseSystem?, onWitidraw
             // 退课
             scope.launchCatching {
                 mCourse?.run {
-                    courseSystem?.run {
-                        delete(id)
-                        onWitidrawCourse()
+                    courseSystem?.let {
+                        it.delete(id)
+                        onWithdrawCourse()
                         showToast(getString(Res.string.withdraw_course_successful))
                         deleteDialogVisible = false
                         mCourse = null
@@ -171,9 +171,9 @@ private fun Timetable(courses: List<MCourse>) {
         isLoading = timetable == null,
     ) {
         val windowSizeClass = LocalWindowSizeClass.current
-        val spacing = 2.dp
+        val spacing = 0.dp
         val lineHeight = 600.dp
-        val timelineWeight = 0.05f
+        val timelineWeight = 0.12f
         val timelineMinWidth = 32.dp
         val week = 0
 

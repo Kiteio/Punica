@@ -24,11 +24,12 @@ import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.foundation.Campus
-import org.kiteio.punica.ui.page.modules.ModuleRoute
-import org.kiteio.punica.ui.rememberRBlocking
+import org.kiteio.punica.ui.component.CardListItem
 import org.kiteio.punica.ui.component.HorizontalTabPager
 import org.kiteio.punica.ui.component.NavBackAppBar
 import org.kiteio.punica.ui.component.showToast
+import org.kiteio.punica.ui.page.modules.ModuleRoute
+import org.kiteio.punica.ui.rememberRBlocking
 import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.*
 
@@ -61,6 +62,7 @@ private fun Content() {
         topBar = {
             NavBackAppBar(
                 title = { Text(stringResource(EmergencyCallRoute.nameRes)) },
+                shadowElevation = 0.dp,
             )
         }
     ) { innerPadding ->
@@ -79,8 +81,8 @@ private fun Content() {
             modifier = Modifier.padding(innerPadding)
         ) { page ->
             LazyVerticalGrid(
-                columns = GridCells.Adaptive(200.dp),
-                contentPadding = PaddingValues(4.dp),
+                columns = GridCells.Adaptive(232.dp),
+                contentPadding = PaddingValues(8.dp),
                 modifier = Modifier.fillMaxSize(),
             ) {
                 separateCampus(
@@ -187,26 +189,28 @@ private fun Call(
     workingHours: String = stringResource(Res.string.hours_24),
     onCopy: (String) -> Unit,
 ) {
-    ElevatedCard(onClick = {}, modifier = Modifier.padding(4.dp)) {
-        ListItem(
-            // 名称
-            headlineContent = { Text(name) },
-            // 电话和工作时间
-            supportingContent = {
-                Column {
-                    Text(phoneNumber)
-                    Text(workingHours)
-                }
-            },
-            // 复制
-            trailingContent = {
-                IconButton(onClick = { onCopy(phoneNumber) }) {
-                    Icon(
-                        Icons.Outlined.ContentCopy,
-                        contentDescription = stringResource(Res.string.copy),
-                    )
-                }
+    CardListItem(
+        // 名称
+        headlineContent = {
+            Text(name, color = MaterialTheme.colorScheme.primary)
+        },
+        onClick = {},
+        modifier = Modifier.padding(8.dp),
+        // 电话和工作时间
+        supportingContent = {
+            Column {
+                Text(phoneNumber)
+                Text(workingHours)
             }
-        )
-    }
+        },
+        // 复制
+        trailingContent = {
+            IconButton(onClick = { onCopy(phoneNumber) }) {
+                Icon(
+                    Icons.Outlined.ContentCopy,
+                    contentDescription = stringResource(Res.string.copy),
+                )
+            }
+        },
+    )
 }

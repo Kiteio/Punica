@@ -6,6 +6,7 @@ import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -69,7 +70,18 @@ private fun NavigationRailItem(
     NavigationRailItem(
         selected = selected,
         onClick = onClick,
-        icon = { ToggleRouteIcon(selected, topLevelRoute = route) },
-        label = { ToggleText(selected, text = stringResource(route.nameRes)) },
+        icon = {
+            Icon(
+                imageVector = if (selected) route.toggledIcon else route.icon,
+                contentDescription = stringResource(route.nameRes),
+                tint = if (selected) MaterialTheme.colorScheme.primary else LocalContentColor.current,
+            )
+        },
+        label = {
+            Text(
+                stringResource(route.nameRes),
+                color = if (selected) MaterialTheme.colorScheme.primary else Color.Unspecified,
+            )
+        },
     )
 }

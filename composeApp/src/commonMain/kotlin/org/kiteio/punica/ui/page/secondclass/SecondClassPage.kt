@@ -6,14 +6,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import compose.icons.CssGgIcons
 import compose.icons.cssggicons.Dribbble
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
-import org.kiteio.punica.ui.page.modules.ModuleRoute
 import org.kiteio.punica.ui.component.HorizontalTabPager
 import org.kiteio.punica.ui.component.NavBackAppBar
+import org.kiteio.punica.ui.page.modules.ModuleRoute
 import punica.composeapp.generated.resources.*
 
 /**
@@ -39,7 +40,12 @@ private fun SecondClassVM.Content() {
     val state = rememberPagerState { tabs.size }
 
     Scaffold(
-        topBar = { NavBackAppBar(title = { Text(stringResource(SecondClassRoute.nameRes)) }) }
+        topBar = {
+            NavBackAppBar(
+                title = { Text(stringResource(SecondClassRoute.nameRes)) },
+                shadowElevation = 0.dp,
+            )
+        }
     ) { innerPadding ->
         HorizontalTabPager(
             state = state,

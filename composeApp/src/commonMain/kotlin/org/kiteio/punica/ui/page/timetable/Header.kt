@@ -3,6 +3,7 @@ package org.kiteio.punica.ui.page.timetable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,28 +54,32 @@ fun TimetableHeader(
             daysOfWeek.forEachIndexed { index, dayOfWeek ->
                 val date = offsetDate.plus(DatePeriod(days = index - ordinal))
                 val isToday = offset == 0 && index == ordinal
-                val fontWeight = if (isToday) FontWeight.Bold else LocalTextStyle.current.fontWeight
+                val fontWeight = if (isToday) FontWeight.Black else LocalTextStyle.current.fontWeight
 
                 Surface(
                     modifier = Modifier.weight(1f),
                     shape = MaterialTheme.shapes.small,
-                    color = if (isToday) MaterialTheme.colorScheme.secondaryContainer
-                    else MaterialTheme.colorScheme.surface,
                     contentColor = if (isToday) MaterialTheme.colorScheme.primary
-                    else LocalContentColor.current
+                    else LocalContentColor.current.copy(0.4f)
                 ) {
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                    CompositionLocalProvider(
+                        LocalTextStyle provides if (isToday) LocalTextStyle.current.copy(
+                            color = MaterialTheme.colorScheme.primary,
+                        ) else LocalTextStyle.current,
                     ) {
-                        // 星期
-                        Text(dayOfWeek, fontWeight = fontWeight)
-                        // 日期
-                        Text(
-                            "${date.monthNumber}-${date.dayOfMonth}",
-                            fontWeight = fontWeight,
-                            style = MaterialTheme.typography.labelSmall,
-                        )
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            // 星期
+                            Text(dayOfWeek, fontWeight = fontWeight)
+                            // 日期
+                            Text(
+                                "${date.monthNumber}-${date.dayOfMonth}",
+                                fontWeight = fontWeight,
+                                style = MaterialTheme.typography.labelSmall,
+                            )
+                        }
                     }
                 }
             }

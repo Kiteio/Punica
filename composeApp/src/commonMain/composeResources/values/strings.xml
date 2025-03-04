@@ -27,7 +27,7 @@
     <string name="dismiss">取消</string>
 
     <string name="nothing_provided">什么也没有</string>
-    <string name="error">出现了点问题</string>
+    <string name="error">出了点问题</string>
 
     <string name="connect_timeout">连接超时</string>
 
@@ -53,9 +53,7 @@
     <string name="selected_courses">已选课程</string>
 
     <!-- PlanScreen.kt -->
-    <string name="course_id">编号</string>
     <string name="class_hours">学时</string>
-    <string name="course_category">属性</string>
 
     <!-- CourseTimetablePage.kt -->
     <string name="section_of">%1$s节</string>

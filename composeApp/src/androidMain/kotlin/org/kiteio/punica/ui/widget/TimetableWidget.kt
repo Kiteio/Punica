@@ -54,7 +54,7 @@ class TimetableWidget : GlanceAppWidget() {
             dynamicColorScheme(
                 primary = Color(0xFF5783E0),
                 isDark = false,
-                isAmoled = true,
+                isAmoled = false,
             )
         )
         val daysOfWeek = context.resources.getStringArray(R.array.days_of_week)
@@ -79,7 +79,7 @@ class TimetableWidget : GlanceAppWidget() {
                     LocalDate.parse(it)
                 } ?: now
                 date.run {
-                    (daysUntil(now) + (dayOfWeek.ordinal - now.dayOfWeek.ordinal)).toInt() / 7
+                    (daysUntil(now) + (dayOfWeek.ordinal - now.dayOfWeek.ordinal)) / 7
                 }.coerceIn(0..20)
             }.collectAsState(0)
             // 校区

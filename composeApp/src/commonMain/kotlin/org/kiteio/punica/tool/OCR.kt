@@ -25,7 +25,7 @@ suspend fun getDataPath(): String {
         // 获取并写入训练数据
         SystemFileSystem.createDirectories(Path(dir))
         val bytes = Client("https://gitee.com")
-            .get("Kiteio/Punica/raw/master/tessdata/eng.traineddata") {
+            .get("Kiteio/Punica-CMP/raw/master/tessdata/eng.traineddata") {
                 timeout { requestTimeoutMillis = 20000 }
             }.readRawBytes()
         SystemFileSystem.sink(path).buffered().use {

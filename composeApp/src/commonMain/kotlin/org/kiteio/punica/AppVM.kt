@@ -50,8 +50,7 @@ object AppVM : ViewModel() {
             LocalDate.parse(it)
         } ?: now
         date.run {
-            (daysUntil(now) + (dayOfWeek.ordinal - now.dayOfWeek.ordinal))
-                .toInt() / 7
+            (daysUntil(now) + (dayOfWeek.ordinal - now.dayOfWeek.ordinal)) / 7
         }.coerceIn(0..20)
     }
 

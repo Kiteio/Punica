@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ReceiptLong
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -16,13 +17,11 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.androidpasswordstore.sublimefuzzy.Fuzzy
-import compose.icons.CssGgIcons
-import compose.icons.cssggicons.Clipboard
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.AppVM
-import org.kiteio.punica.ui.page.modules.ModuleRoute
 import org.kiteio.punica.ui.component.*
+import org.kiteio.punica.ui.page.modules.ModuleRoute
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 import org.kiteio.punica.wrapper.focusCleaner
 import punica.composeapp.generated.resources.*
@@ -33,7 +32,7 @@ import punica.composeapp.generated.resources.*
 @Serializable
 object GradesRoute : ModuleRoute {
     override val nameRes = Res.string.grade
-    override val icon = CssGgIcons.Clipboard
+    override val icon = Icons.AutoMirrored.Outlined.ReceiptLong
 }
 
 
@@ -63,6 +62,7 @@ private fun GradesVM.Content() {
         topBar = {
             NavBackAppBar(
                 title = { Text(stringResource(GradesRoute.nameRes)) },
+                shadowElevation = 0.dp,
                 actions = {
                     // 搜索
                     SearchButton(

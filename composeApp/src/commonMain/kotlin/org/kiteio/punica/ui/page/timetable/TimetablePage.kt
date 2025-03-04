@@ -5,7 +5,10 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.outlined.DateRange
-import androidx.compose.material3.*
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -15,11 +18,11 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.foundation.ICourse
-import org.kiteio.punica.ui.page.home.TopLevelRoute
-import org.kiteio.punica.ui.rememberRBlocking
 import org.kiteio.punica.ui.component.Checkbox
 import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
 import org.kiteio.punica.ui.component.NoteDialog
+import org.kiteio.punica.ui.page.home.TopLevelRoute
+import org.kiteio.punica.ui.rememberRBlocking
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.Res
@@ -77,9 +80,9 @@ private fun TimetableVM.Content() {
             isLoading = isLoading,
             modifier = Modifier.padding(innerPadding),
         ) { timetable ->
-            val spacing = 2.dp
+            val spacing = 0.dp
             val lineHeight = 600.dp
-            val timelineWeight = 0.05f
+            val timelineWeight = 0.12f
             val timelineMinWidth = 32.dp
 
             Column {
@@ -92,6 +95,7 @@ private fun TimetableVM.Content() {
                     timelineMinWidth = timelineMinWidth,
                     modifier = Modifier.padding(spacing),
                 )
+                Spacer(modifier = Modifier.height(1.dp))
                 // 时间线和表格
                 TimetablePager(
                     state = state,
@@ -113,7 +117,7 @@ private fun TimetableVM.Content() {
                         Text(
                             timetable.note,
                             modifier = Modifier.padding(spacing),
-                            color = LocalContentColor.current.copy(0.6f),
+                            color = MaterialTheme.colorScheme.primary,
                             style = MaterialTheme.typography.labelSmall,
                         )
                     }

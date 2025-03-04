@@ -19,6 +19,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.foundation.User
 import org.kiteio.punica.tool.TOTP
+import org.kiteio.punica.ui.component.CardListItem
 import org.kiteio.punica.ui.component.showToast
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 import org.kiteio.punica.wrapper.launchCatching
@@ -50,44 +51,44 @@ fun AccountVM.OTPUser(user: User, onClick: () -> Unit, modifier: Modifier = Modi
         }
     }
 
-    ElevatedCard(onClick = onClick, modifier = modifier) {
-        ListItem(
-            headlineContent = {
-                Text(
-                    if (password.length == 6) password.run {
-                        "${substring(0..2)} ${substring(3..5)}"
-                    } else password,
-                    color = if (leftSecond <= 5) MaterialTheme.colorScheme.error
-                    else MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.titleLarge,
-                )
-            },
-            supportingContent = { Text("${user.id}    ${leftSecond}s") },
-            trailingContent = {
-                Row {
-                    IconButton(
-                        onClick = {
-                            scope.launchCatching {
-                                val text = buildAnnotatedString { append(password) }
-                                clipboardManager.setText(text)
-                                showToast(getString(Res.string.copy_successful))
-                            }
+    CardListItem(
+        headlineContent = {
+            Text(
+                if (password.length == 6) password.run {
+                    "${substring(0..2)} ${substring(3..5)}"
+                } else password,
+                color = if (leftSecond <= 5) MaterialTheme.colorScheme.error
+                else MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.titleLarge,
+            )
+        },
+        onClick = onClick,
+        modifier = modifier,
+        supportingContent = { Text("${user.id}    ${leftSecond}s") },
+        trailingContent = {
+            Row {
+                IconButton(
+                    onClick = {
+                        scope.launchCatching {
+                            val text = buildAnnotatedString { append(password) }
+                            clipboardManager.setText(text)
+                            showToast(getString(Res.string.copy_successful))
                         }
-                    ) {
-                        Icon(
-                            Icons.Outlined.ContentCopy,
-                            contentDescription = stringResource(Res.string.copy)
-                        )
                     }
-
-                    DeleteIconButton(
-                        onDeleteAccount = { scope.launchCatching { AppVM.deleteUser(type, user.id) } },
+                ) {
+                    Icon(
+                        Icons.Outlined.ContentCopy,
+                        contentDescription = stringResource(Res.string.copy)
                     )
                 }
+
+                DeleteIconButton(
+                    onDeleteAccount = { scope.launchCatching { AppVM.deleteUser(type, user.id) } },
+                )
             }
-        )
-    }
+        }
+    )
 }
 
 
@@ -103,41 +104,41 @@ private fun LocalDateTime.leftSecond() = second.let {
 fun AccountVM.User(user: User, isCurrentAccount: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
     val scope = rememberCoroutineScope()
 
-    ElevatedCard(onClick = onClick, modifier = modifier) {
-        ListItem(
-            headlineContent = {
-                Text(user.id)
-            },
-            trailingContent = {
-                Row {
-                    // 设为、移除当前账号
-                    IconButton(
-                        onClick = {
-                            scope.launchCatching {
-                                if (isCurrentAccount) removeCurrentAccount()
-                                else setupCurrentAccount(user.id)
-                            }
-                        },
-                    ) {
-                        Icon(
-                            if (isCurrentAccount) Icons.Filled.LocalOffer
-                            else Icons.Outlined.LocalOffer,
-                            contentDescription = stringResource(
-                                if (isCurrentAccount) Res.string.remove_current_account
-                                else Res.string.set_up_current_account,
-                            ),
-                            tint = if (isCurrentAccount) MaterialTheme.colorScheme.primary
-                            else LocalContentColor.current,
-                        )
-                    }
-
-                    DeleteIconButton(
-                        onDeleteAccount = { scope.launchCatching { AppVM.deleteUser(type, user.id) } },
+    CardListItem(
+        headlineContent = {
+            Text(user.id)
+        },
+        onClick = onClick,
+        modifier = modifier,
+        trailingContent = {
+            Row {
+                // 设为、移除当前账号
+                IconButton(
+                    onClick = {
+                        scope.launchCatching {
+                            if (isCurrentAccount) removeCurrentAccount()
+                            else setupCurrentAccount(user.id)
+                        }
+                    },
+                ) {
+                    Icon(
+                        if (isCurrentAccount) Icons.Filled.LocalOffer
+                        else Icons.Outlined.LocalOffer,
+                        contentDescription = stringResource(
+                            if (isCurrentAccount) Res.string.remove_current_account
+                            else Res.string.set_up_current_account,
+                        ),
+                        tint = if (isCurrentAccount) MaterialTheme.colorScheme.primary
+                        else LocalContentColor.current,
                     )
                 }
+
+                DeleteIconButton(
+                    onDeleteAccount = { scope.launchCatching { AppVM.deleteUser(type, user.id) } },
+                )
             }
-        )
-    }
+        },
+    )
 }
 
 

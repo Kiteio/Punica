@@ -6,13 +6,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringArrayResource
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.client.academic.foundation.ICourse
+import org.kiteio.punica.ui.component.PunicaCard
 import punica.composeapp.generated.resources.*
 
 /**
@@ -34,12 +38,12 @@ fun CoursesDialog(visible: Boolean, onDismissRequest: () -> Unit, courses: List<
             text = {
                 if (courses != null) {
                     LazyColumn(
-                        contentPadding = PaddingValues(4.dp)
+                        contentPadding = PaddingValues(8.dp)
                     ) {
                         items(courses) {
                             Course(
                                 course = it,
-                                modifier = Modifier.padding(4.dp),
+                                modifier = Modifier.padding(vertical = 8.dp),
                             )
                         }
                     }
@@ -55,8 +59,11 @@ fun CoursesDialog(visible: Boolean, onDismissRequest: () -> Unit, courses: List<
  */
 @Composable
 private fun Course(course: ICourse, modifier: Modifier = Modifier) {
-    Card(modifier = modifier) {
-        Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+    PunicaCard(
+        modifier = modifier,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+    ) {
+        Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
             // 课程名称
             Text(
                 course.name,

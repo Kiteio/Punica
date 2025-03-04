@@ -4,8 +4,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +17,7 @@ import compose.icons.cssggicons.Bell
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.client.office.api.Notice
+import org.kiteio.punica.ui.component.CardListItem
 import org.kiteio.punica.ui.component.Loading
 import org.kiteio.punica.ui.component.NavBackAppBar
 import org.kiteio.punica.ui.page.modules.ModuleRoute
@@ -51,14 +50,14 @@ private fun NoticeVM.Content() {
     ) { innerPadding ->
         Loading(notices, modifier = Modifier.padding(innerPadding)) {
             LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Adaptive(200.dp),
-                contentPadding = PaddingValues(4.dp)
+                columns = StaggeredGridCells.Adaptive(232.dp),
+                contentPadding = PaddingValues(8.dp)
             ) {
                 items(notices.itemCount) { index ->
                     notices[index]?.let {
                         Notice(
                             notice = it,
-                            modifier = Modifier.padding(4.dp),
+                            modifier = Modifier.padding(8.dp),
                         )
                     }
                 }
@@ -75,10 +74,10 @@ private fun NoticeVM.Content() {
 private fun Notice(notice: Notice, modifier: Modifier = Modifier) {
     val uriHandler = LocalUriHandler.current
 
-    ElevatedCard(onClick = { uriHandler.openUri(notice.urlString) }, modifier = modifier) {
-        ListItem(
-            headlineContent = { Text(notice.title) },
-            supportingContent = { Text(notice.time) }
-        )
-    }
+    CardListItem(
+        headlineContent = { Text(notice.title) },
+        onClick = { uriHandler.openUri(notice.urlString) },
+        modifier = modifier,
+        supportingContent = { Text(notice.time) },
+    )
 }

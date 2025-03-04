@@ -39,7 +39,7 @@ fun PunicaTheme(
         LocalIsDarkTheme provides isDarkTheme,
     ) {
         DynamicMaterialTheme(
-            primary = Color(0xFF5783E0),
+            primary = Color(0xff5b89e8),
             useDarkTheme = isDarkTheme,
             animate = true,
             content = content,

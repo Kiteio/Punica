@@ -8,11 +8,15 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import org.kiteio.punica.ui.component.CardListItem
 import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 
@@ -42,32 +46,32 @@ fun SecondClassVM.Grades() {
         modifier = Modifier.fillMaxSize(),
     ) { grades ->
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(200.dp),
-            contentPadding = PaddingValues(4.dp),
+            columns = GridCells.Adaptive(232.dp),
+            contentPadding = PaddingValues(8.dp),
         ) {
             itemsIndexed(grades.grades) { index, grade ->
-                ElevatedCard(onClick = {}, modifier = Modifier.padding(4.dp)) {
-                    ListItem(
-                        // 名称
-                        headlineContent = { Text(grade.name) },
-                        // 图标
-                        leadingContent = {
-                            Icon(icons[index], contentDescription = grade.name)
-                        },
-                        // 成绩比分
-                        trailingContent = {
-                            Text(
-                                "${grade.score} / ${grade.requiredScore}",
-                                color = if (
-                                    grade.score < grade.requiredScore
-                                ) MaterialTheme.colorScheme.error
-                                else LocalContentColor.current,
-                                fontWeight = FontWeight.SemiBold,
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                        }
-                    )
-                }
+                CardListItem(
+                    // 名称
+                    headlineContent = { Text(grade.name) },
+                    onClick = {},
+                    modifier = Modifier.padding(8.dp),
+                    // 图标
+                    leadingContent = {
+                        Icon(icons[index], contentDescription = grade.name)
+                    },
+                    // 成绩比分
+                    trailingContent = {
+                        Text(
+                            "${grade.score} / ${grade.requiredScore}",
+                            color = if (
+                                grade.score < grade.requiredScore
+                            ) MaterialTheme.colorScheme.error
+                            else LocalContentColor.current,
+                            fontWeight = FontWeight.SemiBold,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    },
+                )
             }
         }
     }

@@ -7,7 +7,9 @@ import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -20,8 +22,9 @@ import compose.icons.cssggicons.Dribbble
 import compose.icons.tablericons.Wifi
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
-import org.kiteio.punica.ui.page.modules.ModuleRoute
+import org.kiteio.punica.ui.component.CardListItem
 import org.kiteio.punica.ui.component.NavBackAppBar
+import org.kiteio.punica.ui.page.modules.ModuleRoute
 import punica.composeapp.generated.resources.*
 
 /**
@@ -47,9 +50,9 @@ private fun Content() {
         topBar = { NavBackAppBar(title = { Text(stringResource(WebsitesRoute.nameRes)) }) }
     ) { innerPadding ->
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(200.dp),
+            columns = GridCells.Adaptive(232.dp),
             modifier = Modifier.padding(innerPadding),
-            contentPadding = PaddingValues(4.dp),
+            contentPadding = PaddingValues(8.dp),
         ) {
             websites()
         }
@@ -151,17 +154,17 @@ private fun LazyGridScope.websites() {
 private fun WebSite(name: String, icon: ImageVector, urlString: String) {
     val uriHandler = LocalUriHandler.current
 
-    ElevatedCard(onClick = { uriHandler.openUri(urlString) }, modifier = Modifier.padding(4.dp)) {
-        ListItem(
-            headlineContent = { Text(name) },
-            supportingContent = {
-                Text(
-                    urlString.replace(Regex("^https://|^http://"), ""),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            },
-            leadingContent = { Icon(icon, contentDescription = name) },
-        )
-    }
+    CardListItem(
+        headlineContent = { Text(name) },
+        onClick = { uriHandler.openUri(urlString) },
+        modifier = Modifier.padding(8.dp),
+        supportingContent = {
+            Text(
+                urlString.replace(Regex("^https://|^http://"), ""),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        },
+        leadingContent = { Icon(icon, contentDescription = name) },
+    )
 }

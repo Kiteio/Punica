@@ -3,7 +3,6 @@ package org.kiteio.punica.ui.page.timetables
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringArrayResource
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.client.academic.foundation.CCourse
+import org.kiteio.punica.ui.component.CardListItem
 import org.kiteio.punica.ui.component.ModalBottomSheet
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.day_of_week
@@ -28,10 +28,10 @@ fun CoursesBottomSheet(
     courses: List<CCourse>?,
 ) {
     ModalBottomSheet(visible, onDismissRequest = onDismissRequest) {
-        LazyColumn(contentPadding = PaddingValues(4.dp)) {
+        LazyColumn(contentPadding = PaddingValues(8.dp)) {
             courses?.let {
                 items(it) { course ->
-                    Course(course, modifier = Modifier.padding(4.dp))
+                    Course(course, modifier = Modifier.padding(8.dp))
                 }
             }
         }
@@ -44,7 +44,7 @@ fun CoursesBottomSheet(
  */
 @Composable
 private fun Course(course: CCourse, modifier: Modifier = Modifier) {
-    ListItem(
+    CardListItem(
         // 名称
         headlineContent = { Text(course.name) },
         modifier = modifier,

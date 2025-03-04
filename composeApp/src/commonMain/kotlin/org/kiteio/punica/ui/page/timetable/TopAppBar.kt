@@ -50,6 +50,9 @@ fun TimetableVM.TopAppBar(
             }
         },
         actions = {
+            // 学期
+            Term(userId = userId)
+
             // 备注
             IconButton(onClick = onNoteDialogDisplayRequest, enabled = timetable != null) {
                 Icon(
@@ -57,9 +60,6 @@ fun TimetableVM.TopAppBar(
                     contentDescription = stringResource(Res.string.note),
                 )
             }
-
-            // 学期
-            Term(userId = userId)
         }
     )
 }
@@ -75,7 +75,10 @@ private fun Week(currentPage: Int, onPageChange: (Int) -> Unit, enabled: Boolean
     Box {
         TextButton(onClick = { expanded = true }, enabled = enabled) {
             Text(
-                if (currentPage == 0) stringResource(Res.string.all) else stringResource(Res.string.week_of, currentPage),
+                if (currentPage == 0) stringResource(Res.string.all) else stringResource(
+                    Res.string.week_of,
+                    currentPage
+                ),
                 style = MaterialTheme.typography.titleMedium,
             )
         }

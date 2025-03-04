@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -20,11 +22,8 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.foundation.CCourse
+import org.kiteio.punica.ui.component.*
 import org.kiteio.punica.ui.page.modules.ModuleRoute
-import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
-import org.kiteio.punica.ui.component.NavBackAppBar
-import org.kiteio.punica.ui.component.SearchButton
-import org.kiteio.punica.ui.component.SearchTextField
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 import org.kiteio.punica.wrapper.focusCleaner
 import punica.composeapp.generated.resources.Res
@@ -93,7 +92,7 @@ private fun CourseTimetableVM.Content() {
             ) { timetable ->
                 LazyVerticalStaggeredGrid(
                     columns = StaggeredGridCells.Adaptive(280.dp),
-                    contentPadding = PaddingValues(4.dp),
+                    contentPadding = PaddingValues(8.dp),
                 ) {
                     items(
                         timetable.courses.run {
@@ -108,27 +107,24 @@ private fun CourseTimetableVM.Content() {
                             } else this
                         }.sortedBy { it.first().name }
                     ) {
-                        ElevatedCard(
+                        CardListItem(
+                            headlineContent = { Text(it.first().name) },
                             onClick = {
                                 courses = it
                                 bottomSheetVisible = true
                             },
-                            modifier = Modifier.padding(4.dp),
-                        ) {
-                            ListItem(
-                                headlineContent = { Text(it.first().name) },
-                                supportingContent = {
-                                    // 教师
-                                    Text(
-                                        it.filter { it.teacher != null }
-                                            .map { course -> course.teacher }
-                                            .toSet()
-                                            .joinToString(),
-                                        style = MaterialTheme.typography.bodySmall,
-                                    )
-                                }
-                            )
-                        }
+                            modifier = Modifier.padding(8.dp),
+                            supportingContent = {
+                                // 教师
+                                Text(
+                                    it.filter { it.teacher != null }
+                                        .map { course -> course.teacher }
+                                        .toSet()
+                                        .joinToString(),
+                                    style = MaterialTheme.typography.bodySmall,
+                                )
+                            },
+                        )
                     }
                 }
             }

@@ -20,9 +20,9 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.foundation.User
-import org.kiteio.punica.ui.page.account.PasswordType.*
 import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
 import org.kiteio.punica.ui.component.NavBackAppBar
+import org.kiteio.punica.ui.page.account.PasswordType.*
 import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.add
@@ -96,7 +96,7 @@ private fun AccountVM.Content() {
         ) { users ->
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(256.dp),
-                contentPadding = PaddingValues(4.dp),
+                contentPadding = PaddingValues(8.dp),
             ) {
                 items(users.sortedBy { it.id != userId }, key = { it.id }) {
                     if (type == OTP) OTPUser(
@@ -106,7 +106,7 @@ private fun AccountVM.Content() {
                             loginWhenSave = false
                             accountBottomSheetVisible = true
                         },
-                        modifier = Modifier.padding(4.dp).animateItem()
+                        modifier = Modifier.padding(8.dp).animateItem()
                     ) else User(
                         user = it,
                         isCurrentAccount = it.id == userId,
@@ -115,7 +115,7 @@ private fun AccountVM.Content() {
                             loginWhenSave = false
                             accountBottomSheetVisible = true
                         },
-                        modifier = Modifier.padding(4.dp)
+                        modifier = Modifier.padding(8.dp)
                     )
                 }
             }

@@ -22,9 +22,9 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.course.foundation.CourseCategory
+import org.kiteio.punica.ui.component.*
 import org.kiteio.punica.ui.page.modules.ModuleRoute
 import org.kiteio.punica.ui.page.timetable.TimetableRoute
-import org.kiteio.punica.ui.component.*
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 import org.kiteio.punica.wrapper.focusCleaner
 import punica.composeapp.generated.resources.Res
@@ -68,6 +68,7 @@ private fun CourseSystemVM.Content() {
         topBar = {
             NavBackAppBar(
                 title = { Text(stringResource(CourseSystemRoute.nameRes)) },
+                shadowElevation = 0.dp,
                 actions = {
                     // 日志
                     IconButton(
@@ -77,16 +78,6 @@ private fun CourseSystemVM.Content() {
                         Icon(
                             Icons.Outlined.History,
                             contentDescription = stringResource(Res.string.log),
-                        )
-                    }
-                    // 信息
-                    IconButton(
-                        onClick = { overviewBottomSheetVisible = true },
-                        enabled = courseSystem != null,
-                    ) {
-                        Icon(
-                            Icons.Outlined.Info,
-                            contentDescription = stringResource(Res.string.note),
                         )
                     }
                     // 已选课程
@@ -105,7 +96,17 @@ private fun CourseSystemVM.Content() {
                         isQueryBlank = query.isBlank(),
                         onClick = { searchBarVisible = !searchBarVisible },
                     )
-                }
+                    // 信息
+                    IconButton(
+                        onClick = { overviewBottomSheetVisible = true },
+                        enabled = courseSystem != null,
+                    ) {
+                        Icon(
+                            Icons.Outlined.Info,
+                            contentDescription = stringResource(Res.string.note),
+                        )
+                    }
+                },
             )
         },
         modifier = Modifier.focusCleaner(focusManager),

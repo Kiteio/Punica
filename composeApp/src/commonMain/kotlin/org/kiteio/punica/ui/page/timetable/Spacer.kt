@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 fun TimetableMealSpacer(rowIndex: Int) {
     if (rowIndex == 2 || rowIndex == 4) Spacer(
         modifier = Modifier.fillMaxWidth().height(4.dp).background(
-            MaterialTheme.colorScheme.surfaceContainerLowest
+            MaterialTheme.colorScheme.surfaceContainerLow,
         )
     )
 }

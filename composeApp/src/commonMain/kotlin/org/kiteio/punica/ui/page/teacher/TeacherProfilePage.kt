@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -19,10 +21,7 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.api.Teacher
-import org.kiteio.punica.ui.component.Loading
-import org.kiteio.punica.ui.component.NavBackAppBar
-import org.kiteio.punica.ui.component.SearchButton
-import org.kiteio.punica.ui.component.SearchTextField
+import org.kiteio.punica.ui.component.*
 import org.kiteio.punica.ui.page.modules.ModuleRoute
 import org.kiteio.punica.wrapper.Pager
 import org.kiteio.punica.wrapper.focusCleaner
@@ -87,8 +86,8 @@ private fun Content() {
             Loading(teachers) {
                 // 教师
                 LazyVerticalStaggeredGrid(
-                    columns = StaggeredGridCells.Adaptive(200.dp),
-                    contentPadding = PaddingValues(4.dp),
+                    columns = StaggeredGridCells.Adaptive(232.dp),
+                    contentPadding = PaddingValues(8.dp),
                 ) {
                     items(teachers.itemCount) { index ->
                         teachers[index]?.let {
@@ -98,7 +97,7 @@ private fun Content() {
                                     teacher = it
                                     bottomSheetVisible = true
                                 },
-                                modifier = Modifier.padding(4.dp),
+                                modifier = Modifier.padding(8.dp),
                             )
                         }
                     }
@@ -123,21 +122,25 @@ private fun Content() {
  * 教师。
  */
 @Composable
-private fun Teacher(teacher: Teacher, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    ElevatedCard(onClick = onClick, modifier = modifier) {
-        ListItem(
-            // 姓名
-            headlineContent = { Text(teacher.name) },
-            // 院系
-            supportingContent = teacher.faculty?.let { { Text(it) } },
-            // 工号
-            trailingContent = {
-                Text(
-                    teacher.id,
-                    fontWeight = FontWeight.SemiBold,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-        )
-    }
+private fun Teacher(
+    teacher: Teacher,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    CardListItem(
+        // 姓名
+        headlineContent = { Text(teacher.name) },
+        onClick = onClick,
+        modifier = modifier,
+        // 院系
+        supportingContent = teacher.faculty?.let { { Text(it) } },
+        // 工号
+        trailingContent = {
+            Text(
+                teacher.id,
+                fontWeight = FontWeight.SemiBold,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        },
+    )
 }

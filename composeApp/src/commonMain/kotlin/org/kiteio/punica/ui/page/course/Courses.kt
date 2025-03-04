@@ -19,6 +19,7 @@ import org.kiteio.punica.client.course.api.SearchParameters
 import org.kiteio.punica.client.course.api.delete
 import org.kiteio.punica.client.course.api.select
 import org.kiteio.punica.client.course.foundation.CourseCategory
+import org.kiteio.punica.ui.component.CardListItem
 import org.kiteio.punica.ui.component.Loading
 import org.kiteio.punica.ui.component.showToast
 import org.kiteio.punica.ui.page.account.DeleteDialog
@@ -61,7 +62,7 @@ fun Courses(courseSystem: CourseSystem, category: CourseCategory, query: String)
         Loading(courses) {
             LazyVerticalStaggeredGrid(
                 columns = StaggeredGridCells.Adaptive(280.dp),
-                contentPadding = PaddingValues(4.dp),
+                contentPadding = PaddingValues(8.dp),
             ) {
                 items(courses.itemCount) {
                     courses[it]?.let { course ->
@@ -86,7 +87,7 @@ fun Courses(courseSystem: CourseSystem, category: CourseCategory, query: String)
                                     sCourse = course
                                     deleteDialogVisible = true
                                 },
-                                modifier = Modifier.padding(4.dp),
+                                modifier = Modifier.padding(8.dp),
                             )
                         }
                     }
@@ -138,55 +139,54 @@ private fun Course(
     onWithdraw: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    ElevatedCard(modifier = modifier) {
-        ListItem(
-            headlineContent = { Text(course.name) },
-            supportingContent = {
-                Column {
-                    CompositionLocalProvider(
-                        LocalTextStyle provides MaterialTheme.typography.bodySmall,
-                    ) {
-                        Row {
-                            // 课程编号
-                            Text(course.courseId)
-                            Spacer(modifier = Modifier.width(8.dp))
-                            // 学分
-                            Text("${course.credits}", fontWeight = FontWeight.Bold)
-                            Spacer(modifier = Modifier.width(8.dp))
-                            // 校区
-                            Text(stringResource(Campus.entries[course.campusId - 1].nameRes))
-                            Spacer(modifier = Modifier.width(8.dp))
-                            // 选课人数
-                            Text("${course.leftover} / ${course.total}")
-                        }
-                        // 教师
-                        Text(course.teacher)
-                        // 上课时间
-                        course.time?.let { Text(it) }
-                        // 上课地点
-                        course.classroom?.let { Text(it) }
-                        // 备注
-                        course.note?.let { Text(it) }
-                        // 冲突说明
-                        course.conflict?.let {
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(it)
-                        }
+    CardListItem(
+        headlineContent = { Text(course.name) },
+        modifier = modifier,
+        supportingContent = {
+            Column {
+                CompositionLocalProvider(
+                    LocalTextStyle provides MaterialTheme.typography.bodySmall,
+                ) {
+                    Row {
+                        // 课程编号
+                        Text(course.courseId)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        // 学分
+                        Text("${course.credits}", fontWeight = FontWeight.Bold)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        // 校区
+                        Text(stringResource(Campus.entries[course.campusId - 1].nameRes))
+                        Spacer(modifier = Modifier.width(8.dp))
+                        // 选课人数
+                        Text("${course.leftover} / ${course.total}")
+                    }
+                    // 教师
+                    Text(course.teacher)
+                    // 上课时间
+                    course.time?.let { Text(it) }
+                    // 上课地点
+                    course.classroom?.let { Text(it) }
+                    // 备注
+                    course.note?.let { Text(it) }
+                    // 冲突说明
+                    course.conflict?.let {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(it)
                     }
                 }
-            },
-            trailingContent = {
-                TextButton(onClick = { if (course.isSelected) onWithdraw() else onSelect() }) {
-                    Text(
-                        stringResource(
-                            if (course.isSelected) Res.string.withdraw_course
-                            else Res.string.select_course,
-                        ),
-                        color = if (course.isSelected) MaterialTheme.colorScheme.error
-                        else LocalContentColor.current
-                    )
-                }
-            },
-        )
-    }
+            }
+        },
+        trailingContent = {
+            TextButton(onClick = { if (course.isSelected) onWithdraw() else onSelect() }) {
+                Text(
+                    stringResource(
+                        if (course.isSelected) Res.string.withdraw_course
+                        else Res.string.select_course,
+                    ),
+                    color = if (course.isSelected) MaterialTheme.colorScheme.error
+                    else LocalContentColor.current
+                )
+            }
+        },
+    )
 }

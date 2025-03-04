@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesomeMosaic
 import androidx.compose.material.icons.outlined.AutoAwesomeMosaic
@@ -15,6 +16,8 @@ import androidx.compose.ui.unit.dp
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
+import org.kiteio.punica.ui.component.PunicaCard
+import org.kiteio.punica.ui.component.PunicaListItem
 import org.kiteio.punica.ui.compositionlocal.LocalNavController
 import org.kiteio.punica.ui.compositionlocal.LocalWindowSizeClass
 import org.kiteio.punica.ui.compositionlocal.isCompactWidth
@@ -105,19 +108,35 @@ private fun Module(
     isCompactWidth: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    ElevatedCard(onClick = onClick, modifier = modifier) {
+    PunicaCard(onClick = onClick, modifier = modifier) {
         val name = stringResource(route.nameRes)
 
         if (isCompactWidth) {
-            ListItem(
-                headlineContent = { Text(name) },
-                leadingContent = { Icon(route.icon, contentDescription = name) },
+            PunicaListItem(
+                headlineContent = {
+                    Text(name, color = MaterialTheme.colorScheme.primary)
+                },
+                leadingContent = {
+                    Surface(
+                        onClick = onClick,
+                        tonalElevation = 1.5.dp,
+                        shadowElevation = 1.5.dp,
+                        shape = CircleShape,
+                        modifier = Modifier.size(28.dp),
+                    ) {
+                        Icon(
+                            route.icon,
+                            contentDescription = name,
+                            modifier = Modifier.padding(4.dp),
+                        )
+                    }
+                },
             )
         } else {
             Column(modifier = Modifier.padding(16.dp)) {
                 Icon(route.icon, contentDescription = name)
                 Spacer(modifier = Modifier.height(12.dp))
-                Text(name)
+                Text(name, color = MaterialTheme.colorScheme.primary)
             }
         }
     }
