@@ -2,7 +2,6 @@ package org.kiteio.punica.ui.page.settings
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AlternateEmail
-import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +17,8 @@ import org.kiteio.punica.Build
 import org.kiteio.punica.ui.component.SettingsGroup
 import org.kiteio.punica.ui.component.SettingsMenuLink
 import org.kiteio.punica.ui.component.showToast
+import org.kiteio.punica.ui.compositionlocal.LocalNavController
+import org.kiteio.punica.ui.page.versions.VersionsRoute
 import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.*
 
@@ -27,6 +28,7 @@ import punica.composeapp.generated.resources.*
 @Composable
 fun AboutSettingsGroup() {
     val scope = rememberCoroutineScope()
+    val navController = LocalNavController.current
     val clipboardManager = LocalClipboardManager.current
     val uriHandler = LocalUriHandler.current
 
@@ -37,15 +39,15 @@ fun AboutSettingsGroup() {
     SettingsGroup(title = { Text(stringResource(Res.string.about)) }) {
         // 版本
         SettingsMenuLink(
-            title = { Text(stringResource(Res.string.version)) },
+            title = { Text(stringResource(VersionsRoute.nameRes)) },
             subtitle = { Text(Build.versionName) },
             icon = {
                 Icon(
-                    Icons.Outlined.Verified,
-                    contentDescription = stringResource(Res.string.version),
+                    VersionsRoute.icon,
+                    contentDescription = stringResource(VersionsRoute.nameRes),
                 )
             },
-            onClick = {},
+            onClick = { navController.navigate(VersionsRoute) },
         )
         // GitHub
         SettingsMenuLink(

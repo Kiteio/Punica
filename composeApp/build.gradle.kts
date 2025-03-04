@@ -66,6 +66,7 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.material3.windowSizeClass)
             implementation(libs.materialkolor)
+            implementation(libs.multiplatformMarkdownRenderer.m3)
             implementation(libs.navigation.compose)
             implementation(libs.paging.compose)
             implementation(libs.sublime.fuzzy)

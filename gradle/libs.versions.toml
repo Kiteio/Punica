@@ -24,6 +24,7 @@ kotlinx-serialization = "1.8.0"
 ksoup = "0.2.2"
 ktor = "3.0.3"
 materialkolor = "2.0.2"
+multiplatform-markdown-renderer = "0.27.0-rc02"
 navigation = "2.8.0-alpha12"
 otp = "2.4.1"
 paging = "3.3.0-alpha02-0.5.1"
@@ -59,6 +60,7 @@ ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "kto
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 material3-windowSizeClass = { module = "org.jetbrains.compose.material3:material3-window-size-class", version.ref = "compose-multiplatform" }
 materialkolor = { module = "com.materialkolor:material-kolor", version.ref = "materialkolor" }
+multiplatformMarkdownRenderer-m3 = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "multiplatform-markdown-renderer" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation" }
 otp = { module = "dev.turingcomplete:kotlin-onetimepassword", version.ref = "otp" }
 paging-compose = { module = "app.cash.paging:paging-compose-common", version.ref = "paging" }

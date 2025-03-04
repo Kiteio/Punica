@@ -41,6 +41,8 @@ import org.kiteio.punica.ui.page.teacher.TeacherProfilePage
 import org.kiteio.punica.ui.page.teacher.TeacherProfileRoute
 import org.kiteio.punica.ui.page.timetables.CourseTimetablePage
 import org.kiteio.punica.ui.page.timetables.CourseTimetableRoute
+import org.kiteio.punica.ui.page.versions.VersionsPage
+import org.kiteio.punica.ui.page.versions.VersionsRoute
 import org.kiteio.punica.ui.page.websites.WebsitesPage
 import org.kiteio.punica.ui.page.websites.WebsitesRoute
 import org.kiteio.punica.ui.theme.PunicaTheme
@@ -96,6 +98,7 @@ fun App(windowSizeClass: WindowSizeClass, snackbarHostState: SnackbarHostState? 
                 composable<CourseTimetableRoute> { CourseTimetablePage() }
                 composable<PlanRoute> { PlanPage() }
                 composable<ProgressRoute> { ProgressPage() }
+                composable<VersionsRoute> { VersionsPage() }
             }
         }
     }
