@@ -52,8 +52,9 @@ private fun Content() {
     val releases by produceState<List<Release>?>(null) {
         launchCatching {
             try {
-                value = Gitee().getReleases("Kiteio", "Punica-CMP") +
-                        Gitee().getReleases("Kiteio", "Punica")
+                val gitee = Gitee()
+                value = gitee.getReleases("Kiteio", "Punica-CMP") +
+                        gitee.getReleases("Kiteio", "Punica")
             } finally {
                 isLoading = false
             }

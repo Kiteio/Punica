@@ -45,7 +45,8 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(compose.foundation)
-            implementation(compose.material3)
+            // TODO: 在 1.8.0 之后改回 compose.material3
+            implementation("org.jetbrains.compose.material3:material3:1.8.0-alpha03")
             implementation(compose.materialIconsExtended)
             implementation(compose.runtime)
             implementation(compose.ui)
