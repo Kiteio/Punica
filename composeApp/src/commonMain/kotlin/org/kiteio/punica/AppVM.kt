@@ -7,21 +7,33 @@ import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.datetime.*
+import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.daysUntil
+import kotlinx.datetime.minus
+import kotlinx.datetime.monthsUntil
 import org.jetbrains.compose.resources.getString
 import org.kiteio.punica.AppVM.academicSystem
 import org.kiteio.punica.client.academic.AcademicSystem
-import org.kiteio.punica.client.academic.api.getNetworkPwd
 import org.kiteio.punica.client.academic.api.getTermDateRange
 import org.kiteio.punica.client.academic.foundation.Campus.CANTON
 import org.kiteio.punica.client.academic.foundation.Campus.FO_SHAN
 import org.kiteio.punica.client.academic.foundation.User
-import org.kiteio.punica.serialization.*
+import org.kiteio.punica.serialization.PrefsKeys
+import org.kiteio.punica.serialization.Stores
+import org.kiteio.punica.serialization.get
+import org.kiteio.punica.serialization.remove
+import org.kiteio.punica.serialization.removeAll
+import org.kiteio.punica.serialization.set
 import org.kiteio.punica.ui.component.showToast
 import org.kiteio.punica.ui.page.account.PasswordType
-import org.kiteio.punica.ui.page.account.PasswordType.*
+import org.kiteio.punica.ui.page.account.PasswordType.Academic
+import org.kiteio.punica.ui.page.account.PasswordType.OTP
+import org.kiteio.punica.ui.page.account.PasswordType.SecondClass
 import org.kiteio.punica.ui.theme.ThemeMode
-import org.kiteio.punica.ui.theme.ThemeMode.*
+import org.kiteio.punica.ui.theme.ThemeMode.Dark
+import org.kiteio.punica.ui.theme.ThemeMode.Default
+import org.kiteio.punica.ui.theme.ThemeMode.Light
 import org.kiteio.punica.wrapper.now
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.delete_successful
@@ -35,9 +47,6 @@ object AppVM : ViewModel() {
 
     /** 第二课堂学号 */
     val secondClassUserId = Stores.prefs.data.map { it[PrefsKeys.SECOND_CLASS_USER_ID] }
-
-    /** 校园网学号 */
-    val networkUserId = Stores.prefs.data.map { it[PrefsKeys.NETWORK_USER_ID] }
 
     /** 教务系统 */
     var academicSystem by mutableStateOf<AcademicSystem?>(null)
@@ -87,23 +96,10 @@ object AppVM : ViewModel() {
                             prefs[PrefsKeys.SECOND_CLASS_USER_ID] = userId
                         }
                     }
-                    // 设置校园网当前账号
-                    if (networkUserId.first() == null) {
-                        Stores.prefs.edit { prefs ->
-                            prefs[PrefsKeys.NETWORK_USER_ID] = userId
-                        }
-                    }
 
                     // 登录
                     try {
                         academicSystem = AcademicSystem(user).apply {
-                            // 获取并设置校园网密码
-                            if (user.networkPwd.isEmpty()) {
-                                val u = user.copy(networkPwd = getNetworkPwd())
-                                Stores.users.edit { prefs ->
-                                    prefs[u.id] = u
-                                }
-                            }
                             // 获取并设置开学日期
                             val old = Stores.prefs.data.map { prefs ->
                                 prefs[PrefsKeys.TERM_START_DATE]?.let { LocalDate.parse(it) }
@@ -140,8 +136,7 @@ object AppVM : ViewModel() {
             val key = when (type) {
                 Academic -> PrefsKeys.ACADEMIC_USER_ID
                 SecondClass -> PrefsKeys.SECOND_CLASS_USER_ID
-                Network -> PrefsKeys.NETWORK_USER_ID
-                OTP -> error("")
+                OTP -> error("Unsupported type")
             }
             // 删除数据
             Stores.timetable.edit { prefs -> prefs.removeAll { it.contains(userId) } }

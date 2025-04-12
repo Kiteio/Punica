@@ -116,6 +116,7 @@
     <string name="gdufe_portal">融合门户</string>
     <string name="gdufe_all">一体化平台</string>
     <string name="gdufe_app">广财通</string>
+    <string name="campus_network">校园网</string>
     <string name="gdufe_finance">财务系统</string>
     <string name="gdufe_mooc">广财慕课</string>
     <string name="gdufe_blackboard">毕博平台</string>
@@ -144,7 +145,6 @@
     <string name="way_to_get_otp_secret">扫描 OTP 二维码，扫描结果中包含了密钥：“secret=密钥&amp;issuer=...”</string>
     <string name="way_to_change_password">忘记密码可前往“融合门户”网站更改</string>
     <string name="default_is_user_id">默认为学号，可不填</string>
-    <string name="default_is_id_card_last_8">默认为身份证末 8 位</string>
     <string name="visible">可见</string>
     <string name="invisible">不可见</string>
 
@@ -187,7 +187,6 @@
     <!-- SettingsPage.kt -->
     <string name="account">账号</string>
     <string name="academic_system">教务系统</string>
-    <string name="campus_network">校园网</string>
     <string name="otp" translatable="false">OTP</string>
     <string name="not_logged_in">未登录</string>
     <string name="login">登录</string>

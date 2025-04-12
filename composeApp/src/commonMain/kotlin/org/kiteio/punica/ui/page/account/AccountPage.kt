@@ -11,7 +11,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -22,7 +28,9 @@ import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.foundation.User
 import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
 import org.kiteio.punica.ui.component.NavBackAppBar
-import org.kiteio.punica.ui.page.account.PasswordType.*
+import org.kiteio.punica.ui.page.account.PasswordType.Academic
+import org.kiteio.punica.ui.page.account.PasswordType.OTP
+import org.kiteio.punica.ui.page.account.PasswordType.SecondClass
 import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.add
@@ -55,7 +63,6 @@ private fun AccountVM.Content() {
     val userId by when (type) {
         Academic -> AppVM.academicUserId
         SecondClass -> AppVM.secondClassUserId
-        Network -> AppVM.networkUserId
         else -> flowOf(null)
     }.collectAsState(null)
 

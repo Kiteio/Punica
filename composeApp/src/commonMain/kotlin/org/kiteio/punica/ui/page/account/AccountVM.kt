@@ -6,9 +6,15 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import org.jetbrains.compose.resources.getString
 import org.kiteio.punica.client.academic.foundation.User
-import org.kiteio.punica.serialization.*
-import org.kiteio.punica.ui.page.account.PasswordType.*
+import org.kiteio.punica.serialization.PrefsKeys
+import org.kiteio.punica.serialization.Stores
+import org.kiteio.punica.serialization.deserializeToList
+import org.kiteio.punica.serialization.get
+import org.kiteio.punica.serialization.set
 import org.kiteio.punica.ui.component.showToast
+import org.kiteio.punica.ui.page.account.PasswordType.Academic
+import org.kiteio.punica.ui.page.account.PasswordType.OTP
+import org.kiteio.punica.ui.page.account.PasswordType.SecondClass
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.remove_current_account
 import punica.composeapp.generated.resources.save_successful
@@ -19,12 +25,10 @@ class AccountVM(val type: PasswordType) : ViewModel() {
     val users = Stores.users.data.deserializeToList<User>().run {
         map { list ->
             when (type) {
-                // 所有用户
-                Network -> list
                 // OTP 密钥不为空的用户
                 OTP -> list.filter { it.otpSecret.isNotBlank() }
-                // 仅 userId 为 11 位的用户
-                else -> list.filter { it.id.length == 11 }
+                // 所有用户
+                else -> list
             }.sortedBy { it.id }
         }
     }
@@ -32,7 +36,6 @@ class AccountVM(val type: PasswordType) : ViewModel() {
     private val key = when (type) {
         Academic -> PrefsKeys.ACADEMIC_USER_ID
         SecondClass -> PrefsKeys.SECOND_CLASS_USER_ID
-        Network -> PrefsKeys.NETWORK_USER_ID
         OTP -> null
     }
 
@@ -46,7 +49,6 @@ class AccountVM(val type: PasswordType) : ViewModel() {
             when (type) {
                 Academic -> copy(password = password)
                 SecondClass -> copy(secondClassPwd = password)
-                Network -> copy(networkPwd = password)
                 OTP -> copy(otpSecret = password)
             }
         }

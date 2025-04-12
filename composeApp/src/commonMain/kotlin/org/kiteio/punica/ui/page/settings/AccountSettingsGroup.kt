@@ -15,7 +15,9 @@ import org.kiteio.punica.ui.component.SettingsMenuLink
 import org.kiteio.punica.ui.compositionlocal.LocalNavController
 import org.kiteio.punica.ui.page.account.AccountRoute
 import org.kiteio.punica.ui.page.account.PasswordType
-import org.kiteio.punica.ui.page.account.PasswordType.*
+import org.kiteio.punica.ui.page.account.PasswordType.Academic
+import org.kiteio.punica.ui.page.account.PasswordType.OTP
+import org.kiteio.punica.ui.page.account.PasswordType.SecondClass
 import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.account
@@ -35,7 +37,6 @@ fun AccountSettingsGroup() {
             val userId by when (it) {
                 Academic -> AppVM.academicUserId
                 SecondClass -> AppVM.secondClassUserId
-                Network -> AppVM.networkUserId
                 OTP -> flowOf(null)
             }.collectAsState(null)
 
@@ -46,9 +47,9 @@ fun AccountSettingsGroup() {
                     Academic -> {
                         {
                             Text(
-                                userId?.let {
+                                userId?.let { userId ->
                                     if (AppVM.academicSystem == null) "$it  ${stringResource(Res.string.not_logged_in)}"
-                                    else it
+                                    else userId
                                 } ?: stringResource(Res.string.not_logged_in))
                         }
                     }

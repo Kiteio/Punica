@@ -1,11 +1,30 @@
 package org.kiteio.punica.ui.page.account
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.FilledIconToggleButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -17,9 +36,21 @@ import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.client.academic.foundation.User
 import org.kiteio.punica.ui.component.Checkbox
 import org.kiteio.punica.ui.component.ModalBottomSheet
-import org.kiteio.punica.ui.page.account.PasswordType.*
+import org.kiteio.punica.ui.page.account.PasswordType.Academic
+import org.kiteio.punica.ui.page.account.PasswordType.OTP
+import org.kiteio.punica.ui.page.account.PasswordType.SecondClass
 import org.kiteio.punica.wrapper.focusCleaner
-import punica.composeapp.generated.resources.*
+import punica.composeapp.generated.resources.Res
+import punica.composeapp.generated.resources.default_is_user_id
+import punica.composeapp.generated.resources.invisible
+import punica.composeapp.generated.resources.login_when_save
+import punica.composeapp.generated.resources.password
+import punica.composeapp.generated.resources.save
+import punica.composeapp.generated.resources.secret
+import punica.composeapp.generated.resources.user_id
+import punica.composeapp.generated.resources.visible
+import punica.composeapp.generated.resources.way_to_change_password
+import punica.composeapp.generated.resources.way_to_get_otp_secret
 
 /**
  * 账号模态对话框。
@@ -41,7 +72,6 @@ fun AccountVM.AccountBottomSheet(
                 when (type) {
                     Academic -> initialUser?.password
                     SecondClass -> initialUser?.secondClassPwd
-                    Network -> initialUser?.networkPwd
                     OTP -> initialUser?.otpSecret
                 } ?: ""
             )
@@ -50,7 +80,7 @@ fun AccountVM.AccountBottomSheet(
         var loginWhenSave by remember { mutableStateOf(initialLoginWhenSave) }
 
         var passwordVisible by remember { mutableStateOf(false) }
-        val isUserIdError = userId.isBlank() || type != Network && userId.length != 11
+        val isUserIdError = userId.isBlank() || userId.length != 11
         val isPasswordError = type != SecondClass && password.isBlank()
 
         Column(
@@ -67,7 +97,7 @@ fun AccountVM.AccountBottomSheet(
                 value = userId,
                 onValueChange = {
                     userId = it.filter { char -> char.isDigit() }.run {
-                        if (type != Network && length > 11) substring(0..10)
+                        if (length > 11) substring(0..10)
                         else this
                     }
                 },
@@ -85,7 +115,6 @@ fun AccountVM.AccountBottomSheet(
                 else stringResource(Res.string.password),
                 placeholder = when (type) {
                     SecondClass -> stringResource(Res.string.default_is_user_id)
-                    Network -> stringResource(Res.string.default_is_id_card_last_8)
                     else -> null
                 },
                 trailingIcon = {
@@ -142,8 +171,7 @@ fun AccountVM.AccountBottomSheet(
                         onDismissRequest()
                     }
                 },
-                enabled = userId.isNotBlank() && password.isNotBlank() &&
-                        if (type == Network) true else userId.length == 11,
+                enabled = userId.isNotBlank() && password.isNotBlank() && userId.length == 11,
             ) {
                 Text(stringResource(Res.string.save))
             }
