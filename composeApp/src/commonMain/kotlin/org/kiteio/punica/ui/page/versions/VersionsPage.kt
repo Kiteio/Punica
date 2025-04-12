@@ -1,6 +1,10 @@
 package org.kiteio.punica.ui.page.versions
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
@@ -9,9 +13,13 @@ import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
@@ -65,7 +73,9 @@ private fun Content() {
     var release by remember { mutableStateOf<Release?>(null) }
 
     Scaffold(
-        topBar = { NavBackAppBar(title = { Text(stringResource(VersionsRoute.nameRes)) }) },
+        topBar = {
+            NavBackAppBar(title = { Text(stringResource(VersionsRoute.nameRes)) })
+        },
     ) { innerPadding ->
         LoadingNotNullOrEmpty(
             releases,
@@ -117,12 +127,6 @@ private fun Release(release: Release, onClick: () -> Unit, modifier: Modifier = 
         modifier = modifier,
         supportingContent = {
             Column {
-                // 版本描述
-                Text(
-                    release.description,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                )
                 Spacer(modifier = Modifier.height(4.dp))
                 // 创建时间
                 Text(release.time.format(), style = MaterialTheme.typography.bodySmall)

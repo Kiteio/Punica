@@ -63,7 +63,9 @@ fun ReleaseBottomSheet(visible: Boolean, onDismissRequest: () -> Unit, release: 
                     Spacer(modifier = Modifier.height(16.dp))
                 }
                 // 版本描述
-                item { Markdown(description) }
+                item {
+                    Markdown(description)
+                }
             }
         }
     }

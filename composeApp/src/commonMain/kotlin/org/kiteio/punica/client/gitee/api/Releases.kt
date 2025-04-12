@@ -1,6 +1,6 @@
 package org.kiteio.punica.client.gitee.api
 
-import io.ktor.client.call.*
+import io.ktor.client.call.body
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.format.char
 import kotlinx.serialization.SerialName
@@ -37,10 +37,12 @@ sealed interface Release {
 private data class ReleaseImpl(
     override val name: String,
     @SerialName("tag_name") override val tag: String,
-    @SerialName("body") override val description: String,
+    val body: String,
     @SerialName("created_at") val createdAt: String,
     override val assets: List<Assets>,
 ) : Release {
+    override val description = body.replace("\r\n", "\n")
+
     override val time = LocalDateTime.parse(
         createdAt,
         LocalDateTime.Format {

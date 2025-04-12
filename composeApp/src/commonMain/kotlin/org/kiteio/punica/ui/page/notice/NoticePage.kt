@@ -7,8 +7,11 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import app.cash.paging.compose.collectAsLazyPagingItems
@@ -44,6 +47,8 @@ fun NoticePage() = viewModel { NoticeVM() }.Content()
 @Composable
 private fun NoticeVM.Content() {
     val notices = noticesPagerFlow.collectAsLazyPagingItems()
+    var noticeBottomSheetVisible by remember { mutableStateOf(false) }
+    var notice by remember { mutableStateOf<Notice?>(null) }
 
     Scaffold(
         topBar = { NavBackAppBar(title = { Text(stringResource(NoticeRoute.nameRes)) }) }
@@ -57,6 +62,10 @@ private fun NoticeVM.Content() {
                     notices[index]?.let {
                         Notice(
                             notice = it,
+                            onClick = {
+                                notice = it
+                                noticeBottomSheetVisible = true
+                            },
                             modifier = Modifier.padding(8.dp),
                         )
                     }
@@ -64,6 +73,12 @@ private fun NoticeVM.Content() {
             }
         }
     }
+
+    NoticeBottomSheet(
+        noticeBottomSheetVisible,
+        onDismissRequest = { noticeBottomSheetVisible = false },
+        notice = notice,
+    )
 }
 
 
@@ -71,12 +86,10 @@ private fun NoticeVM.Content() {
  * 通知。
  */
 @Composable
-private fun Notice(notice: Notice, modifier: Modifier = Modifier) {
-    val uriHandler = LocalUriHandler.current
-
+private fun Notice(notice: Notice, onClick: () -> Unit, modifier: Modifier = Modifier) {
     CardListItem(
         headlineContent = { Text(notice.title) },
-        onClick = { uriHandler.openUri(notice.urlString) },
+        onClick = onClick,
         modifier = modifier,
         supportingContent = { Text(notice.time) },
     )
