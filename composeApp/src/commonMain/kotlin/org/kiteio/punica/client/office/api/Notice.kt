@@ -2,7 +2,7 @@ package org.kiteio.punica.client.office.api
 
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.select.Evaluator
-import io.ktor.client.statement.*
+import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kiteio.punica.client.office.AcademicOffice

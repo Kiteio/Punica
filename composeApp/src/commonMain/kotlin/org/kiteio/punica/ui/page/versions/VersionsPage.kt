@@ -24,9 +24,9 @@ import androidx.compose.ui.unit.dp
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.Build
-import org.kiteio.punica.client.gitee.Gitee
-import org.kiteio.punica.client.gitee.api.Release
-import org.kiteio.punica.client.gitee.api.getReleases
+import org.kiteio.punica.client.gitlab.GitLab
+import org.kiteio.punica.client.gitlab.api.Release
+import org.kiteio.punica.client.gitlab.api.getReleases
 import org.kiteio.punica.ui.component.CardListItem
 import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
 import org.kiteio.punica.ui.component.NavBackAppBar
@@ -60,9 +60,8 @@ private fun Content() {
     val releases by produceState<List<Release>?>(null) {
         launchCatching {
             try {
-                val gitee = Gitee()
-                value = gitee.getReleases("Kiteio", "Punica-CMP") +
-                        gitee.getReleases("Kiteio", "Punica")
+                val gitLab = GitLab()
+                value = gitLab.getReleases()
             } finally {
                 isLoading = false
             }
