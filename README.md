@@ -12,6 +12,7 @@
 
 #### 4月13日
 
+- 修改 tessdata 源
 - 使用 GitLab API 替换 Gitee
 
 #### 4月12日

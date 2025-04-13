@@ -33,22 +33,22 @@ fun AccountSettingsGroup() {
     val navController = LocalNavController.current
 
     SettingsGroup(title = { Text(stringResource(Res.string.account)) }) {
-        PasswordType.entries.forEach {
-            val userId by when (it) {
+        PasswordType.entries.forEach { type ->
+            val userId by when (type) {
                 Academic -> AppVM.academicUserId
                 SecondClass -> AppVM.secondClassUserId
                 OTP -> flowOf(null)
             }.collectAsState(null)
 
             SettingsMenuLink(
-                title = { Text(stringResource(it.nameRes)) },
-                subtitle = when (it) {
+                title = { Text(stringResource(type.nameRes)) },
+                subtitle = when (type) {
                     OTP -> null
                     Academic -> {
                         {
                             Text(
                                 userId?.let { userId ->
-                                    if (AppVM.academicSystem == null) "$it  ${stringResource(Res.string.not_logged_in)}"
+                                    if (AppVM.academicSystem == null) "$userId  ${stringResource(Res.string.not_logged_in)}"
                                     else userId
                                 } ?: stringResource(Res.string.not_logged_in))
                         }
@@ -60,11 +60,11 @@ fun AccountSettingsGroup() {
                 },
                 icon = {
                     Icon(
-                        it.icon,
-                        contentDescription = stringResource(it.nameRes),
+                        type.icon,
+                        contentDescription = stringResource(type.nameRes),
                     )
                 },
-                action = if (it == Academic && userId != null && AppVM.academicSystem == null) {
+                action = if (type == Academic && userId != null && AppVM.academicSystem == null) {
                     {
                         TextButton(
                             onClick = {
@@ -73,7 +73,7 @@ fun AccountSettingsGroup() {
                         ) { Text(stringResource(Res.string.login)) }
                     }
                 } else null,
-                onClick = { navController.navigate(AccountRoute(it.ordinal)) }
+                onClick = { navController.navigate(AccountRoute(type.ordinal)) }
             )
         }
     }

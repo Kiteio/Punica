@@ -1,7 +1,7 @@
 package org.kiteio.punica.tool
 
-import io.ktor.client.plugins.*
-import io.ktor.client.statement.*
+import io.ktor.client.plugins.timeout
+import io.ktor.client.statement.readRawBytes
 import kotlinx.io.buffered
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
@@ -24,8 +24,8 @@ suspend fun getDataPath(): String {
     if (!SystemFileSystem.exists(path)) {
         // 获取并写入训练数据
         SystemFileSystem.createDirectories(Path(dir))
-        val bytes = Client("https://gitee.com")
-            .get("Kiteio/Punica-CMP/raw/master/tessdata/eng.traineddata") {
+        val bytes = Client("https://kiteio.top")
+            .get("/downloads/eng.traineddata") {
                 timeout { requestTimeoutMillis = 20000 }
             }.readRawBytes()
         SystemFileSystem.sink(path).buffered().use {
