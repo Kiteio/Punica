@@ -1,7 +1,11 @@
 package org.kiteio.punica.ui.page.course
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
@@ -10,7 +14,14 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -20,17 +31,20 @@ import org.kiteio.punica.client.academic.foundation.MCourse
 import org.kiteio.punica.client.course.CourseSystem
 import org.kiteio.punica.client.course.api.delete
 import org.kiteio.punica.client.course.api.getCourses
-import org.kiteio.punica.ui.component.*
-import org.kiteio.punica.ui.compositionlocal.LocalWindowSizeClass
-import org.kiteio.punica.ui.compositionlocal.isCompactWidth
-import org.kiteio.punica.ui.compositionlocal.isMediumHeight
+import org.kiteio.punica.ui.component.CardListItem
+import org.kiteio.punica.ui.component.HorizontalTabPager
+import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
+import org.kiteio.punica.ui.component.ModalBottomSheet
+import org.kiteio.punica.ui.component.showToast
 import org.kiteio.punica.ui.page.account.DeleteDialog
-import org.kiteio.punica.ui.page.timetable.TimetableHeader
-import org.kiteio.punica.ui.page.timetable.TimetableTable
-import org.kiteio.punica.ui.page.timetable.TimetableTimeline
+import org.kiteio.punica.ui.page.timetable.Timetable
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 import org.kiteio.punica.wrapper.launchCatching
-import punica.composeapp.generated.resources.*
+import punica.composeapp.generated.resources.Res
+import punica.composeapp.generated.resources.selected_courses
+import punica.composeapp.generated.resources.timetable
+import punica.composeapp.generated.resources.withdraw_course
+import punica.composeapp.generated.resources.withdraw_course_successful
 
 @Composable
 fun MyCoursesBottomSheet(visible: Boolean, onDismissRequest: () -> Unit, courseSystem: CourseSystem?) {
@@ -62,7 +76,30 @@ fun MyCoursesBottomSheet(visible: Boolean, onDismissRequest: () -> Unit, courseS
                         onWithdrawCourse = { flag = !flag }
                     )
 
-                    1 -> Timetable(courses)
+                    1 -> {
+                        var timetable by remember { mutableStateOf<List<List<MCourse>?>?>(null) }
+
+                        LaunchedEffectCatching(Unit) {
+                            // 生成课表
+                            val list = MutableList<MutableList<MCourse>?>(42) { null }
+                            courses.forEach { course ->
+                                if (course.dayOfWeek != null && course.sections != null) {
+                                    // 计算当前课程下标
+                                    val index = course.dayOfWeek.ordinal * 6 + (course.sections.minOf { it -> it } - 1) / 2
+
+                                    (list[index] ?: mutableListOf<MCourse>().also { list[index] = it }).add(course)
+                                }
+                            }
+                            timetable = list
+                        }
+
+                        LoadingNotNullOrEmpty(
+                            timetable,
+                            isLoading = timetable == null,
+                        ) {
+                            Timetable(it, onItemClick = {})
+                        }
+                    }
                 }
             }
         }
@@ -146,79 +183,4 @@ private fun List(courses: List<MCourse>, courseSystem: CourseSystem?, onWithdraw
             }
         },
     )
-}
-
-
-@Composable
-private fun Timetable(courses: List<MCourse>) {
-    var timetable by remember { mutableStateOf<List<List<MCourse>?>?>(null) }
-
-    LaunchedEffectCatching(Unit) {
-        // 生成课表
-        val list = MutableList<MutableList<MCourse>?>(42) { null }
-        courses.forEach {
-            if (it.dayOfWeek != null && it.sections != null) {
-                val index = it.dayOfWeek.ordinal * 6 + (it.sections.minOf { it } - 1) / 2
-
-                (list[index] ?: mutableListOf<MCourse>().also { list[index] = it }).add(it)
-            }
-        }
-        timetable = list
-    }
-
-    LoadingNotNullOrEmpty(
-        timetable,
-        isLoading = timetable == null,
-    ) {
-        val windowSizeClass = LocalWindowSizeClass.current
-        val spacing = 0.dp
-        val lineHeight = 600.dp
-        val timelineWeight = 0.12f
-        val timelineMinWidth = 32.dp
-        val week = 0
-
-        Column {
-            // 星期
-            TimetableHeader(
-                week = week,
-                currentPage = week,
-                spacing = spacing,
-                timelineWeight = timelineWeight,
-                timelineMinWidth = timelineMinWidth,
-                modifier = Modifier.padding(spacing),
-            )
-            // 时间线和表格
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(spacing),
-            ) {
-                item {
-                    Row(
-                        modifier = Modifier.run {
-                            if (
-                                windowSizeClass.isCompactWidth ||
-                                windowSizeClass.isMediumHeight
-                            ) height(lineHeight)
-                            else fillParentMaxHeight()
-                        },
-                    ) {
-                        // 时间线
-                        TimetableTimeline(
-                            spacing = spacing,
-                            modifier = Modifier.widthIn(timelineMinWidth)
-                                .fillMaxWidth(timelineWeight),
-                        )
-                        // 课表
-                        TimetableTable(
-                            currentPage = week,
-                            courses = it,
-                            onItemClick = {},
-                            spacing = spacing,
-                            modifier = Modifier.weight(1f),
-                        )
-                    }
-                }
-            }
-        }
-    }
 }

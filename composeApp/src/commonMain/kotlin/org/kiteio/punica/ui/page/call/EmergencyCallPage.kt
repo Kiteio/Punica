@@ -11,7 +11,11 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.ContentCopy
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -29,9 +33,17 @@ import org.kiteio.punica.ui.component.HorizontalTabPager
 import org.kiteio.punica.ui.component.NavBackAppBar
 import org.kiteio.punica.ui.component.showToast
 import org.kiteio.punica.ui.page.modules.ModuleRoute
-import org.kiteio.punica.ui.rememberRBlocking
+import org.kiteio.punica.ui.rememberRunBlocking
 import org.kiteio.punica.wrapper.launchCatching
-import punica.composeapp.generated.resources.*
+import punica.composeapp.generated.resources.Res
+import punica.composeapp.generated.resources.campus_alarm
+import punica.composeapp.generated.resources.campus_police_office
+import punica.composeapp.generated.resources.copy
+import punica.composeapp.generated.resources.copy_successful
+import punica.composeapp.generated.resources.emergency_call
+import punica.composeapp.generated.resources.first_aid
+import punica.composeapp.generated.resources.guanzhou_police_station
+import punica.composeapp.generated.resources.hours_24
 
 /**
  * 紧急电话页面路由。
@@ -56,7 +68,7 @@ private fun Content() {
     val clipboardManager = LocalClipboardManager.current
 
     val state = rememberPagerState { Campus.entries.size }
-    val campus = rememberRBlocking { AppVM.campus.first() }
+    val campus = rememberRunBlocking { AppVM.campus.first() }
 
     Scaffold(
         topBar = {

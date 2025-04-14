@@ -1,17 +1,21 @@
 package org.kiteio.punica.ui.page.timetable
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.outlined.DateRange
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.Serializable
@@ -22,7 +26,7 @@ import org.kiteio.punica.ui.component.Checkbox
 import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
 import org.kiteio.punica.ui.component.NoteDialog
 import org.kiteio.punica.ui.page.home.TopLevelRoute
-import org.kiteio.punica.ui.rememberRBlocking
+import org.kiteio.punica.ui.rememberRunBlocking
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.Res
@@ -49,7 +53,7 @@ fun TimetablePage() = viewModel { TimetableVM() }.Content()
 @Composable
 private fun TimetableVM.Content() {
     val scope = rememberCoroutineScope()
-    val week = rememberRBlocking { AppVM.week.first() }
+    val week = rememberRunBlocking { AppVM.week.first() }
     val state = rememberPagerState(initialPage = week) { AppVM.TIMETABLE_MAX_PAGE }
 
     // 备注对话框可见性
@@ -80,49 +84,17 @@ private fun TimetableVM.Content() {
             isLoading = isLoading,
             modifier = Modifier.padding(innerPadding),
         ) { timetable ->
-            val spacing = 0.dp
-            val lineHeight = 600.dp
-            val timelineWeight = 0.12f
-            val timelineMinWidth = 32.dp
-
-            Column {
-                // 星期
-                TimetableHeader(
-                    week = week,
-                    currentPage = state.currentPage,
-                    spacing = spacing,
-                    timelineWeight = timelineWeight,
-                    timelineMinWidth = timelineMinWidth,
-                    modifier = Modifier.padding(spacing),
-                )
-                Spacer(modifier = Modifier.height(1.dp))
-                // 时间线和表格
-                TimetablePager(
-                    state = state,
-                    courses = timetable.cells,
-                    onItemClick = {
-                        visibleCourses = timetable.cells[it]
-                        coursesDialogVisible = true
-                    },
-                    spacing = spacing,
-                    lineHeight = lineHeight,
-                    timelineWeight = timelineWeight,
-                    timelineMinWidth = timelineMinWidth,
-                    modifier = Modifier.weight(1f),
-                )
-                // 课表备注
-                if (bottomNoteVisible && timetable.note != null) {
-                    Column(modifier = Modifier.fillMaxWidth()) {
-                        HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant)
-                        Text(
-                            timetable.note,
-                            modifier = Modifier.padding(spacing),
-                            color = MaterialTheme.colorScheme.primary,
-                            style = MaterialTheme.typography.labelSmall,
-                        )
-                    }
-                }
-            }
+            Timetable(
+                state = state,
+                week = week,
+                courses = timetable.cells,
+                onItemClick = {
+                    visibleCourses = timetable.cells[it]
+                    coursesDialogVisible = true
+                },
+                note = timetable.note,
+                noteVisible = bottomNoteVisible,
+            )
         }
     }
 

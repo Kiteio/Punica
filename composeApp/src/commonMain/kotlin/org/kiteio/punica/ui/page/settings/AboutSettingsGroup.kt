@@ -20,7 +20,11 @@ import org.kiteio.punica.ui.component.showToast
 import org.kiteio.punica.ui.compositionlocal.LocalNavController
 import org.kiteio.punica.ui.page.versions.VersionsRoute
 import org.kiteio.punica.wrapper.launchCatching
-import punica.composeapp.generated.resources.*
+import punica.composeapp.generated.resources.Res
+import punica.composeapp.generated.resources.about
+import punica.composeapp.generated.resources.copy_successful
+import punica.composeapp.generated.resources.github
+import punica.composeapp.generated.resources.little_red_book
 
 /**
  * 关于设置。
@@ -32,7 +36,7 @@ fun AboutSettingsGroup() {
     val clipboardManager = LocalClipboardManager.current
     val uriHandler = LocalUriHandler.current
 
-    val githubUrl = "https://github.com/Kiteio/Punica-CMP"
+    val githubUrl = "https://github.com/Kiteio/Punica"
     val littleRedBookId = "95634885169"
     val littleRedBookUserName = "@Kiteio"
 

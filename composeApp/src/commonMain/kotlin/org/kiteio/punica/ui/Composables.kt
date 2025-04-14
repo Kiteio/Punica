@@ -9,5 +9,5 @@ import kotlinx.coroutines.runBlocking
  * [remember] + [runBlocking]。
  */
 @Composable
-fun <T> rememberRBlocking(block: suspend CoroutineScope.() -> T) =
+fun <T> rememberRunBlocking(block: suspend CoroutineScope.() -> T) =
     remember { runBlocking(block = block) }
