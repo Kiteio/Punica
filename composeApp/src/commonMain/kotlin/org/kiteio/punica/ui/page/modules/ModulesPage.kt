@@ -1,6 +1,18 @@
 package org.kiteio.punica.ui.page.modules
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -8,11 +20,23 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesomeMosaic
 import androidx.compose.material.icons.outlined.AutoAwesomeMosaic
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -36,6 +60,7 @@ import org.kiteio.punica.ui.page.timetables.CourseTimetableRoute
 import org.kiteio.punica.ui.page.websites.WebsitesRoute
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.modules
+import kotlin.random.Random
 
 /**
  * 模块页面路由。
@@ -111,30 +136,56 @@ private fun Module(
     PunicaCard(onClick = onClick, modifier = modifier) {
         val name = stringResource(route.nameRes)
 
+        var rotated by remember { mutableStateOf(false) }
+
+        val degrees by animateFloatAsState(
+            if (rotated) Random.nextFloat() * 720f - 360f else 0f,
+            animationSpec = tween(durationMillis = 400)
+        )
+
+        LaunchedEffect(Unit) {
+            while (true) {
+                rotated = !rotated
+                delay(600)
+                rotated = !rotated
+                delay(4000)
+            }
+        }
+
         if (isCompactWidth) {
+            // 移动端
             PunicaListItem(
                 headlineContent = {
                     Text(name, color = MaterialTheme.colorScheme.primary)
                 },
                 leadingContent = {
-                    Surface(
-                        onClick = onClick,
-                        tonalElevation = 1.5.dp,
-                        shadowElevation = 1.5.dp,
-                        shape = CircleShape,
-                        modifier = Modifier.size(28.dp),
-                    ) {
-                        Icon(
-                            route.icon,
-                            contentDescription = name,
-                            modifier = Modifier.padding(4.dp),
-                        )
+                    Box(modifier = Modifier.size(36.dp), contentAlignment = Alignment.Center) {
+                        Surface(
+                            onClick = onClick,
+                            tonalElevation = 2.dp,
+                            shadowElevation = 2.dp,
+                            shape = CircleShape,
+                            modifier = Modifier.size(36.dp),
+                        ) {
+                            Icon(
+                                route.icon,
+                                contentDescription = name,
+                                modifier = Modifier.padding(8.dp).rotate(degrees),
+                            )
+                        }
                     }
                 },
             )
         } else {
+            // 桌面端
             Column(modifier = Modifier.padding(16.dp)) {
-                Icon(route.icon, contentDescription = name)
+                Surface(color = MaterialTheme.colorScheme.surfaceContainerLowest) {
+                    Icon(
+                        route.icon,
+                        contentDescription = name,
+                        modifier = Modifier.rotate(degrees),
+                    )
+                }
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(name, color = MaterialTheme.colorScheme.primary)
             }
