@@ -31,7 +31,7 @@ fun NoticeBottomSheet(
 ) {
     ModalBottomSheet(visible, onDismissRequest) {
         notice?.run {
-            var isLoading by remember { mutableStateOf(false) }
+            var isLoading by remember { mutableStateOf(true) }
             val html by produceState<String?>(null) {
                 launchCatching {
                     try {
@@ -46,7 +46,7 @@ fun NoticeBottomSheet(
             }
 
             LoadingNotNullOrEmpty(html, isLoading = isLoading) {
-                val htmlText = remember(it) { htmlToAnnotatedString(it) }
+                val htmlText = remember { htmlToAnnotatedString(it) }
 
                 LazyColumn(contentPadding = PaddingValues(16.dp)) {
                     item { Text(htmlText, lineHeight = 32.sp) }

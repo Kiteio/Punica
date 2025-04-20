@@ -32,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,7 +52,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -92,20 +93,22 @@ fun UserBottomSheet(visible: Boolean, onDismissRequest: () -> Unit) {
         val focusManager = LocalFocusManager.current
         val scope = rememberCoroutineScope()
 
-        var user by remember { mutableStateOf<User?>(null) }
+
         var userId by remember { mutableStateOf("") }
         var password by remember { mutableStateOf("") }
-        var secondClassPwd by remember { mutableStateOf(user?.secondClassPwd ?: "") }
+        var secondClassPwd by remember { mutableStateOf("") }
+        val user by AppVM.userFlow.map {
+            userId = it?.id ?: ""
+            password = it?.password ?: ""
+            secondClassPwd = it?.secondClassPwd ?: ""
+            it.also { println(it) }
+        }.collectAsState(null)
+
         var secondClassVisible by remember { mutableStateOf(false) }
         var isLoginButtonClicked by remember { mutableStateOf(false) }
 
-        LaunchedEffectCatching(Unit) {
-            AppVM.userFlow.first()?.let {
-                user = it
-                userId = it.id
-                password = it.password
-                secondClassPwd = it.secondClassPwd
-            }
+        val isUserLogin by remember {
+            derivedStateOf { AppVM.academicSystem?.userId == userId }
         }
 
         LazyColumn(
@@ -150,7 +153,7 @@ fun UserBottomSheet(visible: Boolean, onDismissRequest: () -> Unit) {
                         }
                     },
                     modifier = Modifier.fillMaxWidth(0.9f),
-                    readOnly = AppVM.isLoggingIn,
+                    readOnly = isUserLogin || AppVM.isLoggingIn,
                     label = { Text(stringResource(Res.string.user_id)) },
                     placeholder = {
                         Text(stringResource(Res.string.should_be_11_digits))
@@ -168,7 +171,7 @@ fun UserBottomSheet(visible: Boolean, onDismissRequest: () -> Unit) {
                     value = password,
                     onValueChange = { password = it },
                     modifier = Modifier.fillMaxWidth(0.9f),
-                    readOnly = AppVM.isLoggingIn,
+                    readOnly = isUserLogin || AppVM.isLoggingIn,
                     label = { Text(stringResource(Res.string.password)) },
                     placeholder = { Text(stringResource(Res.string.academic_system_password)) },
                     isError = isLoginButtonClicked && password.isEmpty(),
@@ -203,7 +206,7 @@ fun UserBottomSheet(visible: Boolean, onDismissRequest: () -> Unit) {
                             value = secondClassPwd,
                             onValueChange = { secondClassPwd = it },
                             modifier = Modifier.fillMaxWidth(0.9f),
-                            readOnly = AppVM.isLoggingIn,
+                            readOnly = isUserLogin || AppVM.isLoggingIn,
                             label = {
                                 Text(stringResource(Res.string.second_class_password))
                             },
@@ -231,10 +234,6 @@ fun UserBottomSheet(visible: Boolean, onDismissRequest: () -> Unit) {
             }
             // 登录、退出按钮
             item {
-                val isUserLogin by remember {
-                    derivedStateOf { AppVM.academicSystem?.userId == userId }
-                }
-
                 ElevatedButton(
                     onClick = {
                         scope.launchCatching {
@@ -242,9 +241,18 @@ fun UserBottomSheet(visible: Boolean, onDismissRequest: () -> Unit) {
                             if (isUserLogin) {
                                 AppVM.logout()
                             } else {
+                                require(userId.length == 11) {
+                                    showToast(getString(Res.string.error_user_id_is_11_digits))
+                                }
+
+                                require(password.isNotBlank()) {
+                                    showToast(getString(Res.string.error_password_is_empty))
+                                }
+
                                 showToast(getString(Res.string.logging_in))
-                                AppVM.login(User(userId, password, secondClassPwd), true)
+                                AppVM.login(User(userId, password, secondClassPwd))
                                 if (isUserLogin) {
+                                    onDismissRequest()
                                     showToast(getString(Res.string.login_successful))
                                 }
                             }

@@ -95,39 +95,42 @@ object AppVM : ViewModel() {
     }
 
 
-    suspend fun login(user: User? = null, shouldSave: Boolean = false) {
-        (user ?: userFlow.first())?.let { user ->
-            try {
-                // 登录
-                isLoggingIn = true
-                academicSystem = AcademicSystem(user).apply {
-                    // 获取并设置开学日期
-                    val old = Stores.prefs.data.map { prefs ->
-                        prefs[PrefsKeys.TERM_START_DATE]?.let { LocalDate.parse(it) }
-                    }.first()
-                    val start = getTermDateRange().range.start.minus(DatePeriod(days = 7))
-                    if (old == null || old.monthsUntil(start) >= 4) {
-                        Stores.prefs.edit { it[PrefsKeys.TERM_START_DATE] = "$start" }
+    suspend fun login(user: User? = null) {
+        val localUser = userFlow.first()
+        (user ?: localUser)?.let { user ->
+            if (academicSystem?.userId != user.id || user.password != localUser?.password) {
+                try {
+                    // 登录
+                    isLoggingIn = true
+                    academicSystem = AcademicSystem(user).apply {
+                        // 获取并设置开学日期
+                        val old = Stores.prefs.data.map { prefs ->
+                            prefs[PrefsKeys.TERM_START_DATE]?.let { LocalDate.parse(it) }
+                        }.first()
+                        val start = getTermDateRange().range.start.minus(DatePeriod(days = 7))
+                        if (old == null || old.monthsUntil(start) >= 4) {
+                            Stores.prefs.edit { it[PrefsKeys.TERM_START_DATE] = "$start" }
+                        }
                     }
+                } catch (throwable: Throwable) {
+                    // 验证码错误重试
+                    if (throwable.message == "验证码错误!!") login(user)
+                    else throw throwable
+                } finally {
+                    isLoggingIn = false
                 }
-
-                if (shouldSave) {
-                    // 保存用户
-                    Stores.users.edit {
-                        it[user.id] = it.get<User>(user.id)?.copy(
-                            password = user.password,
-                            secondClassPwd = user.secondClassPwd,
-                        ) ?: user
-                    }
-                    Stores.prefs.edit { it[PrefsKeys.USER_ID] = user.id }
-                }
-            } catch (throwable: Throwable) {
-                // 验证码错误重试
-                if (throwable.message == "验证码错误!!") login(user)
-                else throw throwable
-            } finally {
-                isLoggingIn = false
             }
+        }
+
+        if (user != null) {
+            // 保存用户
+            Stores.users.edit {
+                it[user.id] = it.get<User>(user.id)?.copy(
+                    password = user.password,
+                    secondClassPwd = user.secondClassPwd,
+                ) ?: user
+            }
+            Stores.prefs.edit { it[PrefsKeys.USER_ID] = user.id }
         }
     }
 

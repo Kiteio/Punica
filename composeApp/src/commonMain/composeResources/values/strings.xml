@@ -132,27 +132,6 @@
     <string name="guanzhou_police_station">官洲派出所</string>
     <string name="hours_24">24小时</string>
 
-    <!-- AccountPage.kt -->
-    <string name="safety_instruction">小石榴是一款开源软件，我们十分重视您的隐私，您的数据将在本地妥善保存</string>
-    <string name="user_id">学号</string>
-    <string name="password">密码</string>
-    <string name="second_class_password">第二课堂密码</string>
-    <string name="should_be_11_digits">11 位</string>
-    <string name="academic_system_password">教务系统（融合门户）密码</string>
-    <string name="error_user_id_is_11_digits">学号是 11 位</string>
-    <string name="error_password_is_empty">请输入密码</string>
-    <string name="default_is_user_id">默认是学号，可留空</string>
-    <string name="expand_more">展开</string>
-    <string name="expand_less">收起</string>
-    <string name="forget_password">忘记密码</string>
-    <string name="login">登录</string>
-    <string name="logout">退出</string>
-    <string name="login_successful">登录成功</string>
-    <string name="delete">删除</string>
-    <string name="delete_successful">删除成功</string>
-    <string name="visible">可见</string>
-    <string name="invisible">不可见</string>
-
     <!-- TimetablePage.kt -->
     <string name="week_of">第%1$d周</string>
     <string name="all">全部</string>
@@ -208,6 +187,26 @@
     <string name="open_source_repository">开源仓库</string>
     <string name="official_website">官网</string>
     <string name="official_website_kiteio">Kiteio 官方网站</string>
+
+    <string name="safety_instruction">小石榴是一款开源软件，我们十分重视您的隐私，您的数据将在本地妥善保存。首次登录需要下载 OCR 训练文件，请耐心等待</string>
+    <string name="user_id">学号</string>
+    <string name="password">密码</string>
+    <string name="second_class_password">第二课堂密码</string>
+    <string name="should_be_11_digits">11 位数字</string>
+    <string name="academic_system_password">教务系统（融合门户）密码</string>
+    <string name="error_user_id_is_11_digits">学号是 11 位</string>
+    <string name="error_password_is_empty">请输入密码</string>
+    <string name="default_is_user_id">默认是学号，可留空</string>
+    <string name="expand_more">展开</string>
+    <string name="expand_less">收起</string>
+    <string name="forget_password">忘记密码</string>
+    <string name="login">登录</string>
+    <string name="logout">退出</string>
+    <string name="login_successful">登录成功</string>
+    <string name="delete">删除</string>
+    <string name="delete_successful">删除成功</string>
+    <string name="visible">可见</string>
+    <string name="invisible">不可见</string>
 
     <!-- HomePage.kt -->
     <string name="timetable">课表</string>

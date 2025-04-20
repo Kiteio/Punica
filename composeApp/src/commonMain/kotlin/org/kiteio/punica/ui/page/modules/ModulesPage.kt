@@ -144,12 +144,10 @@ private fun Module(
         )
 
         LaunchedEffect(Unit) {
-            while (true) {
-                rotated = !rotated
-                delay(600)
-                rotated = !rotated
-                delay(4000)
-            }
+            delay(100)
+            rotated = !rotated
+            delay(600)
+            rotated = !rotated
         }
 
         if (isCompactWidth) {
