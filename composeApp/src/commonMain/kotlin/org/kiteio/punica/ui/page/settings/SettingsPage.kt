@@ -42,6 +42,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -52,6 +53,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import compose.icons.SimpleIcons
 import compose.icons.simpleicons.Github
 import kotlinx.serialization.Serializable
@@ -61,6 +63,8 @@ import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.Build
 import org.kiteio.punica.client.academic.foundation.Campus
+import org.kiteio.punica.client.bing.Bing
+import org.kiteio.punica.client.bing.api.getTodayWallpaper
 import org.kiteio.punica.ui.component.showToast
 import org.kiteio.punica.ui.compositionlocal.LocalNavController
 import org.kiteio.punica.ui.page.home.TopLevelRoute
@@ -83,6 +87,7 @@ import punica.composeapp.generated.resources.poem
 import punica.composeapp.generated.resources.punica
 import punica.composeapp.generated.resources.settings
 import punica.composeapp.generated.resources.theme_mode
+import punica.composeapp.generated.resources.wallpaper
 import punica.composeapp.generated.resources.week_of
 
 /**
@@ -109,16 +114,35 @@ private fun Content() {
     val scope = rememberCoroutineScope()
     val userId by AppVM.userIdFlow.collectAsState(null)
     var userBottomSheetVisible by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(true) }
+    val imageUrl by produceState<String?>(null) {
+        launchCatching {
+            try {
+                value = Bing().getTodayWallpaper()
+            } finally {
+                isLoading = false
+            }
+        }
+    }
 
     Scaffold(contentWindowInsets = WindowInsets.statusBars) {
         Box(modifier = Modifier) {
-            // 背景
-            Image(
-                painterResource(Res.drawable.punica),
-                contentDescription = stringResource(Res.string.app_name),
-                modifier = Modifier.fillMaxWidth().fillMaxHeight(0.3f).blur(4.dp),
-                contentScale = ContentScale.Crop,
-            )
+            if (isLoading || imageUrl != null) {
+                AsyncImage(
+                    imageUrl,
+                    contentDescription = stringResource(Res.string.wallpaper),
+                    modifier = Modifier.fillMaxWidth().fillMaxHeight(0.3f),
+                    contentScale = ContentScale.Crop,
+                )
+            }else {
+                // 背景
+                Image(
+                    painterResource(Res.drawable.punica),
+                    contentDescription = stringResource(Res.string.app_name),
+                    modifier = Modifier.fillMaxWidth().fillMaxHeight(0.3f).blur(4.dp),
+                    contentScale = ContentScale.Crop,
+                )
+            }
             // 蒙版
             Box(
                 modifier = Modifier.fillMaxWidth().fillMaxHeight(0.3f)

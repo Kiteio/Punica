@@ -190,6 +190,7 @@
     <string name="academic_progress">学业进度</string>
 
     <!-- SettingsPage.kt -->
+    <string name="wallpaper">壁纸</string>
     <string name="academic_system">教务系统</string>
     <string name="otp" translatable="false">OTP</string>
     <string name="not_logged_in">未登录</string>

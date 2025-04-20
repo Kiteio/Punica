@@ -6,12 +6,15 @@ import org.kiteio.punica.http.HttpClientWrapper
 /**
  * 教务处。
  */
-interface AcademicOffice: HttpClientWrapper
+interface AcademicOffice: HttpClientWrapper {
+    val baseUrl: String
+}
 
 
 /**
  * 返回教务处客户端。
  */
 fun AcademicOffice() = object: AcademicOffice {
-    override val httpClient = HttpClient("https://jwc.gdufe.edu.cn")
+    override val baseUrl = "https://jwc.gdufe.edu.cn"
+    override val httpClient = HttpClient(baseUrl)
 }

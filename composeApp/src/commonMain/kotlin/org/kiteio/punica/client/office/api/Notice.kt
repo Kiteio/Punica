@@ -26,7 +26,7 @@ suspend fun AcademicOffice.getNotices(index: Int = 1): List<Notice> {
                 Notice(
                     title = a.attr("title"),
                     time = li.child(1).text(),
-                    urlString = "https://jwc.gdufe.edu.cn${a.attr("href")}",
+                    urlString = "$baseUrl${a.attr("href")}",
                 )
             )
         }
