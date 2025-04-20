@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
@@ -16,6 +17,7 @@ import org.jetbrains.compose.resources.getString
 import org.kiteio.punica.AppVM.academicSystem
 import org.kiteio.punica.client.academic.AcademicSystem
 import org.kiteio.punica.client.academic.api.getTermDateRange
+import org.kiteio.punica.client.academic.api.logout
 import org.kiteio.punica.client.academic.foundation.Campus.CANTON
 import org.kiteio.punica.client.academic.foundation.Campus.FO_SHAN
 import org.kiteio.punica.client.academic.foundation.User
@@ -26,10 +28,6 @@ import org.kiteio.punica.serialization.remove
 import org.kiteio.punica.serialization.removeAll
 import org.kiteio.punica.serialization.set
 import org.kiteio.punica.ui.component.showToast
-import org.kiteio.punica.ui.page.account.PasswordType
-import org.kiteio.punica.ui.page.account.PasswordType.Academic
-import org.kiteio.punica.ui.page.account.PasswordType.OTP
-import org.kiteio.punica.ui.page.account.PasswordType.SecondClass
 import org.kiteio.punica.ui.theme.ThemeMode
 import org.kiteio.punica.ui.theme.ThemeMode.Dark
 import org.kiteio.punica.ui.theme.ThemeMode.Default
@@ -42,18 +40,28 @@ object AppVM : ViewModel() {
     /** 课表最大页数 */
     const val TIMETABLE_MAX_PAGE = 21
 
-    /** 教务系统学号 */
-    val academicUserId = Stores.prefs.data.map { it[PrefsKeys.ACADEMIC_USER_ID] }
+    /** 学号 */
+    val userIdFlow = Stores.prefs.data.map { it[PrefsKeys.USER_ID] }
 
-    /** 第二课堂学号 */
-    val secondClassUserId = Stores.prefs.data.map { it[PrefsKeys.SECOND_CLASS_USER_ID] }
+    /** 用户 */
+    val userFlow = flow {
+        emit(
+            userIdFlow.first()?.let { userId ->
+                Stores.users.data.map { it.get<User>(userId) }.first()
+            }
+        )
+    }
 
     /** 教务系统 */
     var academicSystem by mutableStateOf<AcademicSystem?>(null)
         private set
 
+    /** 是否正在登录 */
+    var isLoggingIn by mutableStateOf(false)
+        private set
+
     /** 周次 */
-    val week = Stores.prefs.data.map { prefs ->
+    val weekFlow = Stores.prefs.data.map { prefs ->
         val now = LocalDate.now()
         val date = prefs[PrefsKeys.TERM_START_DATE]?.let {
             LocalDate.parse(it)
@@ -64,7 +72,7 @@ object AppVM : ViewModel() {
     }
 
     /** 主题模式 */
-    val themeMode = Stores.prefs.data.map {
+    val themeModeFlow = Stores.prefs.data.map {
         when (it[PrefsKeys.THEME_MODE]) {
             Light.ordinal -> Light
             Dark.ordinal -> Dark
@@ -73,10 +81,53 @@ object AppVM : ViewModel() {
     }
 
     /** 校区 */
-    val campus = Stores.prefs.data.map {
+    val campusFlow = Stores.prefs.data.map {
         when (it[PrefsKeys.CAMPUS]) {
             FO_SHAN.ordinal -> FO_SHAN
             else -> CANTON
+        }
+    }
+
+
+    suspend fun logout() {
+        academicSystem?.logout()
+        academicSystem = null
+    }
+
+
+    suspend fun login(user: User? = null, shouldSave: Boolean = false) {
+        (user ?: userFlow.first())?.let { user ->
+            try {
+                // 登录
+                isLoggingIn = true
+                academicSystem = AcademicSystem(user).apply {
+                    // 获取并设置开学日期
+                    val old = Stores.prefs.data.map { prefs ->
+                        prefs[PrefsKeys.TERM_START_DATE]?.let { LocalDate.parse(it) }
+                    }.first()
+                    val start = getTermDateRange().range.start.minus(DatePeriod(days = 7))
+                    if (old == null || old.monthsUntil(start) >= 4) {
+                        Stores.prefs.edit { it[PrefsKeys.TERM_START_DATE] = "$start" }
+                    }
+                }
+
+                if (shouldSave) {
+                    // 保存用户
+                    Stores.users.edit {
+                        it[user.id] = it.get<User>(user.id)?.copy(
+                            password = user.password,
+                            secondClassPwd = user.secondClassPwd,
+                        ) ?: user
+                    }
+                    Stores.prefs.edit { it[PrefsKeys.USER_ID] = user.id }
+                }
+            } catch (throwable: Throwable) {
+                // 验证码错误重试
+                if (throwable.message == "验证码错误!!") login(user)
+                else throw throwable
+            } finally {
+                isLoggingIn = false
+            }
         }
     }
 
@@ -88,17 +139,10 @@ object AppVM : ViewModel() {
         if (userId != null) {
             // 防止同一账号重复登录
             if (academicSystem?.userId != userId) {
-                // 通过用户名获取用户
-                Stores.users.data.map { it.get<User>(userId) }.first()?.let { user ->
-                    // 设置第二课堂当前账号
-                    if (secondClassUserId.first() == null) {
-                        Stores.prefs.edit { prefs ->
-                            prefs[PrefsKeys.SECOND_CLASS_USER_ID] = userId
-                        }
-                    }
-
-                    // 登录
+                userFlow.first()?.let { user ->
                     try {
+                        // 登录
+                        isLoggingIn = true
                         academicSystem = AcademicSystem(user).apply {
                             // 获取并设置开学日期
                             val old = Stores.prefs.data.map { prefs ->
@@ -113,6 +157,8 @@ object AppVM : ViewModel() {
                         // 验证码错误重试
                         if (throwable.message == "验证码错误!!") updateAcademicSystem(userId)
                         else throw throwable
+                    } finally {
+                        isLoggingIn = false
                     }
                 }
             }
@@ -126,35 +172,23 @@ object AppVM : ViewModel() {
     /**
      * 删除用户。
      */
-    suspend fun deleteUser(type: PasswordType, userId: String) {
-        if (type == OTP) {
-            // 将 OTP 密钥清空
-            Stores.users.edit {
-                it[userId] = it.get<User>(userId)?.copy(otpSecret = "")
-            }
-        } else {
-            val key = when (type) {
-                Academic -> PrefsKeys.ACADEMIC_USER_ID
-                SecondClass -> PrefsKeys.SECOND_CLASS_USER_ID
-                OTP -> error("Unsupported type")
-            }
-            // 删除数据
-            Stores.timetable.edit { prefs -> prefs.removeAll { it.contains(userId) } }
-            Stores.exams.edit { prefs -> prefs.removeAll { it == userId } }
-            Stores.grades.edit { prefs -> prefs.removeAll { it == userId } }
-            Stores.secondClassGrades.edit { prefs -> prefs.removeAll { it == userId } }
-            Stores.plans.edit { prefs -> prefs.removeAll { it == userId } }
-            Stores.progresses.edit { prefs -> prefs.removeAll { it == userId } }
-            // 删除用户
-            Stores.users.edit { it.remove(userId) }
-            // 删除学号
-            Stores.prefs.edit {
-                if (it[key] == userId) {
-                    it.remove(key)
-                    // 退出教务系统
-                    if (type == Academic) {
-                        academicSystem = null
-                    }
+    suspend fun deleteUser(userId: String) {
+        // 删除数据
+        Stores.timetable.edit { prefs -> prefs.removeAll { it.contains(userId) } }
+        Stores.exams.edit { prefs -> prefs.removeAll { it == userId } }
+        Stores.grades.edit { prefs -> prefs.removeAll { it == userId } }
+        Stores.secondClassGrades.edit { prefs -> prefs.removeAll { it == userId } }
+        Stores.plans.edit { prefs -> prefs.removeAll { it == userId } }
+        Stores.progresses.edit { prefs -> prefs.removeAll { it == userId } }
+        // 删除用户
+        Stores.users.edit { it.remove(userId) }
+        // 删除学号
+        Stores.prefs.edit {
+            if (it[PrefsKeys.USER_ID] == userId) {
+                it.remove(PrefsKeys.USER_ID)
+                // 退出教务系统
+                if (academicSystem?.userId == userId) {
+                    academicSystem = null
                 }
             }
         }
@@ -167,7 +201,9 @@ object AppVM : ViewModel() {
      */
     suspend fun changeWeek(value: Int) {
         require(value in 0..<TIMETABLE_MAX_PAGE)
-        Stores.prefs.edit { it[PrefsKeys.TERM_START_DATE] = "${LocalDate.now().minus(DatePeriod(days = 7 * value))}" }
+        Stores.prefs.edit {
+            it[PrefsKeys.TERM_START_DATE] = "${LocalDate.now().minus(DatePeriod(days = 7 * value))}"
+        }
     }
 
 

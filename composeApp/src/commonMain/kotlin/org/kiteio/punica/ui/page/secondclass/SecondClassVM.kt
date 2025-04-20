@@ -31,7 +31,7 @@ class SecondClassVM : ViewModel() {
     init {
         // 登录第二课堂
         viewModelScope.launchCatching {
-            AppVM.secondClassUserId.first()?.let { userId ->
+            AppVM.userIdFlow.first()?.let { userId ->
                 Stores.users.data.map { it.get<User>(userId) }.first()?.let { user ->
                     secondClass = SecondClass(user.id, user.secondClassPwd)
                 }
@@ -44,7 +44,7 @@ class SecondClassVM : ViewModel() {
      * 更新成绩。
      */
     suspend fun updateGrades() {
-        AppVM.secondClassUserId.first()?.let { userId ->
+        AppVM.userIdFlow.first()?.let { userId ->
             isGradesLoading = true
             // 本地获取
             grades = Stores.secondClassGrades.data.map {

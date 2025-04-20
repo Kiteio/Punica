@@ -37,7 +37,7 @@ class TimetableVM : ViewModel() {
      * 更新课表。
      */
     suspend fun updateTimetable() {
-        AppVM.academicUserId.first()?.let { userId ->
+        AppVM.userIdFlow.first()?.let { userId ->
             isLoading = true
             // 本地获取
             timetable = Stores.timetable.data.map {

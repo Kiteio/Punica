@@ -53,7 +53,7 @@ fun TimetablePage() = viewModel { TimetableVM() }.Content()
 @Composable
 private fun TimetableVM.Content() {
     val scope = rememberCoroutineScope()
-    val week = rememberRunBlocking { AppVM.week.first() }
+    val week = rememberRunBlocking { AppVM.weekFlow.first() }
     val state = rememberPagerState(initialPage = week) { AppVM.TIMETABLE_MAX_PAGE }
 
     // 备注对话框可见性

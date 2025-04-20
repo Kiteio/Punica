@@ -1,7 +1,11 @@
 package org.kiteio.punica.ui.component
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.material3.*
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
@@ -15,7 +19,7 @@ import androidx.compose.ui.unit.sp
 fun PunicaCard(
     modifier: Modifier = Modifier,
     shape: Shape = MaterialTheme.shapes.medium,
-    containerColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
+    containerColor: Color = MaterialTheme.colorScheme.surface,
     contentColor: Color = LocalContentColor.current,
     tonalElevation: Dp = 0.5.dp,
     shadowElevation: Dp = 1.dp,
@@ -43,7 +47,7 @@ fun PunicaCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     shape: Shape = MaterialTheme.shapes.medium,
-    containerColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
+    containerColor: Color = MaterialTheme.colorScheme.surface,
     contentColor: Color = LocalContentColor.current,
     tonalElevation: Dp = 0.5.dp,
     shadowElevation: Dp = 1.dp,

@@ -68,7 +68,7 @@ private fun Content() {
     val clipboardManager = LocalClipboardManager.current
 
     val state = rememberPagerState { Campus.entries.size }
-    val campus = rememberRunBlocking { AppVM.campus.first() }
+    val campus = rememberRunBlocking { AppVM.campusFlow.first() }
 
     Scaffold(
         topBar = {

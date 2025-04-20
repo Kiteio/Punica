@@ -6,6 +6,7 @@ import kotlinx.io.buffered
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
 import kotlinx.io.files.SystemPathSeparator
+import org.kiteio.punica.Build
 import org.kiteio.punica.http.Client
 import org.kiteio.punica.serialization.fileDir
 
@@ -24,7 +25,7 @@ suspend fun getDataPath(): String {
     if (!SystemFileSystem.exists(path)) {
         // 获取并写入训练数据
         SystemFileSystem.createDirectories(Path(dir))
-        val bytes = Client("https://kiteio.top")
+        val bytes = Client(Build.officialWebsite)
             .get("/downloads/eng.traineddata") {
                 timeout { requestTimeoutMillis = 20000 }
             }.readRawBytes()

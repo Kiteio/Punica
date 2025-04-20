@@ -179,7 +179,7 @@ private fun Module(
         } else {
             // 桌面端
             Column(modifier = Modifier.padding(16.dp)) {
-                Surface(color = MaterialTheme.colorScheme.surfaceContainerLowest) {
+                Surface(tonalElevation = 0.5.dp) {
                     Icon(
                         route.icon,
                         contentDescription = name,

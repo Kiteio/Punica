@@ -26,7 +26,7 @@ fun TimetableVM.TopAppBar(
     onPageChange: (Int) -> Unit,
     onNoteDialogDisplayRequest: () -> Unit,
 ) {
-    val userId by AppVM.academicUserId.collectAsState(null)
+    val userId by AppVM.userIdFlow.collectAsState(null)
 
     TopAppBar(
         title = {

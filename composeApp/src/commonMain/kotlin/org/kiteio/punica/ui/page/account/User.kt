@@ -2,12 +2,19 @@ package org.kiteio.punica.ui.page.account
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocalOffer
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.DeleteOutline
-import androidx.compose.material.icons.outlined.LocalOffer
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.buildAnnotatedString
@@ -16,7 +23,6 @@ import kotlinx.coroutines.delay
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
-import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.foundation.User
 import org.kiteio.punica.tool.TOTP
 import org.kiteio.punica.ui.component.CardListItem
@@ -24,18 +30,21 @@ import org.kiteio.punica.ui.component.showToast
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 import org.kiteio.punica.wrapper.launchCatching
 import org.kiteio.punica.wrapper.now
-import punica.composeapp.generated.resources.*
+import punica.composeapp.generated.resources.Res
+import punica.composeapp.generated.resources.copy
+import punica.composeapp.generated.resources.copy_successful
+import punica.composeapp.generated.resources.delete
 
 
 /**
  * OTP 用户。
  */
 @Composable
-fun AccountVM.OTPUser(user: User, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun OTPUser(user: User, onClick: () -> Unit, modifier: Modifier = Modifier) {
     val scope = rememberCoroutineScope()
     val clipboardManager = LocalClipboardManager.current
 
-    val otp = remember { TOTP(secret = user.otpSecret) }
+    val otp = remember { TOTP(secret = "") }
     var password by remember { mutableStateOf(otp.generate()) }
     var leftSecond by remember {
         mutableIntStateOf(
@@ -84,7 +93,7 @@ fun AccountVM.OTPUser(user: User, onClick: () -> Unit, modifier: Modifier = Modi
                 }
 
                 DeleteIconButton(
-                    onDeleteAccount = { scope.launchCatching { AppVM.deleteUser(type, user.id) } },
+                    onDeleteAccount = { scope.launchCatching {  } },
                 )
             }
         }
@@ -100,50 +109,8 @@ private fun LocalDateTime.leftSecond() = second.let {
 }
 
 
-@Composable
-fun AccountVM.User(user: User, isCurrentAccount: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    val scope = rememberCoroutineScope()
-
-    CardListItem(
-        headlineContent = {
-            Text(user.id)
-        },
-        onClick = onClick,
-        modifier = modifier,
-        trailingContent = {
-            Row {
-                // 设为、移除当前账号
-                IconButton(
-                    onClick = {
-                        scope.launchCatching {
-                            if (isCurrentAccount) removeCurrentAccount()
-                            else setupCurrentAccount(user.id)
-                        }
-                    },
-                ) {
-                    Icon(
-                        if (isCurrentAccount) Icons.Filled.LocalOffer
-                        else Icons.Outlined.LocalOffer,
-                        contentDescription = stringResource(
-                            if (isCurrentAccount) Res.string.remove_current_account
-                            else Res.string.set_up_current_account,
-                        ),
-                        tint = if (isCurrentAccount) MaterialTheme.colorScheme.primary
-                        else LocalContentColor.current,
-                    )
-                }
-
-                DeleteIconButton(
-                    onDeleteAccount = { scope.launchCatching { AppVM.deleteUser(type, user.id) } },
-                )
-            }
-        },
-    )
-}
-
-
 /**
- * 删除账号
+ * 删除账号。
  */
 @Composable
 private fun DeleteIconButton(onDeleteAccount: () -> Unit) {

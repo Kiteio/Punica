@@ -28,7 +28,7 @@ class GradesVM : ViewModel() {
      * 切换成绩。
      */
     suspend fun updateGrades() {
-        AppVM.academicUserId.first()?.let { userId ->
+        AppVM.userIdFlow.first()?.let { userId ->
             isGradesLoading = true
             // 本地获取
             grades = Stores.grades.data.map {

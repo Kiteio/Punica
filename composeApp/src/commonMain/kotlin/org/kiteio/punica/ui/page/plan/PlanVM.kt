@@ -23,7 +23,7 @@ class PlanVM : ViewModel() {
 
 
     suspend fun updatePlans() {
-        AppVM.academicUserId.first()?.let { userId ->
+        AppVM.userIdFlow.first()?.let { userId ->
             isLoading = true
             // 本地获取
             plans = Stores.plans.data.map {

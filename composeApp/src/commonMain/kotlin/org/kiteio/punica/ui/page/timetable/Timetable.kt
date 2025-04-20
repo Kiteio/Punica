@@ -249,7 +249,7 @@ private fun Body(courses: List<List<ICourse>?>, onItemClick: (Int) -> Unit, curr
  */
 @Composable
 private fun Timeline() {
-    val campus = rememberRunBlocking { AppVM.campus.first() }
+    val campus = rememberRunBlocking { AppVM.campusFlow.first() }
 
     Column(modifier = Modifier.width(timelineWidth)) {
         for (index in 0..<6) {

@@ -23,7 +23,7 @@ import punica.composeapp.generated.resources.recommended_term_index
 
 @Composable
 fun ModuleBottomSheet(visible: Boolean, onDismissRequest: () -> Unit, module: ProgressModule?) {
-    val userId by AppVM.academicUserId.collectAsState(null)
+    val userId by AppVM.userIdFlow.collectAsState(null)
     val terms by derivedStateOf { userId?.let { Term.list(it) } }
 
     ModalBottomSheet(visible, onDismissRequest) {

@@ -14,7 +14,16 @@ import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.components.Scaffold
 import androidx.glance.appwidget.provideContent
 import androidx.glance.appwidget.updateAll
-import androidx.glance.layout.*
+import androidx.glance.layout.Alignment
+import androidx.glance.layout.Box
+import androidx.glance.layout.Column
+import androidx.glance.layout.Row
+import androidx.glance.layout.Spacer
+import androidx.glance.layout.fillMaxSize
+import androidx.glance.layout.fillMaxWidth
+import androidx.glance.layout.height
+import androidx.glance.layout.padding
+import androidx.glance.layout.width
 import androidx.glance.material3.ColorProviders
 import androidx.glance.text.Text
 import com.materialkolor.dynamicColorScheme
@@ -65,7 +74,7 @@ class TimetableWidget : GlanceAppWidget() {
 
         provideContent {
             // 学号
-            val userId by Stores.prefs.data.map { it[PrefsKeys.ACADEMIC_USER_ID] }.collectAsState(null)
+            val userId by Stores.prefs.data.map { it[PrefsKeys.USER_ID] }.collectAsState(null)
             // 课表
             val timetable by Stores.timetable.data
                 .map { prefs -> userId?.let { prefs.get<Timetable>("$it${Term.current}") } }

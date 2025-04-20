@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">小石榴</string>
+    <string name="poem">花自飘零水自流。一种相思，两处闲愁</string>
 
     <string name="welcome">欢迎(｡•ㅅ•｡)♡</string>
 
@@ -132,19 +133,23 @@
     <string name="hours_24">24小时</string>
 
     <!-- AccountPage.kt -->
+    <string name="safety_instruction">小石榴是一款开源软件，我们十分重视您的隐私，您的数据将在本地妥善保存</string>
     <string name="user_id">学号</string>
     <string name="password">密码</string>
-    <string name="login_when_save">保存时登录</string>
-    <string name="save">保存</string>
-    <string name="save_successful">保存成功</string>
+    <string name="second_class_password">第二课堂密码</string>
+    <string name="should_be_11_digits">11 位</string>
+    <string name="academic_system_password">教务系统（融合门户）密码</string>
+    <string name="error_user_id_is_11_digits">学号是 11 位</string>
+    <string name="error_password_is_empty">请输入密码</string>
+    <string name="default_is_user_id">默认是学号，可留空</string>
+    <string name="expand_more">展开</string>
+    <string name="expand_less">收起</string>
+    <string name="forget_password">忘记密码</string>
+    <string name="login">登录</string>
+    <string name="logout">退出</string>
+    <string name="login_successful">登录成功</string>
     <string name="delete">删除</string>
-    <string name="set_up_current_account">设为当前账号</string>
-    <string name="remove_current_account">移除当前账号</string>
     <string name="delete_successful">删除成功</string>
-    <string name="secret">密钥</string>
-    <string name="way_to_get_otp_secret">扫描 OTP 二维码，扫描结果中包含了密钥：“secret=密钥&amp;issuer=...”</string>
-    <string name="way_to_change_password">忘记密码可前往“融合门户”网站更改</string>
-    <string name="default_is_user_id">默认为学号，可不填</string>
     <string name="visible">可见</string>
     <string name="invisible">不可见</string>
 
@@ -185,12 +190,10 @@
     <string name="academic_progress">学业进度</string>
 
     <!-- SettingsPage.kt -->
-    <string name="account">账号</string>
     <string name="academic_system">教务系统</string>
     <string name="otp" translatable="false">OTP</string>
     <string name="not_logged_in">未登录</string>
-    <string name="login">登录</string>
-    <string name="common">常用</string>
+    <string name="logging_in">登录中</string>
     <string name="current_week">当前周次</string>
     <string name="campus">校区</string>
     <string name="canton_haizhu">广州 · 海珠</string>
@@ -199,10 +202,11 @@
     <string name="theme_mode_default">跟随系统</string>
     <string name="theme_mode_light">亮色</string>
     <string name="theme_mode_dark">暗色</string>
-    <string name="about">关于</string>
     <string name="version">版本</string>
     <string name="github" translatable="false">GitHub</string>
-    <string name="little_red_book">小红书</string>
+    <string name="open_source_repository">开源仓库</string>
+    <string name="official_website">官网</string>
+    <string name="official_website_kiteio">Kiteio 官方网站</string>
 
     <!-- HomePage.kt -->
     <string name="timetable">课表</string>

@@ -23,7 +23,7 @@ class ProgressVM : ViewModel() {
 
 
     suspend fun updateProgresses() {
-        AppVM.academicUserId.first()?.let { userId ->
+        AppVM.userIdFlow.first()?.let { userId ->
             isLoading = true
             // 本地获取
             progresses = Stores.progresses.data.map {

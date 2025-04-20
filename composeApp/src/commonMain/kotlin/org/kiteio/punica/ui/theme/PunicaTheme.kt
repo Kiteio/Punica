@@ -1,6 +1,7 @@
 package org.kiteio.punica.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -46,3 +47,10 @@ fun PunicaTheme(
         )
     }
 }
+
+
+/**
+ * 链接颜色。
+ */
+val ColorScheme.link: Color
+    get() = Color(0xFF379EDC)
