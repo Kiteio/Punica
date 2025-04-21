@@ -49,6 +49,8 @@ import org.kiteio.punica.ui.page.teacher.TeacherProfilePage
 import org.kiteio.punica.ui.page.teacher.TeacherProfileRoute
 import org.kiteio.punica.ui.page.timetables.CourseTimetablePage
 import org.kiteio.punica.ui.page.timetables.CourseTimetableRoute
+import org.kiteio.punica.ui.page.totp.TOTPPage
+import org.kiteio.punica.ui.page.totp.TOTPRoute
 import org.kiteio.punica.ui.page.versions.VersionsPage
 import org.kiteio.punica.ui.page.versions.VersionsRoute
 import org.kiteio.punica.ui.page.websites.WebsitesPage
@@ -79,13 +81,13 @@ fun App(windowSizeClass: WindowSizeClass, snackbarHostState: SnackbarHostState? 
         firstStartDialogVisible = isFirstStart
     }
 
-    Scaffold(
-        snackbarHost = { if (snackbarHostState != null) SnackbarHost(hostState = snackbarHostState) },
+    PunicaTheme(
+        themeMode = themeMode,
+        windowSizeClass = windowSizeClass,
+        navController = navController,
     ) {
-        PunicaTheme(
-            themeMode = themeMode,
-            windowSizeClass = windowSizeClass,
-            navController = navController,
+        Scaffold(
+            snackbarHost = { if (snackbarHostState != null) SnackbarHost(hostState = snackbarHostState) },
         ) {
             NavHost(
                 navController = navController,
@@ -104,20 +106,22 @@ fun App(windowSizeClass: WindowSizeClass, snackbarHostState: SnackbarHostState? 
                 composable<CourseTimetableRoute> { CourseTimetablePage() }
                 composable<PlanRoute> { PlanPage() }
                 composable<ProgressRoute> { ProgressPage() }
+                composable<TOTPRoute> { TOTPPage() }
                 composable<VersionsRoute> { VersionsPage() }
             }
-        }
-    }
 
-    FirstStartDialog(
-        firstStartDialogVisible,
-        onDismissRequest = {
-            scope.launchCatching {
-                Stores.prefs.edit { it[PrefsKeys.FIRST_START] = false }
-            }
-            firstStartDialogVisible = false
-        },
-    )
+        }
+
+        FirstStartDialog(
+            firstStartDialogVisible,
+            onDismissRequest = {
+                scope.launchCatching {
+                    Stores.prefs.edit { it[PrefsKeys.FIRST_START] = false }
+                }
+                firstStartDialogVisible = false
+            },
+        )
+    }
 }
 
 

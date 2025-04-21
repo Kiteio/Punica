@@ -57,6 +57,7 @@ import org.kiteio.punica.ui.page.progress.ProgressRoute
 import org.kiteio.punica.ui.page.secondclass.SecondClassRoute
 import org.kiteio.punica.ui.page.teacher.TeacherProfileRoute
 import org.kiteio.punica.ui.page.timetables.CourseTimetableRoute
+import org.kiteio.punica.ui.page.totp.TOTPRoute
 import org.kiteio.punica.ui.page.websites.WebsitesRoute
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.modules
@@ -99,6 +100,7 @@ private fun Content() {
         CourseTimetableRoute,
         PlanRoute,
         ProgressRoute,
+        TOTPRoute,
     )
 
     Scaffold(contentWindowInsets = WindowInsets.statusBars) { innerPadding ->

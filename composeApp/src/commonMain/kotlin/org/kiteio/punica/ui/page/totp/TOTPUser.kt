@@ -1,4 +1,4 @@
-package org.kiteio.punica.ui.page.account
+package org.kiteio.punica.ui.page.totp
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
@@ -19,12 +19,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.datastore.preferences.core.edit
 import kotlinx.coroutines.delay
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
-import org.kiteio.punica.client.academic.foundation.User
+import org.kiteio.punica.serialization.Stores
+import org.kiteio.punica.serialization.remove
 import org.kiteio.punica.tool.TOTP
+import org.kiteio.punica.tool.TOTPUser
 import org.kiteio.punica.ui.component.CardListItem
 import org.kiteio.punica.ui.component.showToast
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
@@ -37,14 +40,14 @@ import punica.composeapp.generated.resources.delete
 
 
 /**
- * OTP 用户。
+ * TOTP 用户。
  */
 @Composable
-fun OTPUser(user: User, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun TOTPUser(tOTPUser: TOTPUser, onClick: () -> Unit, modifier: Modifier = Modifier) {
     val scope = rememberCoroutineScope()
     val clipboardManager = LocalClipboardManager.current
 
-    val otp = remember { TOTP(secret = "") }
+    val otp = remember { TOTP(secret = tOTPUser.secret) }
     var password by remember { mutableStateOf(otp.generate()) }
     var leftSecond by remember {
         mutableIntStateOf(
@@ -74,7 +77,7 @@ fun OTPUser(user: User, onClick: () -> Unit, modifier: Modifier = Modifier) {
         },
         onClick = onClick,
         modifier = modifier,
-        supportingContent = { Text("${user.id}    ${leftSecond}s") },
+        supportingContent = { Text("${tOTPUser.name}    ${leftSecond}s") },
         trailingContent = {
             Row {
                 IconButton(
@@ -93,7 +96,11 @@ fun OTPUser(user: User, onClick: () -> Unit, modifier: Modifier = Modifier) {
                 }
 
                 DeleteIconButton(
-                    onDeleteAccount = { scope.launchCatching {  } },
+                    onDeleteAccount = {
+                        scope.launchCatching {
+                            Stores.tOTPUsers.edit { it.remove(tOTPUser.name) }
+                        }
+                    },
                 )
             }
         }

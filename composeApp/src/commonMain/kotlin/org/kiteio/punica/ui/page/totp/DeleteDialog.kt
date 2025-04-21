@@ -1,4 +1,4 @@
-package org.kiteio.punica.ui.page.account
+package org.kiteio.punica.ui.page.totp
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text

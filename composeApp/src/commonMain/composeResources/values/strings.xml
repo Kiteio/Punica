@@ -36,6 +36,15 @@
     <string name="current_version">当前版本</string>
     <string name="old_edition">不再维护的旧版本</string>
 
+    <!-- TOTPPage.kt -->
+    <string name="name">名称</string>
+    <string name="secret">密钥</string>
+    <string name="tip_how_to_get_secret">请扫描 OTP 二维码，将得到的文本全选粘贴到此处。名称可留空，解析时会自动填充。</string>
+    <string name="save">保存</string>
+    <string name="save_successful">保存成功</string>
+    <string name="error_name_is_empty">请输入名称</string>
+    <string name="error_secret_is_empty">请输入密钥</string>
+
     <!-- ProgressPage.kt -->
     <string name="recommended_term_index">建议修读学期</string>
 

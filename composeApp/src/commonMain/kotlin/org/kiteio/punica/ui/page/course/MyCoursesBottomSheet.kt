@@ -36,8 +36,8 @@ import org.kiteio.punica.ui.component.HorizontalTabPager
 import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
 import org.kiteio.punica.ui.component.ModalBottomSheet
 import org.kiteio.punica.ui.component.showToast
-import org.kiteio.punica.ui.page.account.DeleteDialog
 import org.kiteio.punica.ui.page.timetable.Timetable
+import org.kiteio.punica.ui.page.totp.DeleteDialog
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 import org.kiteio.punica.wrapper.launchCatching
 import punica.composeapp.generated.resources.Res

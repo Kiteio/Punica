@@ -134,7 +134,7 @@ private fun Content() {
                     modifier = Modifier.fillMaxWidth().fillMaxHeight(0.3f),
                     contentScale = ContentScale.Crop,
                 )
-            }else {
+            } else {
                 // 背景
                 Image(
                     painterResource(Res.drawable.punica),
@@ -165,7 +165,7 @@ private fun Content() {
                     ) {
                         Logo(
                             onClick = {
-                                if (AppVM.academicSystem == null) {
+                                if (AppVM.academicSystem == null && userId != null) {
                                     scope.launchCatching {
                                         showToast(getString(Res.string.logging_in))
                                         AppVM.login()

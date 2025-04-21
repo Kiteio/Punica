@@ -13,6 +13,9 @@ object Stores {
     /** 用户 */
     val users by lazy { dataStore("users") }
 
+    /** TOTP 用户 */
+    val tOTPUsers by lazy { dataStore("totp_users") }
+
     /** 课表 */
     val timetable by lazy { dataStore("timetable") }
 
