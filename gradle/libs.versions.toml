@@ -1,6 +1,6 @@
 [versions]
-punica-versionCode = "2"
-punica-versionName = "1.0.1"
+punica-versionCode = "3"
+punica-versionName = "2.0.0"
 
 agp = "8.9.1"
 alertKmp = "2.0.0"

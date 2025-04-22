@@ -1,6 +1,6 @@
 # 小石榴
 
-> 安全、美观的广东财经大学教务系统**三方**客户端。
+> 小石榴 2.0 现已发布。
 
 <p align="center">
     <img src="composeApp/src/commonMain/composeResources/drawable/punica.png"
@@ -8,69 +8,33 @@
         width="160" />
 </p>
 
-### 近期更新（未发布）
+## 简介
 
-#### 4月22日
+小石榴是由广东财经大学 21 级学生开发的教务系统客户端，软件 UI 基于 Material Design，提供更人性化的服务。
 
-- 添加 TOTP 页面
+小石榴目前支持 Android（安卓） 和 Windows，使用 Compose Multiplatform 开发。如果有大佬有苹果电脑，欢迎参与 Mac OS 和 iOS 的维护和发行。
 
-#### 4月20日
+教务系统一天不改，小石榴一天不倒。
 
-- 添加必应壁纸
-- 修改图标
-- 修改设置页面
+## 注意
 
-#### 4月14日
-
-- 修改模块页面
-- 修改课表页面
-
-#### 4月13日
-
-- 修改 tessdata 源
-- 使用 GitLab API 替换 Gitee
-
-#### 4月12日
-
-- 移除校园网支持
-- 修改 Markdown 显示，添加教务通知渲染
-
-#### 4月9日
-
-- 更新依赖
-
-## 支持的平台
-
-- Android
-- Windows
-
-## 快速开始
-
-1. 下载软件。你可以在[发行版](https://github.com/Kiteio/Punica/releases)中下载石榴。
-
-2. 登录账号。打开软件（记得连上校园网或开启VPN），切换到设置页面，打开教务系统账号页面，点击右上角加号，登录教务系统账号。
-    <p align="center">
-        <img src="readme/img/2025.2.21-2.png" alt="screenshot" />
-    </p>
-
-## 支持
-
-如果你喜欢石榴，请点亮仓库星标或向好友分享，让更多人发现它。
-
-如果有条件的话，可以扫码捐款，感谢你的支持！
-
-<p align="center">
-   <img width="24%" src="readme/img/qrcode.png" alt="donate" />
-</p>
+小石榴教学数据来源广财官方网站，使用 HTML 解析，因官方 HTML 书写不规范，可能会出现解析错误。
 
 ## 截图
 
 <p align="center">
-    <img width="30%" src="readme/img/2025.2.21-3.jpg" alt="screenshot" />
-    <img width="30%" src="readme/img/2025.2.21-4.jpg" alt="screenshot" />
-    <img width="30%" src="readme/img/2025.2.21-5.jpg" alt="screenshot" />
+    <img width="30%" src="readme/img/2504.21.1.jpg" alt="screenshot" />
+    <img width="30%" src="readme/img/2504.21.2.jpg" alt="screenshot" />
+    <img width="30%" src="readme/img/2504.21.3.jpg" alt="screenshot" />
 </p>
 
+## 支持
+
+小石榴是一款公益项目，软件完全免费且无广告。好的软件需要有更多人发现，如果您喜欢石榴，请点亮仓库星标。
+此外，您也可以向好友分享它。
+
+如果有条件的话，可以扫码小捐，感谢您的支持！
+
 <p align="center">
-    <img src="readme/img/2025.2.21-0.png" alt="screenshot" />
+   <img width="24%" src="readme/img/qrcode.png" alt="donate" />
 </p>
