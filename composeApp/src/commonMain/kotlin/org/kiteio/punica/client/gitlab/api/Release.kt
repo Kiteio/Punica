@@ -1,8 +1,10 @@
 package org.kiteio.punica.client.gitlab.api
 
 import io.ktor.client.call.body
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.format.char
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.client.gitlab.GitLab
@@ -37,15 +39,6 @@ private data class ReleaseImpl(
     override val description: String,
     @SerialName("released_at") val realeasedAt: String,
 ) : Release {
-    override val time = LocalDateTime.parse(
-        realeasedAt,
-        LocalDateTime.Format {
-            year(); char('-')
-            monthNumber(); char('-')
-            dayOfMonth(); char('T')
-            hour(); char(':')
-            minute(); char(':')
-            second(); chars(".000Z")
-        }
-    )
+    override val time =
+        Instant.parse(realeasedAt).toLocalDateTime(TimeZone.currentSystemDefault())
 }
