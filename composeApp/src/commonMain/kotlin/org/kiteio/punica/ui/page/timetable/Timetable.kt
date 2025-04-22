@@ -151,7 +151,7 @@ private fun Header(
                 val ordinal = now.dayOfWeek.ordinal
 
                 val offset = currentWeekIndex - week
-                val offsetDate = remember(now) { now.plus(DatePeriod(days = offset * 7)) }
+                val offsetDate = remember(offset) { now.plus(DatePeriod(days = offset * 7)) }
 
                 daysOfWeek.forEachIndexed { index, dayOfWeek ->
                     val date = offsetDate.plus(DatePeriod(days = index - ordinal))

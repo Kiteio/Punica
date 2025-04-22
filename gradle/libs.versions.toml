@@ -1,8 +1,8 @@
 [versions]
-punica-versionCode = "3"
-punica-versionName = "2.0.0"
+punica-versionCode = "4"
+punica-versionName = "2.0.1"
 
-agp = "8.9.1"
+agp = "8.9.2"
 alertKmp = "2.0.0"
 android-compileSdk = "36"
 android-minSdk = "29"
