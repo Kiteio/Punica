@@ -13,3 +13,12 @@ actual fun fileDir(path: String): String {
 
     return "${documentDirectory.path}$SystemPathSeparator$path"
 }
+
+actual fun downloadsDir(path: String): String {
+    val fileManager = NSFileManager.defaultManager
+    val urls = fileManager.URLsForDirectory(
+        directory = NSFileManager.DownloadsDirectory,
+        inDomains = NSUserDomainMask
+    )
+    return "${(urls.firstOrNull() as? NSURL).path}$SystemPathSeparator$path"
+}

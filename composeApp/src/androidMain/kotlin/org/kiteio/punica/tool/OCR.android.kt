@@ -3,6 +3,8 @@ package org.kiteio.punica.tool
 import android.graphics.BitmapFactory
 import android.graphics.BitmapFactory.Options
 import android.graphics.Color
+import androidx.core.graphics.get
+import androidx.core.graphics.set
 import com.googlecode.tesseract.android.TessBaseAPI
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -19,16 +21,16 @@ actual suspend fun ByteArray.readText(): String = withContext(Dispatchers.Defaul
         ).apply {
             val border = 3
             for (y in 0..<height) for (x in 0..<width) {
-                if (x < border || x > width - border || y < border || y > height - border)
-                // 去除边框
-                    setPixel(x, y, Color.WHITE)
-                else {
+                if (x < border || x > width - border || y < border || y > height - border) {
+                    // 去除边框
+                    set(x, y, Color.WHITE)
+                } else {
                     // 二值化
-                    val pixel = getPixel(x, y)
+                    val pixel = get(x, y)
                     val red = Color.red(pixel)
                     val green = Color.green(pixel)
                     val blue = Color.blue(pixel)
-                    setPixel(x, y, if ((red + green + blue) / 3 < 113) Color.BLACK else Color.WHITE)
+                    set(x, y, if ((red + green + blue) / 3 < 113) Color.BLACK else Color.WHITE)
                 }
             }
             // 向 TessBaseAPI 设置 Bitmap

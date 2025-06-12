@@ -35,6 +35,7 @@ import org.kiteio.punica.ui.page.exam.ExamPage
 import org.kiteio.punica.ui.page.exam.ExamRoute
 import org.kiteio.punica.ui.page.grades.GradesPage
 import org.kiteio.punica.ui.page.grades.GradesRoute
+import org.kiteio.punica.ui.page.graduation.graduationDestination
 import org.kiteio.punica.ui.page.home.HomePage
 import org.kiteio.punica.ui.page.home.HomeRoute
 import org.kiteio.punica.ui.page.notice.NoticePage
@@ -108,6 +109,7 @@ fun App(windowSizeClass: WindowSizeClass, snackbarHostState: SnackbarHostState? 
                 composable<ProgressRoute> { ProgressPage() }
                 composable<TOTPRoute> { TOTPPage() }
                 composable<VersionsRoute> { VersionsPage() }
+                graduationDestination()
             }
 
         }

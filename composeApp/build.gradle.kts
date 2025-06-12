@@ -13,6 +13,9 @@ plugins {
 }
 
 kotlin {
+    // Kotlin 2.2.0 上下文参数支持
+    compilerOptions.freeCompilerArgs.add("-Xcontext-parameters")
+
     androidTarget {
         compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
     }
@@ -45,14 +48,13 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(compose.foundation)
-            // TODO: 在 1.8.0 之后改回 compose.material3
-            implementation("org.jetbrains.compose.material3:material3:1.8.0-alpha03")
+            implementation(compose.material3)
             implementation(compose.materialIconsExtended)
             implementation(compose.runtime)
             implementation(compose.ui)
             implementation(libs.alertKmp)
             implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.androidx.lifecycle.viewmodel.compose)
             implementation(libs.coil.compose)
             implementation(libs.coil.network.ktor3)
             implementation(libs.composeIcon.css)
@@ -64,7 +66,7 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.ksoup)
-            implementation(libs.ktor.client.content.negotitation)
+            implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.material3.windowSizeClass)

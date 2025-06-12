@@ -13,3 +13,13 @@ actual fun fileDir(path: String): String {
 
     return "$userDataDir$SystemPathSeparator$path"
 }
+
+actual fun downloadsDir(path: String): String {
+    val downloadsDir = AppDirsFactory.getInstance().getUserDownloadsDir(
+        null,
+        null,
+        null,
+    )
+
+    return "$downloadsDir$SystemPathSeparator$path"
+}

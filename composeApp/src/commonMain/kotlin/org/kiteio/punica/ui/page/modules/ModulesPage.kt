@@ -50,6 +50,7 @@ import org.kiteio.punica.ui.page.cet.CETRoute
 import org.kiteio.punica.ui.page.course.CourseSystemRoute
 import org.kiteio.punica.ui.page.exam.ExamRoute
 import org.kiteio.punica.ui.page.grades.GradesRoute
+import org.kiteio.punica.ui.page.graduation.GraduationRoute
 import org.kiteio.punica.ui.page.home.TopLevelRoute
 import org.kiteio.punica.ui.page.notice.NoticeRoute
 import org.kiteio.punica.ui.page.plan.PlanRoute
@@ -101,6 +102,7 @@ private fun Content() {
         PlanRoute,
         ProgressRoute,
         TOTPRoute,
+        GraduationRoute,
     )
 
     Scaffold(contentWindowInsets = WindowInsets.statusBars) { innerPadding ->

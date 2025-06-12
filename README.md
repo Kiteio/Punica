@@ -8,6 +8,12 @@
         width="160" />
 </p>
 
+## 更新日志
+
+> 我们计划对软件架构进行重大调整
+
+- 6-11 新增毕业审查功能（备注：Compose Multiplatform Beta 版本有 Bug，桌面端无法运行）
+
 ## 简介
 
 小石榴是由广东财经大学 21 级学生开发的教务系统客户端，软件 UI 基于 Material Design，提供更人性化的服务。
@@ -23,9 +29,9 @@
 ## 截图
 
 <p align="center">
-    <img width="30%" src="readme/img/2504.21.1.jpg" alt="screenshot" />
-    <img width="30%" src="readme/img/2504.21.2.jpg" alt="screenshot" />
-    <img width="30%" src="readme/img/2504.21.3.jpg" alt="screenshot" />
+    <img width="30%" src="readme/2504.21.1.jpg" alt="screenshot" />
+    <img width="30%" src="readme/2504.21.2.jpg" alt="screenshot" />
+    <img width="30%" src="readme/2504.21.3.jpg" alt="screenshot" />
 </p>
 
 ## 支持
@@ -36,5 +42,5 @@
 如果有条件的话，可以扫码小捐，感谢您的支持！
 
 <p align="center">
-   <img width="24%" src="readme/img/qrcode.png" alt="donate" />
+   <img width="24%" src="readme/qrcode.png" alt="donate" />
 </p>

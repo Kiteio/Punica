@@ -2,12 +2,16 @@ package org.kiteio.punica.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialExpressiveTheme
+import androidx.compose.material3.MotionScheme
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
-import com.materialkolor.DynamicMaterialTheme
+import com.materialkolor.ktx.animateColorScheme
+import com.materialkolor.rememberDynamicColorScheme
 import org.kiteio.punica.ui.compositionlocal.LocalIsDarkTheme
 import org.kiteio.punica.ui.compositionlocal.LocalNavController
 import org.kiteio.punica.ui.compositionlocal.LocalWindowSizeClass
@@ -21,6 +25,7 @@ import org.kiteio.punica.ui.theme.ThemeMode.Light
  * @param windowSizeClass 窗口尺寸等级
  * @param navController 导航控制器。
  */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun PunicaTheme(
     themeMode: ThemeMode?,
@@ -39,18 +44,24 @@ fun PunicaTheme(
         LocalNavController provides navController,
         LocalIsDarkTheme provides isDarkTheme,
     ) {
-        DynamicMaterialTheme(
-            primary = Color(0xff5b89e8),
-            useDarkTheme = isDarkTheme,
-            animate = true,
-            content = content,
-        )
+        PunicaTheme(isDarkTheme = isDarkTheme, content = content)
     }
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun PunicaTheme(isDarkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+    val colorScheme = rememberDynamicColorScheme(
+        primary = Color(0xff5b89e8),
+        isAmoled = true,
+        isDark = isDarkTheme,
+    )
+    MaterialExpressiveTheme(
+        colorScheme = animateColorScheme(colorScheme),
+        motionScheme = MotionScheme.expressive(),
+        content = content,
+    )
+}
 
-/**
- * 链接颜色。
- */
 val ColorScheme.link: Color
     get() = Color(0xFF379EDC)

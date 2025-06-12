@@ -16,6 +16,7 @@ import kotlinx.datetime.monthsUntil
 import org.jetbrains.compose.resources.getString
 import org.kiteio.punica.AppVM.academicSystem
 import org.kiteio.punica.client.academic.AcademicSystem
+import org.kiteio.punica.client.academic.api.getGraduation
 import org.kiteio.punica.client.academic.api.getTermDateRange
 import org.kiteio.punica.client.academic.api.logout
 import org.kiteio.punica.client.academic.foundation.Campus.CANTON
@@ -111,6 +112,7 @@ object AppVM : ViewModel() {
                         if (old == null || old.monthsUntil(start) >= 4) {
                             Stores.prefs.edit { it[PrefsKeys.TERM_START_DATE] = "$start" }
                         }
+                        getGraduation()
                     }
                 } catch (throwable: Throwable) {
                     // 验证码错误重试
