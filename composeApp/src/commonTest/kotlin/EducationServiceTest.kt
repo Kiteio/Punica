@@ -113,4 +113,12 @@ class EducationServiceTest {
     fun shouldGetExams(): Unit = runBlocking {
         println(service.getExams())
     }
+
+    /**
+     * 获取执行计划测试。
+     */
+    @Test
+    fun shouldGetPlans() : Unit = runBlocking {
+        println(service.getPlans())
+    }
 }

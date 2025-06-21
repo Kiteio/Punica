@@ -30,6 +30,8 @@ import org.kiteio.punica.mirror.modal.education.Course
 import org.kiteio.punica.mirror.modal.education.CourseTable
 import org.kiteio.punica.mirror.modal.education.Exam
 import org.kiteio.punica.mirror.modal.education.Exams
+import org.kiteio.punica.mirror.modal.education.Plan
+import org.kiteio.punica.mirror.modal.education.Plans
 import org.kiteio.punica.mirror.modal.education.Semester
 import org.kiteio.punica.mirror.modal.education.Timetable
 import org.kiteio.punica.mirror.util.now
@@ -88,7 +90,7 @@ interface EducationService {
     /**
      * 执行计划。
      */
-    suspend fun getPlan()
+    suspend fun getPlans(): Plans
 
     /**
      * 学业进度。
@@ -445,8 +447,44 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
         }
     }
 
-    override suspend fun getPlan() {
-        TODO("Not yet implemented")
+    override suspend fun getPlans(): Plans {
+        return withContext(Dispatchers.Default) {
+            val text = httpClient.get("jsxsd/pyfa/pyfa_query")
+                .bodyAsText()
+
+            val doc = Ksoup.parse(text)
+
+            // # dataList > tbody
+            val tbody = doc.getElementById("dataList")!!
+                .firstElementChild()!!
+            // #dataList > tbody > tr
+            val trs = tbody.children()
+
+            val plans = mutableListOf<Plan>()
+
+            // 排除表头，每一行为一个课程的课程
+            for (index in 1..<trs.size) {
+                val tds = trs[index].children()
+                plans.add(
+                    Plan(
+                        semester = Semester.parse(tds[1].text()),
+                        courseId = tds[2].text(),
+                        courseName = tds[3].text(),
+                        department = tds[4].text(),
+                        credits = tds[5].text().toDouble(),
+                        hours = tds[6].text().toInt(),
+                        assessment = tds[7].text(),
+                        property = tds[8].text(),
+                    )
+                )
+            }
+
+            return@withContext Plans(
+                userId = user!!.id,
+                createAt = LocalDate.now(),
+                plans = plans,
+            )
+        }
     }
 
     override suspend fun getProgress() {
