@@ -8,6 +8,7 @@ import io.ktor.client.plugins.cookies.AcceptAllCookiesStorage
 import io.ktor.client.plugins.cookies.HttpCookies
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.plugin
+import io.ktor.client.plugins.timeout
 import io.ktor.client.request.forms.submitForm
 import io.ktor.client.request.get
 import io.ktor.client.request.header
@@ -23,6 +24,7 @@ import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import org.kiteio.punica.mirror.modal.User
 import org.kiteio.punica.mirror.modal.education.Course
+import org.kiteio.punica.mirror.modal.education.CourseTable
 import org.kiteio.punica.mirror.modal.education.Semester
 import org.kiteio.punica.mirror.modal.education.Timetable
 import org.kiteio.punica.mirror.util.now
@@ -49,7 +51,7 @@ interface EducationService {
     /**
      * 登录验证码。
      */
-    suspend fun captcha(): ByteArray
+    suspend fun getCaptcha(): ByteArray
 
     /**
      * 登录。
@@ -66,77 +68,72 @@ interface EducationService {
     /**
      * 课表。
      */
-    suspend fun timetable(semester: Semester): Timetable
+    suspend fun getTimetable(semester: Semester): Timetable
 
     /**
      * 课程课表。
      */
-    suspend fun courseTable()
+    suspend fun getCourseTable(semester: Semester): CourseTable
 
     /**
      * 考试安排。
      */
-    suspend fun exam()
-
-    /**
-     * 成绩。
-     */
-    suspend fun grade()
+    suspend fun getExam()
 
     /**
      * 执行计划。
      */
-    suspend fun plan()
+    suspend fun getPlan()
 
     /**
      * 学业进度。
      */
-    suspend fun progress()
+    suspend fun getProgress()
 
     /**
      * 教师。
      */
-    suspend fun teacher()
+    suspend fun getTeacher()
 
     /**
      * 教师信息。
      */
-    suspend fun teacherProfile()
+    suspend fun getTeacherProfile()
 
     /**
      * 校历。
      */
-    suspend fun calendar()
+    suspend fun getCalendar()
 
     /**
      * 学籍预警。
      */
-    suspend fun alert()
+    suspend fun getAlert()
 
     /**
      * 课程成绩。
      */
-    suspend fun courseGrade()
+    suspend fun getCourseGrade()
 
     /**
      * 等级考试成绩。
      */
-    suspend fun levelGrade()
+    suspend fun getLevelGrade()
 
     /**
      * 毕业审核。
      */
-    suspend fun graduationAudit()
+    suspend fun getGraduationAudit()
 
     /**
      * 培养方案。
      */
-    suspend fun programme()
+    suspend fun getProgramme()
 
     /**
      * 免听。
      */
-    suspend fun exemption()
+    suspend fun getExemption()
 }
 
 // --------------- 实现 ---------------
@@ -152,20 +149,16 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
 
     companion object {
         const val BASE_URL = "http://jwxt.gdufe.edu.cn"
-        const val CAPTCHA_URL = "/jsxsd/verifycode.servlet"
-        const val LOGIN_URL = "/jsxsd/xk/LoginToXkLdap"
-        const val LOGOUT_URL = "/jsxsd/xk/LoginToXk"
-        const val TIMETABLE_URL = "/jsxsd/xskb/xskb_list.do"
     }
 
-    override suspend fun captcha() = httpClient
-        .get(CAPTCHA_URL)
+    override suspend fun getCaptcha() = httpClient
+        .get("/jsxsd/verifycode.servlet")
         .readRawBytes()
 
     override suspend fun login(user: User, captcha: String) {
         this.user = user
         val text = httpClient.submitForm(
-            LOGIN_URL,
+            "/jsxsd/xk/LoginToXkLdap",
             parameters {
                 append("USERNAME", user.id)
                 append("PASSWORD", user.password)
@@ -188,7 +181,7 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
     }
 
     override suspend fun logout() {
-        httpClient.get(LOGOUT_URL) {
+        httpClient.get("/jsxsd/xk/LoginToXk") {
             parameter("method", "exit")
             parameter("tktime", Clock.System.now().toEpochMilliseconds())
         }.also { println(it.bodyAsText()) }
@@ -220,9 +213,9 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
      *   <br>
      * </div>
      */
-    override suspend fun timetable(semester: Semester): Timetable {
+    override suspend fun getTimetable(semester: Semester): Timetable {
         return withContext(Dispatchers.Default) {
-            val text = httpClient.get(TIMETABLE_URL) {
+            val text = httpClient.get("/jsxsd/xskb/xskb_list.do") {
                 // 学期，yyyy-yyyy-T
                 parameter("xnxq01id", semester)
             }.bodyAsText()
@@ -316,64 +309,127 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
                 createAt = LocalDate.now(),
                 semester = semester,
                 courses = coursesList,
-                note = note
+                note = note,
             )
         }
     }
 
-    override suspend fun courseTable() {
+    override suspend fun getCourseTable(semester: Semester): CourseTable {
+        return withContext(Dispatchers.Default) {
+            val text = httpClient.submitForm(
+                "jsxsd/kbcx/kbxx_kc_ifr",
+                parameters {
+                    // 学期，yyyy-yyyy-T
+                    append("xnxqh", "$semester")
+                }
+            ) {
+                // 课程课表数据量非常大，需要额外设置更长的超时时间
+                timeout { requestTimeoutMillis = 25000 }
+            }.bodyAsText()
+
+            val doc = Ksoup.parse(text)
+            // #kbtable > tbody
+            val tbody = doc.getElementById("kbtable")!!.firstElementChild()!!
+            // #kbtable > tbody > tr
+            val trs = tbody.children()
+
+            // 用于匹配教师和上课周次
+            val teacherWeeksRegex = Regex("^(.+?)?\\s*\\((.*?)\\)$")
+
+            // 每一项为一行，包含同一个课程名的不同上课信息
+            val coursesList = mutableListOf<List<Course>>()
+
+            // 每一行包含一个课程的所有上课信息。从 2 开始，排除星期和节次表头
+            for (index in 2 until trs.size) {
+                val tds = trs[index].children()
+                // 课程名称
+                val name = tds[0].text()
+
+                val courses = mutableListOf<Course>()
+
+                // 排除课程名称，遍历一行课程的每一列
+                for (index in 1..<tds.size) {
+                    // #kbtable > tbody > tr > td > nobr > div.kbcontent1
+                    val divs = tds[index]
+                        .getElementsByClass("kbcontent1")
+
+                    // 一格中包含多个课程
+                    for (div in divs) {
+                        val textNode = div.textNodes()
+                        val (teacher, weeks) = teacherWeeksRegex
+                            .find(textNode[1].text())!!
+                            .destructured
+
+                        val firstSection = index % 6 * 2 - 1
+                        courses.add(
+                            Course(
+                                name = name,
+                                teacher = teacher,
+                                weeks = weeks,
+                                classroom = textNode[2].text().trim(),
+                                sections = setOf(firstSection, firstSection + 1),
+                                dayOfWeek = DayOfWeek((index - 1) / 6 + 1),
+                                clazz = textNode[0].text(),
+                            )
+                        )
+                    }
+                }
+                if (courses.isNotEmpty()) coursesList.add(courses)
+            }
+
+            return@withContext CourseTable(
+                semester = semester,
+                createAt = LocalDate.now(),
+                courses = coursesList,
+            )
+        }
+    }
+
+    override suspend fun getExam() {
         TODO("Not yet implemented")
     }
 
-    override suspend fun exam() {
+    override suspend fun getPlan() {
         TODO("Not yet implemented")
     }
 
-    override suspend fun grade() {
+    override suspend fun getProgress() {
         TODO("Not yet implemented")
     }
 
-    override suspend fun plan() {
+    override suspend fun getTeacher() {
         TODO("Not yet implemented")
     }
 
-    override suspend fun progress() {
+    override suspend fun getTeacherProfile() {
         TODO("Not yet implemented")
     }
 
-    override suspend fun teacher() {
+    override suspend fun getCalendar() {
         TODO("Not yet implemented")
     }
 
-    override suspend fun teacherProfile() {
+    override suspend fun getAlert() {
         TODO("Not yet implemented")
     }
 
-    override suspend fun calendar() {
+    override suspend fun getCourseGrade() {
         TODO("Not yet implemented")
     }
 
-    override suspend fun alert() {
+    override suspend fun getLevelGrade() {
         TODO("Not yet implemented")
     }
 
-    override suspend fun courseGrade() {
+    override suspend fun getGraduationAudit() {
         TODO("Not yet implemented")
     }
 
-    override suspend fun levelGrade() {
+    override suspend fun getProgramme() {
         TODO("Not yet implemented")
     }
 
-    override suspend fun graduationAudit() {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun programme() {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun exemption() {
+    override suspend fun getExemption() {
         TODO("Not yet implemented")
     }
 }

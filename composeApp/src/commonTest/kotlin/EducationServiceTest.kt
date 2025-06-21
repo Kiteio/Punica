@@ -1,14 +1,18 @@
 import io.ktor.utils.io.readText
 import kotlinx.coroutines.runBlocking
+import kotlinx.datetime.DayOfWeek
 import kotlinx.io.buffered
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
 import org.kiteio.punica.mirror.modal.User
+import org.kiteio.punica.mirror.modal.education.Course
 import org.kiteio.punica.mirror.modal.education.Semester
 import org.kiteio.punica.mirror.modal.education.Term
+import org.kiteio.punica.mirror.modal.education.containsWeek
 import org.kiteio.punica.mirror.service.EducationService
 import org.kiteio.punica.mirror.util.readText
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class EducationServiceTest {
     private val service = EducationService()
@@ -41,7 +45,7 @@ class EducationServiceTest {
     private fun login(): Unit = runBlocking {
         val dataPath = "src/commonTest/resources/tessdata/"
         try {
-            val captcha = service.captcha().readText(dataPath)
+            val captcha = service.getCaptcha().readText(dataPath)
             service.login(user, captcha)
         } catch (e: Exception) {
             // 验证码出错重试
@@ -62,6 +66,37 @@ class EducationServiceTest {
      */
     @Test
     fun shouldGetTimetable(): Unit = runBlocking {
-        println(service.timetable(Semester(2021, Term.FIRST)))
+        println(service.getTimetable(Semester(2021, Term.FIRST)))
+    }
+
+    @Test
+    fun shouldGetCourseTable(): Unit = runBlocking {
+        println(service.getCourseTable(Semester.now))
+    }
+
+    @Test
+    fun shouldMatchWeek() {
+        val week = 4
+        val mappedResult = mapOf(
+            "1-16周" to true,
+            "1-16（周）" to true,
+            "1-16(周)" to true,
+            "1-16单周" to false,
+            "1-16（单周）" to false,
+            "1-16双周" to true,
+            "1-16（双周）" to true,
+            "2，3, 4周" to true,
+            "2, 3, 4周" to true,
+            "1, 3-4单周" to false,
+        )
+        for ((weeks, result) in mappedResult) {
+            val course = Course.Builder().apply {
+                name = "移动应用开发"
+                dayOfWeek = DayOfWeek.THURSDAY
+                this.weeks = weeks
+            }.build()
+            println(weeks)
+            assertEquals(result, course.containsWeek(week))
+        }
     }
 }

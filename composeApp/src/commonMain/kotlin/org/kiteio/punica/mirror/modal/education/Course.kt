@@ -11,7 +11,7 @@ import kotlinx.datetime.DayOfWeek
  * @property classroom 教室
  * @property sections 节次
  * @property dayOfWeek 星期
- * @property weeksList 周次列表（有序）
+ * @property clazz 上课班级
  */
 data class Course(
     val name: String,
@@ -20,9 +20,8 @@ data class Course(
     val classroom: String,
     val sections: Set<Int>,
     val dayOfWeek: DayOfWeek,
+    val clazz: String?,
 ) {
-    val weeksList: List<Int> get() = weeks.parseAsWeeksList()
-
     class Builder {
         var name: String? = null
         var teacher: String? = null
@@ -30,6 +29,7 @@ data class Course(
         var classroom: String? = null
         var sections: Set<Int>? = null
         var dayOfWeek: DayOfWeek? = null
+        var clazz: String? = null
 
         fun build(): Course {
             require(name != null)
@@ -42,62 +42,77 @@ data class Course(
                 classroom = classroom ?: "",
                 sections = sections ?: emptySet(),
                 dayOfWeek = dayOfWeek!!,
+                clazz = clazz,
             )
         }
     }
 }
 
 /**
- * 解析周次字符串为有序 列表。
+ * 课程上课周次是否包含 [week]。
  */
-fun String.parseAsWeeksList(): List<Int> {
-    val list = mutableListOf<Int>()
-    var firstNum = ""  // 读取到的第一个数字
-    var secondNum = ""  // 读取到的第二个数字
-    var isSecond = false  // 正在写入的是否为第二个数
+fun Course.containsWeek(week: Int): Boolean {
+    var firstNumber = ""
+    var secondNumber = ""
+    var isSecond = false
 
-    for (index in indices) {
-        val char = this[index]
+    for (index in weeks.indices) {
+        val char = weeks[index]
 
+        // 读取数字
         if (char.isDigit()) {
-            if (isSecond) secondNum += char
-            else firstNum += char
-
+            if (isSecond) {
+                secondNumber += char
+            } else {
+                firstNumber += char
+            }
             continue
         }
 
         when (char) {
-            // 数字连接符，需要切换为写入第二个数
-            '-' -> isSecond = true
-            // 数字分隔符，结算此前输入
-            ',', '，' -> {
-                if (isSecond) {
-                    list.addAll(firstNum.toInt()..secondNum.toInt())
-                    isSecond = false
-                    secondNum = ""
-                } else list.add(firstNum.toInt())
-                firstNum = ""
-            }
             // 跳过空字符、括号
             ' ', '(', '（' -> continue
-            // 单双周
+            // 遇到连字符将读取的数字写入 secondNumber
+            '-' -> isSecond = true
+            // 周次分隔
+            ',', '，' -> {
+                if (isSecond) {
+                    if (week in firstNumber.toInt()..secondNumber.toInt()) {
+                        return true
+                    }
+                    isSecond = false
+                    secondNumber = ""
+                    firstNumber = ""
+                } else {
+                    val firstWeek = firstNumber.toInt()
+                    when {
+                        // 因为周次是有序的，若小于第一个，则小于全部
+                        week < firstWeek -> return false
+                        week == firstWeek -> return true
+                    }
+                    firstNumber = ""
+                }
+            }
+
+            // 单、双、周
             else -> {
                 if (isSecond) {
-                    val range = firstNum.toInt()..secondNum.toInt()
-                    when (char) {
-                        '周' -> list.addAll(range)
-                        '单' -> list.addAll(range.filter { it % 2 != 0 })
-                        '双' -> list.addAll(range.filter { it % 2 == 0 })
+                    val range = firstNumber.toInt()..secondNumber.toInt()
+                    return when (char) {
+                        '周' -> range.contains(week)
+                        '单' -> week % 2 != 0 && range.contains(week)
+                        '双' -> week % 2 == 0 && range.contains(week)
+                        else -> continue
                     }
                 } else {
-                    // 防止出现多余分隔符
-                    if (firstNum.isNotEmpty()) list.add(firstNum.toInt())
+                    if (firstNumber.isNotEmpty() && week == firstNumber.toInt()) {
+                        return true
+                    }
                 }
 
                 break
             }
         }
     }
-
-    return list
+    return false
 }
