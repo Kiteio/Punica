@@ -22,9 +22,14 @@ import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.format.char
 import org.kiteio.punica.mirror.modal.User
+import org.kiteio.punica.mirror.modal.education.Campus
 import org.kiteio.punica.mirror.modal.education.Course
 import org.kiteio.punica.mirror.modal.education.CourseTable
+import org.kiteio.punica.mirror.modal.education.Exam
+import org.kiteio.punica.mirror.modal.education.Exams
 import org.kiteio.punica.mirror.modal.education.Semester
 import org.kiteio.punica.mirror.modal.education.Timetable
 import org.kiteio.punica.mirror.util.now
@@ -78,7 +83,7 @@ interface EducationService {
     /**
      * 考试安排。
      */
-    suspend fun getExam()
+    suspend fun getExams(): Exams
 
     /**
      * 执行计划。
@@ -340,7 +345,7 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
             val coursesList = mutableListOf<List<Course>>()
 
             // 每一行包含一个课程的所有上课信息。从 2 开始，排除星期和节次表头
-            for (index in 2 until trs.size) {
+            for (index in 2..<trs.size) {
                 val tds = trs[index].children()
                 // 课程名称
                 val name = tds[0].text()
@@ -385,8 +390,59 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
         }
     }
 
-    override suspend fun getExam() {
-        TODO("Not yet implemented")
+    override suspend fun getExams(): Exams {
+        return withContext(Dispatchers.Default) {
+            val text = httpClient.get("jsxsd/xsks/xsksap_list")
+                .bodyAsText()
+
+            val doc = Ksoup.parse(text)
+
+            // # dataList > tbody
+            val tbody = doc.getElementById("dataList")!!
+                .firstElementChild()!!
+            // #dataList > tbody > tr
+            val trs = tbody.children()
+
+            // yyyy-MM-dd HH:mm
+            val formatter = LocalDateTime.Format {
+                year(); char('-')
+                monthNumber(); char('-')
+                dayOfMonth(); char(' ')
+                hour(); char(':')
+                minute()
+            }
+
+            val exams = mutableListOf<Exam>()
+
+            // 排除表头，每一行为一个课程的考试信息
+            for (index in 1..<trs.size) {
+                // #dataList > tbody > tr > td
+                val tds = trs[index].children()
+                // 考试时间
+                val time = tds[index + 3].text().split("~")
+                val startTime = LocalDateTime.parse(time[0], formatter)
+                val endTime = LocalDateTime.parse(time[1], formatter)
+                // 校区
+                val campus = if (tds[index + 4].text() == "广州校区")
+                    Campus.Canton else Campus.Foshan
+
+                exams.add(
+                    Exam(
+                        courseId = tds[index + 1].text(),
+                        courseName = tds[index + 2].text(),
+                        duration = startTime..endTime,
+                        campus = campus,
+                        classroom = tds[index + 5].text(),
+                    )
+                )
+            }
+
+            return@withContext Exams(
+                userId = user!!.id,
+                createAt = LocalDate.now(),
+                exams = exams,
+            )
+        }
     }
 
     override suspend fun getPlan() {

@@ -69,11 +69,17 @@ class EducationServiceTest {
         println(service.getTimetable(Semester(2021, Term.FIRST)))
     }
 
+    /**
+     * 获取课程课表测试。
+     */
     @Test
     fun shouldGetCourseTable(): Unit = runBlocking {
         println(service.getCourseTable(Semester.now))
     }
 
+    /**
+     * 周次匹配测试。
+     */
     @Test
     fun shouldMatchWeek() {
         val week = 4
@@ -98,5 +104,13 @@ class EducationServiceTest {
             println(weeks)
             assertEquals(result, course.containsWeek(week))
         }
+    }
+
+    /**
+     * 获取考试安排测试。
+     */
+    @Test
+    fun shouldGetExams(): Unit = runBlocking {
+        println(service.getExams())
     }
 }
