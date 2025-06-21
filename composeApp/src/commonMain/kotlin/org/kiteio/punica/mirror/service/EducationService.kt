@@ -32,6 +32,9 @@ import org.kiteio.punica.mirror.modal.education.Exam
 import org.kiteio.punica.mirror.modal.education.Exams
 import org.kiteio.punica.mirror.modal.education.Plan
 import org.kiteio.punica.mirror.modal.education.Plans
+import org.kiteio.punica.mirror.modal.education.Progress
+import org.kiteio.punica.mirror.modal.education.ProgressModule
+import org.kiteio.punica.mirror.modal.education.Progresses
 import org.kiteio.punica.mirror.modal.education.Semester
 import org.kiteio.punica.mirror.modal.education.Timetable
 import org.kiteio.punica.mirror.util.now
@@ -95,7 +98,7 @@ interface EducationService {
     /**
      * 学业进度。
      */
-    suspend fun getProgress()
+    suspend fun getProgresses(): Progresses
 
     /**
      * 教师。
@@ -464,6 +467,7 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
 
             // 排除表头，每一行为一个课程的课程
             for (index in 1..<trs.size) {
+                // #dataList > tbody > tr > td
                 val tds = trs[index].children()
                 plans.add(
                     Plan(
@@ -487,8 +491,73 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
         }
     }
 
-    override suspend fun getProgress() {
-        TODO("Not yet implemented")
+    override suspend fun getProgresses(): Progresses {
+        return withContext(Dispatchers.Default) {
+            val text = httpClient.submitForm(
+                "jsxsd/pyfa/xyjdcx",
+                parameters {
+                    // 主修（0）或辅修（1）
+                    append("xdlx", "0")
+                },
+            ) {
+                parameter("type", "cx")
+            }.bodyAsText()
+
+            val doc = Ksoup.parse(text)
+            // body > div > div.Nsb_layout_r > table.Nsb_r_list.Nsb_table
+            val tables = doc.getElementsByClass("Nsb_r_list Nsb_table")
+
+            val modules = mutableListOf<ProgressModule>()
+            for (table in tables) {
+                // body > div > div.Nsb_layout_r >
+                // table.Nsb_r_list.Nsb_table > tbody > tr
+                val trs = table.firstElementChild()!!.children()
+
+                val progresses = mutableListOf<Progress>()
+
+                // 排除模块名称和表头
+                for (index in 2..<trs.size - 1) {
+                    // body > div > div.Nsb_layout_r >
+                    // table.Nsb_r_list.Nsb_table > tbody > tr > td
+                    val tds = trs[index].children()
+                    progresses.add(
+                        Progress(
+                            name = tds[0].text(),
+                            property = tds[1].text(),
+                            courseId = tds[2].text(),
+                            courseName = tds[3].text(),
+                            credits = tds[4].text().toDouble(),
+                            termIndex = tds[5].text().toIntOrNull(),
+                            privilege = tds[6].text().ifBlank { null },
+                            requiredCredits = tds[7].text().toDoubleOrNull(),
+                            earnedCredits = tds[8].text().toDoubleOrNull(),
+                        )
+                    )
+                }
+
+                // 模块名称
+                val name = trs[0].firstElementChild()!!.textNodes()[0].text().trim()
+                // 倒数一个 tr 为学分汇总
+                val lastTrChildren = trs.last()?.children()!!
+                val lastTd = lastTrChildren[lastTrChildren.lastIndex]
+                val beforeLastTd = lastTrChildren[lastTrChildren.lastIndex - 1]
+
+                modules.add(
+                    ProgressModule(
+                        name = name,
+                        requiredCredits = beforeLastTd.text().toDoubleOrNull(),
+                        earnedCredits = lastTd.text().toDoubleOrNull(),
+                        progresses = progresses,
+                    )
+                )
+            }
+
+            return@withContext Progresses(
+                userId = user!!.id,
+                createAt = LocalDate.now(),
+                modules = modules
+            )
+        }
     }
 
     override suspend fun getTeacher() {

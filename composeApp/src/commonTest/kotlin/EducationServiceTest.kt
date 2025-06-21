@@ -121,4 +121,9 @@ class EducationServiceTest {
     fun shouldGetPlans() : Unit = runBlocking {
         println(service.getPlans())
     }
+
+    @Test
+    fun shouldGetProgresses() : Unit = runBlocking {
+        println(service.getProgresses())
+    }
 }

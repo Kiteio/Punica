@@ -25,7 +25,7 @@ data class Plans(
  * @property credits 学分
  * @property hours 总学时
  * @property assessment 考核方式
- * @property property 课程属性
+ * @property property 课程属性（必修选修）
  */
 data class Plan(
     val semester: Semester,
