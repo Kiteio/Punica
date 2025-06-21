@@ -122,8 +122,24 @@ class EducationServiceTest {
         println(service.getPlans())
     }
 
+    /**
+     * 获取课程进度测试。
+     */
     @Test
     fun shouldGetProgresses() : Unit = runBlocking {
         println(service.getProgresses())
+    }
+
+    /**
+     * 获取教师列表测试。
+     */
+    @Test
+    fun shouldGetTeachers() : Unit = runBlocking {
+        println(service.getTeachers("abcdefg"))
+    }
+
+    @Test
+    fun shouldGetTeacher() : Unit = runBlocking {
+        println(service.getTeacher("20191180"))
     }
 }

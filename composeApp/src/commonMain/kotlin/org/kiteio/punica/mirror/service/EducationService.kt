@@ -1,6 +1,7 @@
 package org.kiteio.punica.mirror.service
 
 import com.fleeksoft.ksoup.Ksoup
+import com.fleeksoft.ksoup.select.Elements
 import com.fleeksoft.ksoup.select.Evaluator
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpSend
@@ -25,6 +26,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.format.char
 import org.kiteio.punica.mirror.modal.User
+import org.kiteio.punica.mirror.modal.education.BasicTeacher
 import org.kiteio.punica.mirror.modal.education.Campus
 import org.kiteio.punica.mirror.modal.education.Course
 import org.kiteio.punica.mirror.modal.education.CourseTable
@@ -36,6 +38,9 @@ import org.kiteio.punica.mirror.modal.education.Progress
 import org.kiteio.punica.mirror.modal.education.ProgressModule
 import org.kiteio.punica.mirror.modal.education.Progresses
 import org.kiteio.punica.mirror.modal.education.Semester
+import org.kiteio.punica.mirror.modal.education.SimpleCourse
+import org.kiteio.punica.mirror.modal.education.Teacher
+import org.kiteio.punica.mirror.modal.education.Teachers
 import org.kiteio.punica.mirror.modal.education.Timetable
 import org.kiteio.punica.mirror.util.now
 
@@ -101,14 +106,14 @@ interface EducationService {
     suspend fun getProgresses(): Progresses
 
     /**
-     * 教师。
+     * 教师列表。
      */
-    suspend fun getTeacher()
+    suspend fun getTeachers(name: String, page: Int = 1): Teachers
 
     /**
      * 教师信息。
      */
-    suspend fun getTeacherProfile()
+    suspend fun getTeacher(id: String): Teacher
 
     /**
      * 校历。
@@ -194,7 +199,7 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
         httpClient.get("/jsxsd/xk/LoginToXk") {
             parameter("method", "exit")
             parameter("tktime", Clock.System.now().toEpochMilliseconds())
-        }.also { println(it.bodyAsText()) }
+        }
     }
 
     /**
@@ -560,12 +565,162 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
         }
     }
 
-    override suspend fun getTeacher() {
-        TODO("Not yet implemented")
+    override suspend fun getTeachers(name: String, page: Int): Teachers {
+        return withContext(Dispatchers.Default) {
+            val text = httpClient.submitForm(
+                "jsxsd/jsxx/jsxx_list",
+                parameters {
+                    append("jsxm", name)
+                    append("pageIndex", "$page")
+                }
+            ).bodyAsText()
+
+            val doc = Ksoup.parse(text)
+
+            // #Form1
+            val form = doc.getElementById("Form1")!!
+            // #Form1 > table.Nsb_r_list.Nsb_table > tbody
+            val tbody = form.selectFirst(
+                Evaluator.Class("Nsb_r_list Nsb_table"),
+            )!!.child(2)
+            // #Form1 > table.Nsb_r_list.Nsb_table > tbody > tr
+            val trs = tbody.children()
+
+            val teachers = mutableListOf<BasicTeacher>()
+            // 排除表头，每一行为一位教师
+            for (index in 1..<trs.size) {
+                // 查询结果为空
+                if (trs[index].childrenSize() == 1) break
+
+                // #Form1 > table.Nsb_r_list.Nsb_table > tbody > tr > td
+                val tds = trs[index].children()
+
+                teachers.add(
+                    BasicTeacher(
+                        id = tds[1].text(),
+                        name = tds[2].text(),
+                        factorial = tds[3].text(),
+                    )
+                )
+            }
+
+            // #PagingControl1_divOuterClass > div > div.Nsb_r_list_fy3
+            val div = form.selectFirst(
+                Evaluator.Class("Nsb_r_list_fy3")
+            )!!
+            // 页数
+            val pageCount = Regex("\\d+").find(div.text())!!
+                .value.toInt()
+
+            return@withContext Teachers(
+                pageCount = pageCount,
+                teachers = teachers
+            )
+        }
     }
 
-    override suspend fun getTeacherProfile() {
-        TODO("Not yet implemented")
+    override suspend fun getTeacher(id: String): Teacher {
+        return withContext(Dispatchers.Default) {
+            val text = httpClient.get("jsxsd/jsxx/jsxx_query_detail") {
+                // 教师工号
+                parameter("jg0101id", id)
+            }.bodyAsText()
+
+            val doc = Ksoup.parse(text)
+
+            // body > div:nth-child(5) > div.Nsb_layout_r >
+            // form > table.no_border_table > tbody
+            val tbody = doc.selectFirst(
+                Evaluator.Class("no_border_table")
+            )!!.child(0)
+            // body > div:nth-child(5) > div.Nsb_layout_r >
+            // form > table.no_border_table > tbody > tr
+            val trs = tbody.children()
+
+            val builder = Teacher.Builder().apply {
+                this.id = id
+            }
+            var hasContact = false
+
+            builder.name = trs[1].child(2).text()
+            builder.gender = trs[1].child(4).text()
+                .takeIf { it != "未说明的性别" }
+
+            builder.politics = trs[2].child(1).text()
+                .ifEmpty { null }
+            builder.nation = trs[2].child(3).text()
+                .ifEmpty { null }
+
+            builder.duty = trs[3].child(1).text()
+                .ifEmpty { null }
+            builder.title = trs[3].child(3).text()
+                .ifEmpty { null }
+
+            builder.category = trs[4].child(1).text()
+                .ifEmpty { null }
+            builder.factorial = trs[4].child(3).text()
+                .ifEmpty { null }
+
+            builder.office = trs[5].child(1).text()
+                .takeIf { it != "无" }
+            builder.qualification = trs[5].child(3).text()
+                .ifEmpty { null }
+
+            builder.degree = trs[6].child(2).text()
+                .ifEmpty { null }
+            builder.field = trs[6].child(4).text()
+                .ifEmpty { null }
+
+            if (trs[7].child(1).text() != "联系方式：") {
+                hasContact = true
+                builder.phoneNumber = trs[7].child(2).text()
+                    .ifEmpty { null }
+                builder.qq = trs[7].child(4).text()
+                    .ifEmpty { null }
+            }
+
+            if (hasContact) {
+                builder.weChat = trs[8].child(2).text()
+                    .ifEmpty { null }
+                builder.email = trs[8].child(4).text()
+                    .ifEmpty { null }
+            }
+
+            // 个人简介
+            builder.biography = trs[trs.lastIndex - 8].text()
+                .takeIf { it != "暂无数据" }
+
+            // 近四个学期主讲课程
+            trs.parseSimpleCourses(trs.lastIndex - 6, builder.taught::add)
+            // 下学期计划开设课程
+            trs.parseSimpleCourses(trs.lastIndex - 4, builder.teaching::add)
+
+            // 教育理念
+            builder.philosophy = trs[trs.lastIndex - 2].text().takeIf { it != "暂无数据" }
+
+            // 最想对学生说的话
+            builder.slogan = trs[trs.lastIndex].text().takeIf { it != "暂无数据" }
+
+            return@withContext builder.build()
+        }
+    }
+
+    private inline fun Elements.parseSimpleCourses(index: Int, action: (SimpleCourse) -> Unit) {
+        val tds = get(index).selectFirst(
+            Evaluator.Tag("tbody")
+        )!!.getElementsByTag("td")
+
+        if (tds.size != 1) {
+            for (tdIndex in tds.indices step 4) {
+                action(
+                    SimpleCourse(
+                        name = tds[tdIndex + 1].text(),
+                        category = tds[tdIndex + 2].text(),
+                        semester = Semester.parse(tds[tdIndex + 3].text()),
+                    )
+                )
+            }
+        }
     }
 
     override suspend fun getCalendar() {

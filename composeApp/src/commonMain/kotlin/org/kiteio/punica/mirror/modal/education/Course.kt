@@ -22,6 +22,17 @@ data class Course(
     val dayOfWeek: DayOfWeek,
     val clazz: String?,
 ) {
+    /**
+     * 课表课程 Builder。
+     *
+     * @property name 课程名称
+     * @property teacher 教师
+     * @property weeks 周次
+     * @property classroom 教室
+     * @property sections 节次
+     * @property dayOfWeek 星期
+     * @property clazz 上课班级
+     */
     class Builder {
         var name: String? = null
         var teacher: String? = null
