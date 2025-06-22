@@ -158,8 +158,19 @@ class EducationServiceTest {
         )
     }
 
+    /**
+     * 获取学籍预警测试。
+     */
     @Test
     fun shouldGetAlerts(): Unit = runBlocking {
         println(service.getAlerts())
+    }
+
+    /**
+     * 获取课程成绩测试。
+     */
+    @Test
+    fun shouldGetCourseGrades(): Unit = runBlocking {
+        println(service.getCourseGrades())
     }
 }

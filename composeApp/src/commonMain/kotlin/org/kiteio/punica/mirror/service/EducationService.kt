@@ -32,6 +32,8 @@ import org.kiteio.punica.mirror.modal.education.Alerts
 import org.kiteio.punica.mirror.modal.education.BasicTeacher
 import org.kiteio.punica.mirror.modal.education.Campus
 import org.kiteio.punica.mirror.modal.education.Course
+import org.kiteio.punica.mirror.modal.education.CourseGrade
+import org.kiteio.punica.mirror.modal.education.CourseGrades
 import org.kiteio.punica.mirror.modal.education.CourseTable
 import org.kiteio.punica.mirror.modal.education.Exam
 import org.kiteio.punica.mirror.modal.education.Exams
@@ -143,7 +145,7 @@ interface EducationService {
     /**
      * 课程成绩。
      */
-    suspend fun getCourseGrade()
+    suspend fun getCourseGrades(): CourseGrades
 
     /**
      * 等级考试成绩。
@@ -838,8 +840,64 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
         }
     }
 
-    override suspend fun getCourseGrade() {
-        TODO("Not yet implemented")
+    override suspend fun getCourseGrades(): CourseGrades {
+        return withContext(Dispatchers.Default) {
+            val text = httpClient.get("/jsxsd/kscj/cjcx_list")
+                .bodyAsText()
+
+            val doc = Ksoup.parse(text)
+
+            // #dataList > tbody
+            val tbody = doc.getElementById("dataList")!!
+                .firstElementChild()!!
+            // #dataList > tbody > tr
+            val trs = tbody.children()
+
+            val grades = mutableListOf<CourseGrade>()
+
+            // 排除表头，每一行为一个课程
+            for (index in 1..<trs.size) {
+                // #dataList > tbody > tr > td
+                val tds = trs[index].children()
+
+                grades.add(
+                    CourseGrade(
+                        semester = Semester.parse(tds[1].text()),
+                        courseId = tds[2].text(),
+                        name = tds[3].text(),
+                        usualScore = tds[4].text().ifEmpty { null },
+                        labScore = tds[5].text().ifEmpty { null },
+                        finalScore = tds[6].text().ifEmpty { null },
+                        score = tds[7].text(),
+                        credits = tds[8].text().toDouble(),
+                        hours = tds[9].text().toInt(),
+                        assessment = tds[10].text(),
+                        property = tds[11].text(),
+                        category = tds[12].text(),
+                        electiveCategory = tds[13].text().ifEmpty { null },
+                        examCategory = tds[14].text(),
+                        mark = tds[15].text().ifEmpty { null },
+                        note = tds[16].text().ifEmpty { null },
+                    )
+                )
+            }
+
+            // body > div.Nsb_pw
+            val overview = doc.body().child(4).run {
+                // body > div.Nsb_pw > div.Nsb_r_title
+                child(1).remove()
+                // #dataList
+                lastElementChild()?.remove()
+                text().replace("查询条件：全部 ", "")
+            }
+
+            return@withContext CourseGrades(
+                userId = user!!.id,
+                createAt = LocalDate.now(),
+                overview = overview,
+                grades = grades,
+            )
+        }
     }
 
     override suspend fun getLevelGrade() {

@@ -34,7 +34,7 @@ data class ProgressModule(
  * 课程进度。
  * 
  * @property name 模块名称
- * @property property 课程属性（必修选修）
+ * @property property 课程属性（必修、选修）
  * @property courseId 课程编号
  * @property courseName 课程名称
  * @property credits 学分
