@@ -116,9 +116,9 @@ interface EducationService {
     suspend fun getTeacher(id: String): Teacher
 
     /**
-     * 校历。
+     * 学期日期。
      */
-    suspend fun getCalendar()
+    suspend fun getCalendar(semester: Semester): ClosedRange<LocalDate>
 
     /**
      * 学籍预警。
@@ -509,12 +509,12 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
             }.bodyAsText()
 
             val doc = Ksoup.parse(text)
-            // body > div > div.Nsb_layout_r > table.Nsb_r_list.Nsb_table
+            // body > div.Nsb_pw > div.Nsb_layout_r > table.Nsb_r_list.Nsb_table
             val tables = doc.getElementsByClass("Nsb_r_list Nsb_table")
 
             val modules = mutableListOf<ProgressModule>()
             for (table in tables) {
-                // body > div > div.Nsb_layout_r >
+                // body > div.Nsb_pw > div.Nsb_layout_r >
                 // table.Nsb_r_list.Nsb_table > tbody > tr
                 val trs = table.firstElementChild()!!.children()
 
@@ -522,7 +522,7 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
 
                 // 排除模块名称和表头
                 for (index in 2..<trs.size - 1) {
-                    // body > div > div.Nsb_layout_r >
+                    // body > div.Nsb_pw > div.Nsb_layout_r >
                     // table.Nsb_r_list.Nsb_table > tbody > tr > td
                     val tds = trs[index].children()
                     progresses.add(
@@ -628,12 +628,12 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
 
             val doc = Ksoup.parse(text)
 
-            // body > div:nth-child(5) > div.Nsb_layout_r >
+            // body > div.Nsb_pw > div.Nsb_layout_r >
             // form > table.no_border_table > tbody
             val tbody = doc.selectFirst(
                 Evaluator.Class("no_border_table")
             )!!.child(0)
-            // body > div:nth-child(5) > div.Nsb_layout_r >
+            // body > div.Nsb_pw > div.Nsb_layout_r >
             // form > table.no_border_table > tbody > tr
             val trs = tbody.children()
 
@@ -723,8 +723,46 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
         }
     }
 
-    override suspend fun getCalendar() {
-        TODO("Not yet implemented")
+    override suspend fun getCalendar(semester: Semester): ClosedRange<LocalDate> {
+        return withContext(Dispatchers.Default) {
+            val text = httpClient.submitForm(
+                "jsxsd/jxzl/jxzl_query",
+                parameters {
+                    // 学期，yyyy-yyyy-T
+                    append("xnxq01id", "$semester")
+                }
+            ).bodyAsText()
+
+            val doc = Ksoup.parse(text)
+
+            // #kbtable > tbody
+            val tbody = doc.getElementById("kbtable")!!
+                .firstElementChild()!!
+
+            // yyyy年MM月DD
+            val formatter = LocalDate.Format {
+                year(); char('年')
+                monthNumber();char('月')
+                dayOfMonth()
+            }
+
+            // 这一行中包含学期开始时间
+            val firstTr = tbody.child(1)
+            // 这一行中包含学期结束时间
+            val lastTr = tbody.child(tbody.childrenSize() - 2)
+
+            val startTdTitle = firstTr.children().first {
+                it.hasAttr("title")
+            }.attr("title")
+            val endTdTitle = lastTr.children().last {
+                it.hasAttr("title")
+            }.attr("title")
+
+            val start = formatter.parse(startTdTitle)
+            val end = formatter.parse(endTdTitle)
+
+            return@withContext start..end
+        }
     }
 
     override suspend fun getAlert() {

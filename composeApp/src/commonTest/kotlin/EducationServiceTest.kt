@@ -1,6 +1,7 @@
 import io.ktor.utils.io.readText
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.LocalDate
 import kotlinx.io.buffered
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
@@ -118,7 +119,7 @@ class EducationServiceTest {
      * 获取执行计划测试。
      */
     @Test
-    fun shouldGetPlans() : Unit = runBlocking {
+    fun shouldGetPlans(): Unit = runBlocking {
         println(service.getPlans())
     }
 
@@ -126,7 +127,7 @@ class EducationServiceTest {
      * 获取课程进度测试。
      */
     @Test
-    fun shouldGetProgresses() : Unit = runBlocking {
+    fun shouldGetProgresses(): Unit = runBlocking {
         println(service.getProgresses())
     }
 
@@ -134,12 +135,27 @@ class EducationServiceTest {
      * 获取教师列表测试。
      */
     @Test
-    fun shouldGetTeachers() : Unit = runBlocking {
+    fun shouldGetTeachers(): Unit = runBlocking {
         println(service.getTeachers("abcdefg"))
     }
 
+    /**
+     * 获取教师测试。
+     */
     @Test
-    fun shouldGetTeacher() : Unit = runBlocking {
+    fun shouldGetTeacher(): Unit = runBlocking {
         println(service.getTeacher("20191180"))
+    }
+
+    /**
+     * 获取学期时间测试。
+     */
+    @Test
+    fun shouldGetCalendar(): Unit = runBlocking {
+        assertEquals(
+            service.getCalendar(Semester.parse("2024-2025-2")),
+            LocalDate(2025, 3, 2)..
+                    LocalDate(2025, 7, 12),
+        )
     }
 }
