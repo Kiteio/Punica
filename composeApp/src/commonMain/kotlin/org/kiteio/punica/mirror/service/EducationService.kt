@@ -37,6 +37,8 @@ import org.kiteio.punica.mirror.modal.education.CourseGrades
 import org.kiteio.punica.mirror.modal.education.CourseTable
 import org.kiteio.punica.mirror.modal.education.Exam
 import org.kiteio.punica.mirror.modal.education.Exams
+import org.kiteio.punica.mirror.modal.education.Exemption
+import org.kiteio.punica.mirror.modal.education.Exemptions
 import org.kiteio.punica.mirror.modal.education.GraduationAudit
 import org.kiteio.punica.mirror.modal.education.LevelGrade
 import org.kiteio.punica.mirror.modal.education.LevelGrades
@@ -173,7 +175,7 @@ interface EducationService {
     /**
      * 免听。
      */
-    suspend fun getExemption()
+    suspend fun getExemptions(semester: Semester): Exemptions
 }
 
 // --------------- 实现 ---------------
@@ -1015,7 +1017,52 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
         return doc.selectFirst(Evaluator.Tag("form"))!!.html()
     }
 
-    override suspend fun getExemption() {
-        TODO("Not yet implemented")
+    override suspend fun getExemptions(semester: Semester): Exemptions {
+        return withContext(Dispatchers.Default) {
+            val text = httpClient.submitForm(
+                "/jsxsd/kscj/mtsq_list",
+                parameters {
+                    append("xnxqid", "${semester}")
+                }
+            ).bodyAsText()
+
+            val doc = Ksoup.parse(text)
+
+            // #Form1 > table.Nsb_r_list.Nsb_table > tbody
+            val tbody = doc.selectFirst(
+                Evaluator.Class("Nsb_r_list Nsb_table"),
+            )!!.firstElementChild()!!
+            // #Form1 > table.Nsb_r_list.Nsb_table > tbody > tr
+            val trs = tbody.children()
+
+            val exemptions = mutableListOf<Exemption>()
+            // 排除表头，每一行为一个课程
+            for (index in 1..<trs.size) {
+                // #Form1 > table.Nsb_r_list.Nsb_table > tbody > tr > td
+                val tds = trs[index].children()
+                exemptions.add(
+                    Exemption(
+                        courseId = tds[2].text(),
+                        courseName = tds[3].text(),
+                        department = tds[4].text(),
+                        teacher = tds[5].text(),
+                        hours = tds[6].text().toInt(),
+                        credits = tds[7].text().toDouble(),
+                        assessment = tds[8].text(),
+                        reason = tds[9].text().ifEmpty { null },
+                        status = tds[10].text().ifEmpty { null },
+                        time = tds[11].text().ifEmpty { null }
+                            ?.let { LocalDate.parse(it) },
+                    )
+                )
+            }
+
+            return@withContext Exemptions(
+                userId = user!!.id,
+                createAt = LocalDate.now(),
+                semester = semester,
+                exemptions = exemptions,
+            )
+        }
     }
 }

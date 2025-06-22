@@ -197,4 +197,12 @@ class EducationServiceTest {
     fun shouldGetProgramme(): Unit = runBlocking {
         println(service.getProgramme())
     }
+
+    /**
+     * 获取免听申请测试。
+     */
+    @Test
+    fun shouldGetExemptions(): Unit = runBlocking {
+        println(service.getExemptions(Semester(2024, Semester.Term.FIRST)))
+    }
 }
