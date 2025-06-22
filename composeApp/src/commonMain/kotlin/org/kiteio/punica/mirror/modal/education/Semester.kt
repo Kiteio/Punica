@@ -54,15 +54,15 @@ data class Semester(val year: Int, val term: Term) {
             )
         }
     }
-}
 
-/**
- * 学期分段。
- */
-enum class Term {
-    /** 上学期 */
-    FIRST,
+    /**
+     * 学期分段。
+     */
+    enum class Term {
+        /** 上学期 */
+        FIRST,
 
-    /** 下学期 */
-    SECOND
+        /** 下学期 */
+        SECOND
+    }
 }

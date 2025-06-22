@@ -1,6 +1,7 @@
 package org.kiteio.punica.mirror.service
 
 import com.fleeksoft.ksoup.Ksoup
+import com.fleeksoft.ksoup.nodes.Element
 import com.fleeksoft.ksoup.select.Elements
 import com.fleeksoft.ksoup.select.Evaluator
 import io.ktor.client.HttpClient
@@ -26,6 +27,8 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.format.char
 import org.kiteio.punica.mirror.modal.User
+import org.kiteio.punica.mirror.modal.education.Alert
+import org.kiteio.punica.mirror.modal.education.Alerts
 import org.kiteio.punica.mirror.modal.education.BasicTeacher
 import org.kiteio.punica.mirror.modal.education.Campus
 import org.kiteio.punica.mirror.modal.education.Course
@@ -38,7 +41,6 @@ import org.kiteio.punica.mirror.modal.education.Progress
 import org.kiteio.punica.mirror.modal.education.ProgressModule
 import org.kiteio.punica.mirror.modal.education.Progresses
 import org.kiteio.punica.mirror.modal.education.Semester
-import org.kiteio.punica.mirror.modal.education.SimpleCourse
 import org.kiteio.punica.mirror.modal.education.Teacher
 import org.kiteio.punica.mirror.modal.education.Teachers
 import org.kiteio.punica.mirror.modal.education.Timetable
@@ -82,11 +84,15 @@ interface EducationService {
 
     /**
      * 课表。
+     *
+     * @param semester 学期
      */
     suspend fun getTimetable(semester: Semester): Timetable
 
     /**
      * 课程课表。
+     *
+     * @param semester 学期
      */
     suspend fun getCourseTable(semester: Semester): CourseTable
 
@@ -107,23 +113,32 @@ interface EducationService {
 
     /**
      * 教师列表。
+     *
+     * @param query 查询
+     * @param page 页码
      */
-    suspend fun getTeachers(name: String, page: Int = 1): Teachers
+    suspend fun getTeachers(query: String, page: Int = 1): Teachers
 
     /**
      * 教师信息。
+     *
+     * @param id 工号
      */
     suspend fun getTeacher(id: String): Teacher
 
     /**
      * 学期日期。
+     *
+     * @param semester 学期
      */
     suspend fun getCalendar(semester: Semester): ClosedRange<LocalDate>
 
     /**
      * 学籍预警。
+     *
+     * @param page 页码
      */
-    suspend fun getAlert()
+    suspend fun getAlerts(page: Int = 1): Alerts
 
     /**
      * 课程成绩。
@@ -332,7 +347,7 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
     override suspend fun getCourseTable(semester: Semester): CourseTable {
         return withContext(Dispatchers.Default) {
             val text = httpClient.submitForm(
-                "jsxsd/kbcx/kbxx_kc_ifr",
+                "/jsxsd/kbcx/kbxx_kc_ifr",
                 parameters {
                     // 学期，yyyy-yyyy-T
                     append("xnxqh", "$semester")
@@ -402,7 +417,7 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
 
     override suspend fun getExams(): Exams {
         return withContext(Dispatchers.Default) {
-            val text = httpClient.get("jsxsd/xsks/xsksap_list")
+            val text = httpClient.get("/jsxsd/xsks/xsksap_list")
                 .bodyAsText()
 
             val doc = Ksoup.parse(text)
@@ -457,7 +472,7 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
 
     override suspend fun getPlans(): Plans {
         return withContext(Dispatchers.Default) {
-            val text = httpClient.get("jsxsd/pyfa/pyfa_query")
+            val text = httpClient.get("/jsxsd/pyfa/pyfa_query")
                 .bodyAsText()
 
             val doc = Ksoup.parse(text)
@@ -499,7 +514,7 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
     override suspend fun getProgresses(): Progresses {
         return withContext(Dispatchers.Default) {
             val text = httpClient.submitForm(
-                "jsxsd/pyfa/xyjdcx",
+                "/jsxsd/pyfa/xyjdcx",
                 parameters {
                     // 主修（0）或辅修（1）
                     append("xdlx", "0")
@@ -565,12 +580,14 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
         }
     }
 
-    override suspend fun getTeachers(name: String, page: Int): Teachers {
+    override suspend fun getTeachers(query: String, page: Int): Teachers {
         return withContext(Dispatchers.Default) {
             val text = httpClient.submitForm(
-                "jsxsd/jsxx/jsxx_list",
+                "/jsxsd/jsxx/jsxx_list",
                 parameters {
-                    append("jsxm", name)
+                    // 姓名
+                    append("jsxm", query)
+                    // 页码
                     append("pageIndex", "$page")
                 }
             ).bodyAsText()
@@ -604,19 +621,25 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
                 )
             }
 
-            // #PagingControl1_divOuterClass > div > div.Nsb_r_list_fy3
-            val div = form.selectFirst(
-                Evaluator.Class("Nsb_r_list_fy3")
-            )!!
-            // 页数
-            val pageCount = Regex("\\d+").find(div.text())!!
-                .value.toInt()
-
             return@withContext Teachers(
-                pageCount = pageCount,
+                pageCount = form.getPageCount(),
                 teachers = teachers
             )
         }
+    }
+
+    /**
+     * 返回 [Element] 中匹配 #PagingControl1_divOuterClass >
+     * div > div.Nsb_r_list_fy3 子项的页数。
+     */
+    private fun Element.getPageCount(): Int {
+        // #PagingControl1_divOuterClass > div > div.Nsb_r_list_fy3
+        val div = selectFirst(
+            Evaluator.Class("Nsb_r_list_fy3")
+        )!!
+
+        return Regex("\\d+").find(div.text())!!
+            .value.toInt()
     }
 
     override suspend fun getTeacher(id: String): Teacher {
@@ -705,7 +728,7 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
         }
     }
 
-    private inline fun Elements.parseSimpleCourses(index: Int, action: (SimpleCourse) -> Unit) {
+    private inline fun Elements.parseSimpleCourses(index: Int, action: (Teacher.Course) -> Unit) {
         val tds = get(index).selectFirst(
             Evaluator.Tag("tbody")
         )!!.getElementsByTag("td")
@@ -713,7 +736,7 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
         if (tds.size != 1) {
             for (tdIndex in tds.indices step 4) {
                 action(
-                    SimpleCourse(
+                    Teacher.Course(
                         name = tds[tdIndex + 1].text(),
                         category = tds[tdIndex + 2].text(),
                         semester = Semester.parse(tds[tdIndex + 3].text()),
@@ -765,8 +788,54 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
         }
     }
 
-    override suspend fun getAlert() {
-        TODO("Not yet implemented")
+    override suspend fun getAlerts(page: Int): Alerts {
+        return withContext(Dispatchers.Default) {
+            val text = httpClient.submitForm(
+                "/jsxsd/xsxj/xsyjxx.do",
+                parameters {
+                    append("pageIndex", "$page")
+                }
+            ).bodyAsText()
+
+            val doc = Ksoup.parse(text)
+
+            // #Form1
+            val form = doc.getElementById("Form1")!!
+            // #Form1 > table.Nsb_r_list.Nsb_table > tbody
+            val tbody = form.selectFirst(
+                Evaluator.Class("Nsb_r_list Nsb_table"),
+            )!!.child(0)
+            // #Form1 > table.Nsb_r_list.Nsb_table > tbody > tr
+            val trs = tbody.children()
+
+            val alerts = mutableListOf<Alert>()
+
+            // 排除表头，每一行为一个预警
+            for (index in 1..<trs.size) {
+                // #Form1 > table.Nsb_r_list.Nsb_table > tbody > tr > td
+                val tds = trs[index].children()
+                alerts.add(
+                    Alert(
+                        semester = Semester.parse(tds[1].text()),
+                        importance = when (tds[3].text()) {
+                            "红色" -> Alert.Importance.High
+                            "黄色" -> Alert.Importance.Medium
+                            "蓝色" -> Alert.Importance.Low
+                            else -> Alert.Importance.Unknown
+                        },
+                        description = tds[6].text(),
+                        value = tds[7].text(),
+                    )
+                )
+            }
+
+            return@withContext Alerts(
+                userId = user!!.id,
+                createAt = LocalDate.now(),
+                alerts = alerts,
+                pageCount = form.getPageCount(),
+            )
+        }
     }
 
     override suspend fun getCourseGrade() {

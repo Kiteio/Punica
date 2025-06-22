@@ -68,11 +68,24 @@ data class Teacher(
     val weChat: String?,
     val email: String?,
     val biography: String?,
-    val taught: List<SimpleCourse>,
-    val teaching: List<SimpleCourse>,
+    val taught: List<Course>,
+    val teaching: List<Course>,
     val philosophy: String?,
     val slogan: String?,
 ) {
+    /**
+     * 教授课程。
+     *
+     * @property name 课程名称
+     * @property category 课程类别
+     * @property semester 学期
+     */
+    data class Course(
+        val name: String,
+        val category: String,
+        val semester: Semester,
+    )
+
     /**
      * 教师信息 Builder。
      *
@@ -117,8 +130,8 @@ data class Teacher(
         var weChat: String? = null
         var email: String? = null
         var biography: String? = null
-        val taught = mutableListOf<SimpleCourse>()
-        val teaching = mutableListOf<SimpleCourse>()
+        val taught = mutableListOf<Course>()
+        val teaching = mutableListOf<Course>()
         var philosophy: String? = null
         var slogan: String? = null
 
@@ -153,16 +166,3 @@ data class Teacher(
         }
     }
 }
-
-/**
- * 教授课程。
- *
- * @param name 课程名称
- * @param category 课程类别
- * @param semester 学期
- */
-data class SimpleCourse(
-    val name: String,
-    val category: String,
-    val semester: Semester,
-)

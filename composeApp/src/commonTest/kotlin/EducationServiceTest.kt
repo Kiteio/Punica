@@ -8,7 +8,6 @@ import kotlinx.io.files.SystemFileSystem
 import org.kiteio.punica.mirror.modal.User
 import org.kiteio.punica.mirror.modal.education.Course
 import org.kiteio.punica.mirror.modal.education.Semester
-import org.kiteio.punica.mirror.modal.education.Term
 import org.kiteio.punica.mirror.modal.education.containsWeek
 import org.kiteio.punica.mirror.service.EducationService
 import org.kiteio.punica.mirror.util.readText
@@ -67,7 +66,7 @@ class EducationServiceTest {
      */
     @Test
     fun shouldGetTimetable(): Unit = runBlocking {
-        println(service.getTimetable(Semester(2021, Term.FIRST)))
+        println(service.getTimetable(Semester(2021, Semester.Term.FIRST)))
     }
 
     /**
@@ -157,5 +156,10 @@ class EducationServiceTest {
             LocalDate(2025, 3, 2)..
                     LocalDate(2025, 7, 12),
         )
+    }
+
+    @Test
+    fun shouldGetAlerts(): Unit = runBlocking {
+        println(service.getAlerts())
     }
 }

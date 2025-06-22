@@ -5,11 +5,11 @@ import kotlinx.datetime.LocalDate
 /**
  * 课表。
  *
- * @param userId 学号
- * @param semester 学期
- * @param createAt 创建时间
- * @param courses 课程，总共含 42 项，每项包含多个同一节次的课程
- * @param note 备注
+ * @property userId 学号
+ * @property semester 学期
+ * @property createAt 创建时间
+ * @property courses 课程，总共含 42 项，每项包含多个同一节次的课程
+ * @property note 备注
  */
 data class Timetable(
     val userId: String,
