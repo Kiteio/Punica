@@ -189,4 +189,12 @@ class EducationServiceTest {
     fun shouldGetGraduationAudit(): Unit = runBlocking {
         println(service.getGraduationAudit())
     }
+
+    /**
+     * 获取培养方案测试。
+     */
+    @Test
+    fun shouldGetProgramme(): Unit = runBlocking {
+        println(service.getProgramme())
+    }
 }

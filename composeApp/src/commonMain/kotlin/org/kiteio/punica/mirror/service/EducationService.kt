@@ -168,7 +168,7 @@ interface EducationService {
     /**
      * 培养方案。
      */
-    suspend fun getProgramme()
+    suspend fun getProgramme(): String
 
     /**
      * 免听。
@@ -1007,8 +1007,12 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
         }.readRawBytes()
     }
 
-    override suspend fun getProgramme() {
-        TODO("Not yet implemented")
+    override suspend fun getProgramme(): String {
+        val text = httpClient.get("/jsxsd/pyfa/pyfazd_query")
+            .bodyAsText()
+
+        val doc = Ksoup.parse(text)
+        return doc.selectFirst(Evaluator.Tag("form"))!!.html()
     }
 
     override suspend fun getExemption() {
