@@ -37,6 +37,7 @@ import org.kiteio.punica.mirror.modal.education.CourseGrades
 import org.kiteio.punica.mirror.modal.education.CourseTable
 import org.kiteio.punica.mirror.modal.education.Exam
 import org.kiteio.punica.mirror.modal.education.Exams
+import org.kiteio.punica.mirror.modal.education.GraduationAudit
 import org.kiteio.punica.mirror.modal.education.LevelGrade
 import org.kiteio.punica.mirror.modal.education.LevelGrades
 import org.kiteio.punica.mirror.modal.education.Plan
@@ -157,7 +158,12 @@ interface EducationService {
     /**
      * 毕业审核。
      */
-    suspend fun getGraduationAudit()
+    suspend fun getGraduationAudit(isPrimary: Boolean = true): GraduationAudit
+
+    /**
+     * 毕业审核报告。
+     */
+    suspend fun getGraduationAuditReport(urlString: String): ByteArray
 
     /**
      * 培养方案。
@@ -938,8 +944,67 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
         }
     }
 
-    override suspend fun getGraduationAudit() {
-        TODO("Not yet implemented")
+    override suspend fun getGraduationAudit(isPrimary: Boolean): GraduationAudit {
+        return withContext(Dispatchers.Default) {
+            var text = httpClient.get("/jsxsd/bygl/bybm")
+                .bodyAsText()
+            var doc = Ksoup.parse(text)
+            // #bybm > option
+            val option = doc.getElementById("bybm")!!
+                .children()
+                // 筛选出最新
+                .apply { sortByDescending { it.text() } }
+                .run { if (isPrimary) get(1) else get(0) }
+
+            text = httpClient.submitForm(
+                "/jsxsd/bygl/bybmcz.do",
+                parameters {
+                    append("bybm", option.value())
+                },
+            ).bodyAsText()
+            doc = Ksoup.parse(text)
+
+            // #Form1 > table.Nsb_r_list.Nsb_table > tbody
+            val tbody = doc
+                .getElementsByClass("Nsb_r_list Nsb_table")[1]
+                .firstElementChild()!!
+            // #Form1 > table.Nsb_r_list.Nsb_table > tbody > tr
+            val trs = tbody.children().also {
+                check(it.size == 2)
+            }
+            // #Form1 > table.Nsb_r_list.Nsb_table > tbody > tr > td
+            val tds = trs[1].children()
+
+            // javascript:PrintDoc('[reportUrl]')
+            val href = tds[8].selectFirst(
+                Evaluator.Tag("a"),
+            )!!.attr("href")
+            val reportUrl = Regex("\\('([^']*)'\\)")
+                .find(href)!!
+                .groupValues[1]
+
+            return@withContext GraduationAudit(
+                userId = user!!.id,
+                createAt = LocalDate.now(),
+                year = tds[0].text().toInt(),
+                name = tds[1].text(),
+                category = tds[2].text(),
+                channel = tds[3].text(),
+                credits = tds[4].text().toDouble(),
+                completionRate = tds[5].text().toDouble(),
+                enrolmentRate = tds[6].text().toDouble(),
+                note = tds[7].text().ifEmpty { null },
+                reportUrl = reportUrl,
+            )
+        }
+    }
+
+    override suspend fun getGraduationAuditReport(
+        urlString: String,
+    ): ByteArray {
+        return httpClient.get(urlString) {
+            timeout { requestTimeoutMillis = 2000 }
+        }.readRawBytes()
     }
 
     override suspend fun getProgramme() {
