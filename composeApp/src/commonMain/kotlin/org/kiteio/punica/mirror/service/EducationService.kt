@@ -37,6 +37,8 @@ import org.kiteio.punica.mirror.modal.education.CourseGrades
 import org.kiteio.punica.mirror.modal.education.CourseTable
 import org.kiteio.punica.mirror.modal.education.Exam
 import org.kiteio.punica.mirror.modal.education.Exams
+import org.kiteio.punica.mirror.modal.education.LevelGrade
+import org.kiteio.punica.mirror.modal.education.LevelGrades
 import org.kiteio.punica.mirror.modal.education.Plan
 import org.kiteio.punica.mirror.modal.education.Plans
 import org.kiteio.punica.mirror.modal.education.Progress
@@ -150,7 +152,7 @@ interface EducationService {
     /**
      * 等级考试成绩。
      */
-    suspend fun getLevelGrade()
+    suspend fun getLevelGrades(): LevelGrades
 
     /**
      * 毕业审核。
@@ -900,8 +902,40 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
         }
     }
 
-    override suspend fun getLevelGrade() {
-        TODO("Not yet implemented")
+    override suspend fun getLevelGrades(): LevelGrades {
+        return withContext(Dispatchers.Default) {
+            val text = httpClient.get("/jsxsd/kscj/djkscj_list")
+                .bodyAsText()
+
+            val doc = Ksoup.parse(text)
+
+            // #dataList > tbody
+            val tbody = doc.getElementById("dataList")!!
+                .firstElementChild()!!
+            // #dataList > tbody > tr
+            val trs = tbody.children()
+
+            val grades = mutableListOf<LevelGrade>()
+
+            // 排除 2 个表头
+            for (index in 2..<trs.size) {
+                // #dataList > tbody > tr > td
+                val tds = trs[index].children()
+                grades.add(
+                    LevelGrade(
+                        name = tds[1].text(),
+                        score = tds[4].text(),
+                        date = LocalDate.parse(tds[8].text()),
+                    )
+                )
+            }
+
+            return@withContext LevelGrades(
+                userId = user!!.id,
+                createAt = LocalDate.now(),
+                grades = grades,
+            )
+        }
     }
 
     override suspend fun getGraduationAudit() {

@@ -173,4 +173,12 @@ class EducationServiceTest {
     fun shouldGetCourseGrades(): Unit = runBlocking {
         println(service.getCourseGrades())
     }
+
+    /**
+     * 获取等级成绩测试。
+     */
+    @Test
+    fun shouldGetLevelGrades(): Unit = runBlocking {
+        println(service.getLevelGrades())
+    }
 }
