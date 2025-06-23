@@ -1,37 +1,24 @@
-import io.ktor.utils.io.readText
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
-import kotlinx.io.buffered
-import kotlinx.io.files.Path
-import kotlinx.io.files.SystemFileSystem
 import org.kiteio.punica.mirror.modal.User
 import org.kiteio.punica.mirror.modal.education.Course
 import org.kiteio.punica.mirror.modal.education.Semester
 import org.kiteio.punica.mirror.modal.education.containsWeek
 import org.kiteio.punica.mirror.service.EducationService
 import org.kiteio.punica.mirror.util.readText
+import util.readProperties
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class EducationServiceTest {
     private val service = EducationService()
     private val user = run {
-        val properties = hashMapOf<String, String>()
-        val text = SystemFileSystem
-            .source(Path("../local.properties"))
-            .buffered()
-            .readText()
-        text.split("\n").forEach {
-            if (!it.startsWith('#') && it.isNotEmpty()) {
-                val (key, value) = it.split("=")
-                properties[key.trim()] = value.trim()
-            }
-        }
+        val properties = readProperties()
         User(
             id = properties["user.id"]!!,
             password = properties["user.password"]!!,
-            secondClassroomPwd = "",
+            secondClassPwd = "",
         )
     }
 
@@ -66,7 +53,7 @@ class EducationServiceTest {
      */
     @Test
     fun shouldGetTimetable(): Unit = runBlocking {
-        println(service.getTimetable(Semester(2021, Semester.Term.FIRST)))
+        println(service.getTimetable(Semester(2021, Semester.Term.First)))
     }
 
     /**
@@ -203,6 +190,10 @@ class EducationServiceTest {
      */
     @Test
     fun shouldGetExemptions(): Unit = runBlocking {
-        println(service.getExemptions(Semester(2024, Semester.Term.FIRST)))
+        println(
+            service.getExemptions(
+                Semester(2024, Semester.Term.First),
+            )
+        )
     }
 }

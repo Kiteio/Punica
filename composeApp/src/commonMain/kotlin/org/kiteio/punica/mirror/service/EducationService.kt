@@ -13,11 +13,9 @@ import io.ktor.client.plugins.plugin
 import io.ktor.client.plugins.timeout
 import io.ktor.client.request.forms.submitForm
 import io.ktor.client.request.get
-import io.ktor.client.request.header
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
 import io.ktor.client.statement.readRawBytes
-import io.ktor.http.HttpHeaders
 import io.ktor.http.parameters
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -25,7 +23,6 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.format.char
 import org.kiteio.punica.mirror.modal.User
 import org.kiteio.punica.mirror.modal.education.Alert
 import org.kiteio.punica.mirror.modal.education.Alerts
@@ -52,12 +49,15 @@ import org.kiteio.punica.mirror.modal.education.Teacher
 import org.kiteio.punica.mirror.modal.education.Teachers
 import org.kiteio.punica.mirror.modal.education.Timetable
 import org.kiteio.punica.mirror.util.now
+import org.kiteio.punica.mirror.util.parseIsoVariantWithoutSecond
 
+/**
+ * 教务系统服务。
+ */
 fun EducationService(): EducationService {
     val httpClient = HttpClient {
         defaultRequest {
-            url(urlString = EducationServiceImpl.BASE_URL)
-            header(HttpHeaders.AcceptEncoding, "br")
+            url(EducationServiceImpl.BASE_URL)
         }
         // TODO: 改用 intercept 存取 Cookie 并保存本地
         install(HttpCookies) {
@@ -79,6 +79,7 @@ interface EducationService {
 
     /**
      * 登录。
+     *
      * @param user 用户
      * @param captcha 验证码
      */
@@ -180,7 +181,9 @@ interface EducationService {
 
 // --------------- 实现 ---------------
 
-private class EducationServiceImpl(private val httpClient: HttpClient) : EducationService {
+private class EducationServiceImpl(
+    private val httpClient: HttpClient,
+) : EducationService {
     private var user: User? = null
 
     init {
@@ -440,15 +443,6 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
             // #dataList > tbody > tr
             val trs = tbody.children()
 
-            // yyyy-MM-dd HH:mm
-            val formatter = LocalDateTime.Format {
-                year(); char('-')
-                monthNumber(); char('-')
-                dayOfMonth(); char(' ')
-                hour(); char(':')
-                minute()
-            }
-
             val exams = mutableListOf<Exam>()
 
             // 排除表头，每一行为一个课程的考试信息
@@ -457,8 +451,8 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
                 val tds = trs[index].children()
                 // 考试时间
                 val time = tds[index + 3].text().split("~")
-                val startTime = LocalDateTime.parse(time[0], formatter)
-                val endTime = LocalDateTime.parse(time[1], formatter)
+                val startTime = LocalDateTime.parseIsoVariantWithoutSecond(time[0])
+                val endTime = LocalDateTime.parseIsoVariantWithoutSecond(time[1])
                 // 校区
                 val campus = if (tds[index + 4].text() == "广州校区")
                     Campus.Canton else Campus.Foshan
@@ -774,13 +768,6 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
             val tbody = doc.getElementById("kbtable")!!
                 .firstElementChild()!!
 
-            // yyyy年MM月DD
-            val formatter = LocalDate.Format {
-                year(); char('年')
-                monthNumber();char('月')
-                dayOfMonth()
-            }
-
             // 这一行中包含学期开始时间
             val firstTr = tbody.child(1)
             // 这一行中包含学期结束时间
@@ -793,8 +780,8 @@ private class EducationServiceImpl(private val httpClient: HttpClient) : Educati
                 it.hasAttr("title")
             }.attr("title")
 
-            val start = formatter.parse(startTdTitle)
-            val end = formatter.parse(endTdTitle)
+            val start = LocalDate.parse(startTdTitle)
+            val end = LocalDate.parse(endTdTitle)
 
             return@withContext start..end
         }

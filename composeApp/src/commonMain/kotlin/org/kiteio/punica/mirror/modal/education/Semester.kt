@@ -13,7 +13,7 @@ data class Semester(val year: Int, val term: Term) {
     /**
      * yyyy-yyyy-T。
      */
-    override fun toString() = "$year-${year + 1}-${term.ordinal + 1}"
+    override fun toString() = "$year-${year + 1}-${term.value}"
 
     companion object {
         /** 当前学期 */
@@ -25,19 +25,19 @@ data class Semester(val year: Int, val term: Term) {
                 // 去年第 1 学期
                 now < LocalDate(year, 1, 20) -> Semester(
                     year - 1,
-                    Term.FIRST
+                    Term.First
                 )
 
                 // 去年第 2 学期
                 now < LocalDate(year, 7, 20) -> Semester(
                     year - 1,
-                    Term.SECOND
+                    Term.Second
                 )
 
                 // 今年第 1 学期
                 else -> Semester(
                     year,
-                    Term.FIRST
+                    Term.First
                 )
             }
         }
@@ -50,7 +50,8 @@ data class Semester(val year: Int, val term: Term) {
         fun parse(semesterString: String) = semesterString.split("-").run {
             Semester(
                 get(0).toInt(),
-                Term.entries.first { it.ordinal + 1 == (get(2).toInt()) },
+                if (get(2).toInt() == Term.First.value)
+                    Term.First else Term.Second,
             )
         }
     }
@@ -58,11 +59,11 @@ data class Semester(val year: Int, val term: Term) {
     /**
      * 学期分段。
      */
-    enum class Term {
+    sealed class Term(val value: Int) {
         /** 上学期 */
-        FIRST,
+        data object First : Term(1)
 
         /** 下学期 */
-        SECOND
+        data object Second : Term(2)
     }
 }
