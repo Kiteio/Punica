@@ -1,4 +1,4 @@
-package org.kiteio.punica.mirror.util
+package org.kiteio.punica.mirror.platform
 
 /**
  * 使用 Tesseract 识别文字。

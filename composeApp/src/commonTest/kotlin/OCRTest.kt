@@ -3,7 +3,7 @@ import kotlinx.io.buffered
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
 import kotlinx.io.readByteArray
-import org.kiteio.punica.mirror.util.readText
+import org.kiteio.punica.mirror.platform.readText
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

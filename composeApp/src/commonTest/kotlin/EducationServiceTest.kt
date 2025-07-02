@@ -5,8 +5,8 @@ import org.kiteio.punica.mirror.modal.User
 import org.kiteio.punica.mirror.modal.education.Course
 import org.kiteio.punica.mirror.modal.education.Semester
 import org.kiteio.punica.mirror.modal.education.containsWeek
+import org.kiteio.punica.mirror.platform.readText
 import org.kiteio.punica.mirror.service.EducationService
-import org.kiteio.punica.mirror.util.readText
 import util.readProperties
 import kotlin.test.Test
 import kotlin.test.assertEquals

@@ -1,4 +1,4 @@
-package org.kiteio.punica.mirror.util
+package org.kiteio.punica.mirror.platform
 
 actual suspend fun ByteArray.readText(
     dataPath: String,

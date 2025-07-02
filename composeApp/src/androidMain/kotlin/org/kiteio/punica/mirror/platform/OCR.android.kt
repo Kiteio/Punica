@@ -1,4 +1,4 @@
-package org.kiteio.punica.mirror.util
+package org.kiteio.punica.mirror.platform
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
