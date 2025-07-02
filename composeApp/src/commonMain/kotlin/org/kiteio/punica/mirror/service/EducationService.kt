@@ -11,18 +11,25 @@ import io.ktor.client.plugins.cookies.HttpCookies
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.plugin
 import io.ktor.client.plugins.timeout
+import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.forms.submitForm
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
 import io.ktor.client.statement.readRawBytes
+import io.ktor.client.statement.request
+import io.ktor.http.encodeURLParameter
 import io.ktor.http.parameters
+import io.ktor.http.parseQueryString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.isoDayNumber
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import org.kiteio.punica.mirror.modal.User
 import org.kiteio.punica.mirror.modal.education.Alert
 import org.kiteio.punica.mirror.modal.education.Alerts
@@ -31,7 +38,10 @@ import org.kiteio.punica.mirror.modal.education.Campus
 import org.kiteio.punica.mirror.modal.education.Course
 import org.kiteio.punica.mirror.modal.education.CourseGrade
 import org.kiteio.punica.mirror.modal.education.CourseGrades
+import org.kiteio.punica.mirror.modal.education.CourseLog
+import org.kiteio.punica.mirror.modal.education.CourseSystem
 import org.kiteio.punica.mirror.modal.education.CourseTable
+import org.kiteio.punica.mirror.modal.education.CoursesOverview
 import org.kiteio.punica.mirror.modal.education.Exam
 import org.kiteio.punica.mirror.modal.education.Exams
 import org.kiteio.punica.mirror.modal.education.Exemption
@@ -44,10 +54,13 @@ import org.kiteio.punica.mirror.modal.education.Plans
 import org.kiteio.punica.mirror.modal.education.Progress
 import org.kiteio.punica.mirror.modal.education.ProgressModule
 import org.kiteio.punica.mirror.modal.education.Progresses
+import org.kiteio.punica.mirror.modal.education.SelectableCourse
+import org.kiteio.punica.mirror.modal.education.SelectedCourse
 import org.kiteio.punica.mirror.modal.education.Semester
 import org.kiteio.punica.mirror.modal.education.Teacher
 import org.kiteio.punica.mirror.modal.education.Teachers
 import org.kiteio.punica.mirror.modal.education.Timetable
+import org.kiteio.punica.mirror.util.Json
 import org.kiteio.punica.mirror.util.now
 import org.kiteio.punica.mirror.util.parseIsoVariantWithoutSecond
 
@@ -160,11 +173,15 @@ interface EducationService {
 
     /**
      * 毕业审核。
+     *
+     * @param isPrimary 是否主修
      */
     suspend fun getGraduationAudit(isPrimary: Boolean = true): GraduationAudit
 
     /**
      * 毕业审核报告。
+     *
+     * @param urlString 报告下载 URL
      */
     suspend fun getGraduationAuditReport(urlString: String): ByteArray
 
@@ -175,8 +192,78 @@ interface EducationService {
 
     /**
      * 免听。
+     *
+     * @param semester 学期
      */
     suspend fun getExemptions(semester: Semester): Exemptions
+
+    /**
+     * 选课系统入口。
+     *
+     * @param token 选课系统 id，每一轮会有一个不同的 id
+     */
+    suspend fun getCourseSystem(token: String?): CourseSystem?
+
+    /**
+     * 可选课程。
+     *
+     * @param category 特殊类别
+     * @param page 页码
+     * @param size 页面内容量
+     */
+    suspend fun getCourses(
+        category: SelectableCourse.Category.Special,
+        page: Int = 1,
+        size: Int = 15,
+    ): List<SelectableCourse>
+
+    /**
+     * 可选课程。
+     *
+     * @param category 通用类别
+     * @param page 页码
+     * @param size 页面内容量
+     */
+    suspend fun getCourses(
+        category: SelectableCourse.Category.Common,
+        parameters: SelectableCourse.Parameters,
+        page: Int = 1,
+        size: Int = 15,
+    ): List<SelectableCourse>
+
+    /**
+     * 选课。
+     *
+     * @param id 课程唯一标识
+     * @param category 课程类别
+     */
+    suspend fun selectCourse(
+        id: String,
+        category: SelectableCourse.Category,
+        priority: SelectableCourse.Priority?,
+    )
+
+    /**
+     * 退课。
+     *
+     * @param id 课程唯一标识
+     */
+    suspend fun deleteCourse(id: String)
+
+    /**
+     * 选课学分总览。
+     */
+    suspend fun getCoursesOverview(): CoursesOverview
+
+    /**
+     * 已选课程。
+     */
+    suspend fun getSelectedCourses(): List<SelectedCourse>
+
+    /**
+     * 退课日志。
+     */
+    suspend fun getCourseLogs(): List<CourseLog>
 }
 
 // --------------- 实现 ---------------
@@ -218,7 +305,9 @@ private class EducationServiceImpl(
             // 若错误信息为空，则获取页面 title 抛出
             withContext(Dispatchers.Default) {
                 val doc = Ksoup.parse(text)
-                val message = doc.selectFirst(Evaluator.Tag("font"))?.text()
+                val message = doc.selectFirst(
+                    Evaluator.Tag("font"),
+                )?.text()
 
                 message ?: doc.title()
             }
@@ -268,10 +357,10 @@ private class EducationServiceImpl(
 
         val doc = Ksoup.parse(text)
         val courseDividerRegex = Regex("-{21}")
-        val numberRegex = Regex("\\d+")
 
         // #kbtable > tbody
-        val tbody = doc.getElementById("kbtable")!!.firstElementChild()!!
+        val tbody = doc.getElementById("kbtable")!!
+            .firstElementChild()!!
 
         // #kbtable > tbody > tr > td > div.kbcontent
         val divs = tbody.getElementsByClass("kbcontent")
@@ -302,10 +391,8 @@ private class EducationServiceImpl(
                 for (index in segments.indices) {
                     val mappedIndex = index * 3
                     // 节次，通过数字正则提取
-                    val sections = numberRegex
-                        .findAll(textNodes[mappedIndex + 1].text())
-                        .map { it.value.toInt() }
-                        .toSet()
+                    val sections = textNodes[mappedIndex + 1].text()
+                        .parseAsSections()
 
                     // 跳过连上课程的后两节，[01-02-03-04] 节会有重复的两节
                     if (sections.count { it < firstSection } == 2) continue
@@ -375,7 +462,8 @@ private class EducationServiceImpl(
 
         val doc = Ksoup.parse(text)
         // #kbtable > tbody
-        val tbody = doc.getElementById("kbtable")!!.firstElementChild()!!
+        val tbody = doc.getElementById("kbtable")!!
+            .firstElementChild()!!
         // #kbtable > tbody > tr
         val trs = tbody.children()
 
@@ -430,7 +518,9 @@ private class EducationServiceImpl(
         )
     }
 
-    override suspend fun getExams() = withContext(Dispatchers.Default) {
+    override suspend fun getExams() = withContext(
+        Dispatchers.Default,
+    ) {
         val text = httpClient.get("/jsxsd/xsks/xsksap_list")
             .bodyAsText()
 
@@ -453,8 +543,7 @@ private class EducationServiceImpl(
             val startTime = LocalDateTime.parseIsoVariantWithoutSecond(time[0])
             val endTime = LocalDateTime.parseIsoVariantWithoutSecond(time[1])
             // 校区
-            val campus = if (tds[index + 4].text() == "广州校区")
-                Campus.Canton else Campus.Foshan
+            val campus = Campus.getByName(tds[index + 4].text())
 
             exams.add(
                 Exam(
@@ -625,7 +714,7 @@ private class EducationServiceImpl(
 
         return@withContext Teachers(
             pageCount = form.getPageCount(),
-            teachers = teachers
+            teachers = teachers,
         )
     }
 
@@ -960,12 +1049,9 @@ private class EducationServiceImpl(
         val tds = trs[1].children()
 
         // javascript:PrintDoc('[reportUrl]')
-        val href = tds[8].selectFirst(
+        val reportUrl = tds[8].selectFirst(
             Evaluator.Tag("a"),
-        )!!.attr("href")
-        val reportUrl = Regex("\\('([^']*)'\\)")
-            .find(href)!!
-            .groupValues[1]
+        )!!.attr("href").getUrlFromInsetJavaScript()
 
         return@withContext GraduationAudit(
             userId = user!!.id,
@@ -1004,7 +1090,7 @@ private class EducationServiceImpl(
         val text = httpClient.submitForm(
             "/jsxsd/kscj/mtsq_list",
             parameters {
-                append("xnxqid", "${semester}")
+                append("xnxqid", "$semester")
             }
         ).bodyAsText()
 
@@ -1046,4 +1132,392 @@ private class EducationServiceImpl(
             exemptions = exemptions,
         )
     }
+
+    override suspend fun getCourseSystem(
+        token: String?,
+    ) = withContext(Dispatchers.Default) {
+        token?.let {
+            val text = httpClient.get("/jsxsd/xsxk/xsxk_index") {
+                parameter("jx0502zbid", it)
+            }.bodyAsText()
+
+            val body = Ksoup.parse(text).body()
+
+            check(body.childrenSize() != 0) { body.text().trim() }
+            return@withContext CourseSystem(it)
+        }
+
+        val text = httpClient.get("/jsxsd/xsxk/xklc_list")
+            .bodyAsText()
+
+        val doc = Ksoup.parse(text)
+
+        // #tbKxkc > tbody
+        val tbody = doc.getElementById("tbKxkc")
+            ?.firstElementChild()!!
+
+        check(tbody.childrenSize() == 2)
+        // #tbKxkc > tbody > tr:nth-child(2)
+        val lastTr = tbody.lastElementChild()!!
+        // #tbKxkc > tbody > tr:nth-child(2) > td
+        val tds = lastTr.children()
+
+        // #tbKxkc > tbody > tr:nth-child(2) >
+        // td:nth-child(7) > a:nth-child(1)
+        // “进入选课”按钮
+        val urlString = tds[6].firstElementChild()!!
+            .attr("href")
+        val response = httpClient.get(urlString)
+        val body = Ksoup.parse(response.bodyAsText()).body()
+
+        check(body.childrenSize() != 0) { body.text().trim() }
+
+        val startTime = tds[2].text().let {
+            LocalDateTime.parseIsoVariantWithoutSecond(it)
+        }
+        val endTime = tds[3].text().let {
+            LocalDateTime.parseIsoVariantWithoutSecond(it)
+        }
+
+        return@withContext CourseSystem(
+            token = parseQueryString(
+                response.request.url.encodedQuery,
+            )["jx0502zbid"]!!,
+            name = tds[1].text(),
+            startTime = startTime,
+            endTime = endTime,
+        )
+    }
+
+    override suspend fun getCourses(
+        category: SelectableCourse.Category.Special,
+        page: Int,
+        size: Int,
+    ) = getCourses(category, page, size) {}
+
+    override suspend fun getCourses(
+        category: SelectableCourse.Category.Common,
+        parameters: SelectableCourse.Parameters,
+        page: Int,
+        size: Int,
+    ) = getCourses(category, page, size) {
+        with(parameters) {
+            parameter("kcxx", name.encodeURLParameter())
+            parameter("skls", teacher.encodeURLParameter())
+            parameter("skxq", dayOfWeek?.isoDayNumber ?: "")
+            parameter("skjc", sectionPair?.let { "$it-" } ?: "")
+            parameter("sfym", filterFull)
+            parameter("sfct", filterConflict)
+            if (category is SelectableCourse.Category.Common.General) {
+                parameter("xq", campus?.id ?: "")
+            }
+        }
+    }
+
+    private suspend fun getCourses(
+        category: SelectableCourse.Category,
+        page: Int,
+        size: Int,
+        block: HttpRequestBuilder.() -> Unit = {},
+    ) = withContext(Dispatchers.Default) {
+        return@withContext httpClient.submitForm(
+            "/jsxsd/xsxkkc/xsxk${category.routeSegment}xk",
+            parameters {
+                append("iDisplayStart", "${(page - 1) * size}")
+                append("iDisplayLength", "$size")
+            },
+            block = block,
+        ).run {
+            Json.decodeFromString<CoursesBody>(bodyAsText())
+        }.list.map { it.asSelectableCourse(category) }
+    }
+
+    /**
+     * 课程响应数据。
+     *
+     * @property list 课程列表
+     */
+    @Serializable
+    data class CoursesBody(
+        @SerialName("aaData") val list: List<CourseData>,
+    )
+
+    /**
+     * 课程响应数据。
+     *
+     * @property id 课程唯一标识
+     * @property courseId 课程编号
+     * @property name 课程名称
+     * @property credits 学分
+     * @property teacher 教师
+     * @property campusId 校区 id
+     * @property time 上课时间。格式为“周次 星期 节次”
+     * @property classroom 教室
+     * @property note 备注
+     * @property conflict 选课冲突情况
+     * @property category 课程类别
+     * @property isSelectable 是否开放选课。0为不开放，1为开放
+     * @property isSelected 是否已选。0为未选，1为已选
+     * @property department 开课单位
+     * @property assessment 考核方式
+     * @property arrangements 上课安排
+     * @property total 课程总量
+     * @property remain 课程剩余量
+     */
+    @Serializable
+    data class CourseData(
+        @SerialName("jx0404id") val id: String,
+        @SerialName("kch") val courseId: String,
+        @SerialName("kcmc") val name: String,
+        @SerialName("xf") val credits: Double,
+        @SerialName("skls") val teacher: String,
+        @SerialName("xqid") val campusId: Int,
+        @SerialName("sksj") val time: String,
+        @SerialName("skdd") val classroom: String,
+        @SerialName("bj") val note: String?,
+        @SerialName("ctsm") val conflict: String? = null,
+        // 该项暂时不需要
+        // @SerialName("szkcflmc") val category: String?,
+        @SerialName("sfkfxk") val isSelectable: Int,
+        @SerialName("sfYx") val isSelected: Int,
+        @SerialName("dwmc") val department: String,
+        @SerialName("ksfs") val assessment: String,
+        @SerialName("kkapList") val arrangements: List<ArrangementData>? = null,
+        @SerialName("xxrs") val total: Int,
+        @SerialName("syrs") val remain: Int,
+    ) {
+        /**
+         * 转化为 [SelectableCourse]。
+         */
+        fun asSelectableCourse(category: SelectableCourse.Category) = SelectableCourse(
+            id = id,
+            courseId = courseId,
+            name = name,
+            credits = credits,
+            teacher = teacher,
+            campus = Campus.getById(campusId),
+            time = time.takeIf { it.isNotEmptyHtmlText() },
+            classroom = classroom.takeIf { it.isNotEmptyHtmlText() },
+            note = note.takeIf { it != "拟开课时间:" },
+            conflict = conflict.takeIf { it?.isNotEmpty() == true },
+            category = category,
+            isSelectable = isSelectable == 1,
+            isSelected = isSelected == 1,
+            department = department,
+            assessment = assessment,
+            arrangements = arrangements?.map { it.asArrangement() },
+            total = total,
+            remain = remain,
+        )
+
+        /**
+         * 判断字符串是否不为空 HTML 字符串。
+         */
+        private fun String.isNotEmptyHtmlText() =
+            this != "&nbsp;" || this.isNotEmpty()
+    }
+
+    /**
+     * 上课安排响应数据。
+     *
+     * @property classroom 教室
+     * @property weeks 周次
+     * @property isoDayNumber 星期数字
+     * @property sections 节次
+     */
+    @Serializable
+    data class ArrangementData(
+        @SerialName("jsmc") val classroom: String,
+        @SerialName("kkzc") val weeks: String,
+        @SerialName("xq") val isoDayNumber: Int,
+        @SerialName("skjcmc") val sections: String,
+    ) {
+        /**
+         * 转化为 [SelectableCourse.Arrangement]
+         */
+        fun asArrangement() = SelectableCourse.Arrangement(
+            classroom = classroom,
+            weeks = weeks,
+            dayOfWeek = DayOfWeek(isoDayNumber),
+            sections = sections.parseAsSections(),
+        )
+    }
+
+    override suspend fun selectCourse(
+        id: String,
+        category: SelectableCourse.Category,
+        priority: SelectableCourse.Priority?,
+    ) = withContext(Dispatchers.Default) {
+        val body = httpClient.get(
+            "/jsxsd/xsxkkc/${category.routeSegment.lowercase()}xkOper",
+        ) {
+            parameter("jx0404id", id)
+            // 志愿，1 第一志愿，2 第二志愿，3 第三志愿
+            parameter("xkzy", priority?.value ?: "")
+            parameter("trjf", "")
+            parameter("cxxdlx", "1")
+        }.run {
+            Json.decodeFromString<CourseOperateData>(bodyAsText())
+        }
+
+        check(body.isSuccess) { body.message }
+    }
+
+    /**
+     * 课程操作响应数据。
+     *
+     * @property isSuccess 操作是否成功
+     * @property message 消息
+     */
+    @Serializable
+    data class CourseOperateData(
+        @SerialName("success") val isSuccess: Boolean,
+        val message: String = "",
+    )
+
+    override suspend fun deleteCourse(
+        id: String,
+    ) = withContext(Dispatchers.Default) {
+        val body = httpClient.get("/jsxsd/xsxkjg/xstkOper") {
+            parameter("jx0404id", id)
+        }.run {
+            Json.decodeFromString<CourseOperateData>(bodyAsText())
+        }
+
+        check(body.isSuccess) { body.message }
+    }
+
+    override suspend fun getCoursesOverview() = withContext(
+        Dispatchers.Default,
+    ) {
+        val text = httpClient.get("/jsxsd/xsxk/xsxk_tzsm")
+            .bodyAsText()
+
+        val doc = Ksoup.parse(text)
+        val tbody = doc.selectFirst(Evaluator.Tag("tbody"))!!
+        val trs = tbody.children()
+
+        val progresses = mutableListOf<CoursesOverview.Progress>()
+
+        val tds = trs.map { it.children() }
+        val trSize = trs.first()!!.childrenSize()
+
+        // 该表格需要从左往右逐个从上往下读
+        for (index in 1..<trSize) {
+            progresses.add(
+                CoursesOverview.Progress(
+                    // 位于第一行
+                    name = tds[0][index].text(),
+                    // 位于第三行
+                    credits = tds[2][index].text(),
+                    // 位于第二行
+                    limitCredits = tds[1][index].text(),
+                )
+            )
+        }
+
+        return@withContext CoursesOverview(
+            progress = progresses,
+            note = doc.selectFirst(Evaluator.Tag("div"))!!.text(),
+        )
+    }
+
+    override suspend fun getSelectedCourses() = withContext(
+        Dispatchers.Default,
+    ) {
+        val text = httpClient.get("/jsxsd/xsxkjg/comeXkjglb")
+            .bodyAsText()
+
+        val doc = Ksoup.parse(text)
+        val tbody = doc.selectFirst(Evaluator.Tag("tbody"))!!
+        val trs = tbody.children()
+
+        val courses = mutableListOf<SelectedCourse>()
+
+        for (tr in trs) {
+            val tds = tr.children()
+
+            courses.add(
+                SelectedCourse(
+                    id = tds[8].firstElementChild()!!
+                        .attr("href")
+                        // TODO: 使用该方法并借助 Ktor Url 工具解析
+                        // .getUrlFromInsetJavaScript()
+                        .substring(21, 36),
+                    courseId = tds[0].text(),
+                    name = tds[1].text(),
+                    credits = tds[2].text().toDouble(),
+                    category = tds[3].text(),
+                    teacher = tds[4].text(),
+                    time = tds[5].text().takeIf { it.isNotEmpty() },
+                    classroom = tds[6].text().takeIf { it.isNotEmpty() },
+                )
+            )
+        }
+
+        return@withContext courses
+    }
+
+    override suspend fun getCourseLogs() = withContext(
+        Dispatchers.Default,
+    ) {
+        val text = httpClient.get("/jsxsd/xsxkjg/getTkrzList")
+            .bodyAsText()
+
+        val doc = Ksoup.parse(text)
+        val tbody = doc.selectFirst(Evaluator.Tag("tbody"))!!
+        val trs = tbody.children()
+
+        val logs = mutableListOf<CourseLog>()
+
+        for (tr in trs) {
+            val tds = tr.children()
+
+            logs.add(
+                CourseLog(
+                    courseId = tds[0].text(),
+                    courseName = tds[1].text(),
+                    credits = tds[2].text().toDouble(),
+                    property = tds[3].text(),
+                    teacher = tds[4].text(),
+                    time = tds[5].run {
+                        if (text().isBlank()) emptyList()
+                        else textNodes().map { textNode -> textNode.text() }
+                    },
+                    category = tds[6].text(),
+                    action = tds[7].text(),
+                    operateTime = tds[8].text(),
+                    operator = tds[9].text(),
+                    description = tds[10].text(),
+                )
+            )
+        }
+
+        return@withContext logs
+    }
+}
+
+/** 数字正则 */
+private val numberRegex by lazy { Regex("\\d+") }
+
+/**
+ * 将字符串解析为节次集合。
+ */
+private fun String.parseAsSections() = numberRegex
+    .findAll(this)
+    .map { it.value.toInt() }
+    .toSet()
+
+/** Html 内嵌 JavaScript 的 Url 提取正则 */
+private val insetJavaScriptUrlRegex by lazy {
+    Regex("\\('([^']*)'\\)")
+}
+
+/**
+ * 从内嵌 JavaScript 中提取 Url。
+ */
+private fun String.getUrlFromInsetJavaScript(): String {
+    return insetJavaScriptUrlRegex
+        .find(this)!!
+        .groupValues[1]
 }

@@ -1,29 +1,24 @@
 [versions]
-punica-versionCode = "4"
-punica-versionName = "2.0.1"
-
-agp = "8.10.0"
+agp = "8.10.1"
 alertKmp = "2.0.0"
-android-compileSdk = "36"
-android-minSdk = "29"
-android-targetSdk = "36"
 androidx-activityCompose = "1.12.0-alpha02"
-androidx-lifecycle = "2.9.0"
+androidx-lifecycle = "2.9.1"
 appdirs = "1.4.0"
 buildkonfig = "0.17.1"
 coil = "3.2.0"
+composeHotReload = "1.0.0-beta01"
 compose-icon = "1.1.1"
 compose-multiplatform = "1.9.0-alpha02"
 cryptography = "0.4.0"
 datastore = "1.2.0-alpha02"
 glance = "1.2.0-alpha01"
 htmlconverter = "1.0.4"
-kotlin = "2.2.0-RC2"
+kotlin = "2.2.0"
 kotlinx-coroutines = "1.10.2"
 kotlinx-datetime = "0.6.2"
 kotlinx-serialization = "1.8.1"
 ksoup = "0.2.4"
-ktor = "3.1.3"
+ktor = "3.2.0"
 markdown-renderer = "0.35.0"
 materialkolor = "2.1.1"
 navigation = "2.9.0-beta02"
@@ -75,7 +70,8 @@ tess4j = { module = "net.sourceforge.tess4j:tess4j", version.ref = "tess4j" }
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildkonfig" }
-composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
+composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "composeHotReload" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

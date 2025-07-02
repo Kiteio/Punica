@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.buildkonfig)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.composeHotReload)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinSerialization)
@@ -95,16 +96,18 @@ kotlin {
     }
 }
 
+private val punicaVersion = "2.0.1"
+
 android {
     namespace = "org.kiteio.punica"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "org.kiteio.punica"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = libs.versions.punica.versionCode.get().toInt()
-        versionName = libs.versions.punica.versionName.get()
+        minSdk = 30
+        targetSdk = 36
+        versionCode = 4
+        versionName = punicaVersion
     }
     packaging.resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
     buildTypes {
@@ -147,7 +150,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "Punica"
-            packageVersion = libs.versions.punica.versionName.get()
+            packageVersion = punicaVersion
             outputBaseDir = project.file("release")
             modules("jdk.unsupported")
             windows.iconFile = project.file("icons/windows.ico")
@@ -159,14 +162,13 @@ compose.desktop {
     }
 }
 
-
 buildkonfig {
     packageName = "org.kiteio.punica"
     objectName = "Build"
 
     defaultConfigs {
         buildConfigField(FieldSpec.Type.STRING, "appName", "Punica")
-        buildConfigField(FieldSpec.Type.STRING, "versionName", libs.versions.punica.versionName.get())
+        buildConfigField(FieldSpec.Type.STRING, "versionName", punicaVersion)
         buildConfigField(FieldSpec.Type.STRING, "organization", "Kiteio")
         buildConfigField(FieldSpec.Type.STRING, "punicaGitHub", "https://github.com/Kiteio/Punica")
         buildConfigField(FieldSpec.Type.STRING, "officialWebsite", "https://kiteio.top")

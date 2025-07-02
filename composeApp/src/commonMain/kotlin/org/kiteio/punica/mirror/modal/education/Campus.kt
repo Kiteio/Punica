@@ -26,6 +26,22 @@ sealed class Campus(val id: Int) {
         override val nameRes = Res.string.campus_foshan
         override val schedule get() = foshanSchedule
     }
+
+    companion object {
+        /**
+         * 通过 [id] 获取校区。
+         */
+        fun getById(id: Int) = if (id == 1) Canton else Foshan
+
+        /**
+         * 通过名字获取校区。
+         */
+        fun getByName(name: String) = when(name) {
+            "广州校区" -> Canton
+            "佛山校区" -> Foshan
+            else -> error("Unknown campus: $name.")
+        }
+    }
 }
 
 /** 广州校区时间表 */

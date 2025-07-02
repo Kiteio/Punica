@@ -196,4 +196,12 @@ class EducationServiceTest {
             )
         )
     }
+
+    /**
+     * 获取选课系统测试。
+     */
+    @Test
+    fun shouldGetCourseSystem(): Unit = runBlocking {
+        println(service.getCourseSystem(null))
+    }
 }

@@ -1,9 +1,10 @@
 package org.kiteio.punica.client.course
 
 import com.fleeksoft.ksoup.Ksoup
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
+import io.ktor.client.request.parameter
+import io.ktor.client.statement.bodyAsText
+import io.ktor.client.statement.request
+import io.ktor.http.parseQueryString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.getString
@@ -50,7 +51,7 @@ suspend fun AcademicSystem.CourseSystem(courseSystemId: String? = null): CourseS
         }
 
         // 从选课中心进入选课系统
-        val text = get("jsxsd/xsxk/xklc_list?a=1&b=2").bodyAsText()
+        val text = get("jsxsd/xsxk/xklc_list").bodyAsText()
 
         val doc = Ksoup.parse(text)
         val tds = doc.getElementsByTag("td")

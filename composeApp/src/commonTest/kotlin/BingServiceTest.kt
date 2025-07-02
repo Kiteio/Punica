@@ -5,6 +5,9 @@ import kotlin.test.Test
 class BingServiceTest {
     private val service = BingService()
 
+    /**
+     * 获取壁纸测试。
+     */
     @Test
     fun shouldGetWallpaper(): Unit = runBlocking {
         println(service.getWallpaper())

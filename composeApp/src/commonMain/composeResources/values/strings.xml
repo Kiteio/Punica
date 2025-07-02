@@ -61,11 +61,11 @@
 
     <!-- CourseSystemPage.kt -->
     <string name="category_basic">必修课</string>
-    <string name="category_optional">选修课</string>
+    <string name="category_elective">选修课</string>
     <string name="category_general">通识课</string>
-    <string name="category_professional">专业内计划</string>
+    <string name="category_major">专业内计划</string>
     <string name="category_cross_grade">跨年级</string>
-    <string name="category_interprofessional">跨专业</string>
+    <string name="category_cross_major">跨专业</string>
     <string name="select_course">选课</string>
     <string name="select_course_successful">选课成功</string>
     <string name="withdraw_course">退课</string>
