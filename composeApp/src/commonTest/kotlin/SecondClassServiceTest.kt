@@ -1,23 +1,15 @@
 import kotlinx.coroutines.runBlocking
-import org.kiteio.punica.mirror.modal.User
 import org.kiteio.punica.mirror.modal.secondclass.BasicActivity
 import org.kiteio.punica.mirror.service.SecondClassService
-import util.readProperties
+import util.readUser
 import kotlin.test.Test
 
 class SecondClassServiceTest {
     private val service = SecondClassService()
-    private val user = run {
-        val properties = readProperties()
-        User(
-            id = properties["user.id"]!!,
-            password = properties["user.password"]!!,
-            secondClassPwd = "",
-        )
-    }
+    private val user = readUser()
 
     init {
-        runBlocking { service.login(user) }
+        runBlocking { service.login(user.id, user.secondClassPwd) }
     }
 
     /**

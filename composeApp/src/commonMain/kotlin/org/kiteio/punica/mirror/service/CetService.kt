@@ -10,6 +10,9 @@ import kotlinx.coroutines.withContext
 import org.kiteio.punica.mirror.modal.cet.CetExams
 import org.kiteio.punica.mirror.platform.platformHttpClient
 
+/**
+ * 四六级服务。
+ */
 fun CetService(): CetService {
     val httpClient = platformHttpClient {
         defaultRequest {
@@ -20,6 +23,9 @@ fun CetService(): CetService {
     return CetServiceImpl(httpClient)
 }
 
+/**
+ * 四六级服务。
+ */
 interface CetService {
     suspend fun getExam(): CetExams
 }

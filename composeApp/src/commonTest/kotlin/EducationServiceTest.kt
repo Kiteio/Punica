@@ -1,26 +1,18 @@
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
-import org.kiteio.punica.mirror.modal.User
 import org.kiteio.punica.mirror.modal.education.Course
 import org.kiteio.punica.mirror.modal.education.Semester
 import org.kiteio.punica.mirror.modal.education.containsWeek
 import org.kiteio.punica.mirror.platform.readText
 import org.kiteio.punica.mirror.service.EducationService
-import util.readProperties
+import util.readUser
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class EducationServiceTest {
     private val service = EducationService()
-    private val user = run {
-        val properties = readProperties()
-        User(
-            id = properties["user.id"]!!,
-            password = properties["user.password"]!!,
-            secondClassPwd = "",
-        )
-    }
+    private val user = readUser()
 
     init {
         login()
@@ -33,7 +25,7 @@ class EducationServiceTest {
         val dataPath = "src/commonTest/resources/tessdata/"
         try {
             val captcha = service.getCaptcha().readText(dataPath)
-            service.login(user, captcha)
+            service.login(user.id, user.password, captcha)
         } catch (e: Exception) {
             // 验证码出错重试
             if (e.message == "验证码错误!!") login()

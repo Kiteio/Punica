@@ -30,7 +30,6 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.isoDayNumber
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.kiteio.punica.mirror.modal.User
 import org.kiteio.punica.mirror.modal.education.Alert
 import org.kiteio.punica.mirror.modal.education.Alerts
 import org.kiteio.punica.mirror.modal.education.BasicTeacher
@@ -93,10 +92,11 @@ interface EducationService {
     /**
      * 登录。
      *
-     * @param user 用户
+     * @param userId 学号
+     * @param password 门户密码
      * @param captcha 验证码
      */
-    suspend fun login(user: User, captcha: String)
+    suspend fun login(userId: String, password: String, captcha: String)
 
     /**
      * 登出。
@@ -271,7 +271,7 @@ interface EducationService {
 private class EducationServiceImpl(
     private val httpClient: HttpClient,
 ) : EducationService {
-    private var user: User? = null
+    private var user: EducationUser? = null
 
     init {
         httpClient.plugin(HttpSend).intercept {
@@ -287,20 +287,20 @@ private class EducationServiceImpl(
         .get("/jsxsd/verifycode.servlet")
         .readRawBytes()
 
-    override suspend fun login(user: User, captcha: String) {
-        this.user = user
+    override suspend fun login(userId: String, password: String, captcha: String) {
+        user = EducationUser(userId, password)
         val text = httpClient.submitForm(
             "/jsxsd/xk/LoginToXkLdap",
             parameters {
-                append("USERNAME", user.id)
-                append("PASSWORD", user.password)
+                append("USERNAME", userId)
+                append("PASSWORD", password)
                 append("RANDOMCODE", captcha)
             }
         ).bodyAsText()
 
         // 返回空字符串则登录成功
         check(text.isEmpty()) {
-            this.user = null
+            user = null
             // 登录失败，获取登录页的 font 错误信息抛出异常；
             // 若错误信息为空，则获取页面 title 抛出
             withContext(Dispatchers.Default) {
@@ -313,6 +313,14 @@ private class EducationServiceImpl(
             }
         }
     }
+
+    /**
+     * 教务系统用户。
+     *
+     * @property id 学号
+     * @property password 门户密码
+     */
+    private data class EducationUser(val id: String, val password: String)
 
     override suspend fun logout() {
         httpClient.get("/jsxsd/xk/LoginToXk") {

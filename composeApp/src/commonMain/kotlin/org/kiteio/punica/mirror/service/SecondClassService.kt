@@ -17,7 +17,6 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.kiteio.punica.mirror.modal.User
 import org.kiteio.punica.mirror.modal.education.Semester
 import org.kiteio.punica.mirror.modal.secondclass.Activity
 import org.kiteio.punica.mirror.modal.secondclass.BasicActivity
@@ -54,9 +53,10 @@ interface SecondClassService {
     /**
      * 登录。
      *
-     * @param user 用户
+     * @param userId 学号
+     * @param password 第二课堂密码
      */
-    suspend fun login(user: User)
+    suspend fun login(userId: String, password: String)
 
     /**
      * 成绩单。
@@ -112,14 +112,14 @@ private class SecondClassServiceImpl(
         }
     }
 
-    override suspend fun login(user: User) {
-        this.user = SecondClassUser(user.id)
+    override suspend fun login(userId: String, password: String) {
+        user = SecondClassUser(userId)
 
         val params = Json.encodeToString(
             mapOf(
                 "school" to "10018",
-                "account" to user.id,
-                "password" to user.secondClassPwd.ifEmpty { user.id },
+                "account" to userId,
+                "password" to password.ifEmpty { userId },
             )
         )
         val body = httpClient.submitForm(
@@ -129,7 +129,7 @@ private class SecondClassServiceImpl(
             }
         ).body<Response<LoginData>>()
 
-        this.user = this.user?.copy(systemId = body.data.id)
+        user = user?.copy(systemId = body.data.id)
     }
 
     /**

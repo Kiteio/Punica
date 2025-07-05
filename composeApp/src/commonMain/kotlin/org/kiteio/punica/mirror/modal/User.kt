@@ -12,3 +12,14 @@ data class User(
     val password: String,
     val secondClassPwd: String,
 )
+
+/**
+ * TOTP 用户。
+ *
+ * @property name 名称
+ * @property secret 密钥
+ */
+data class TotpUser(
+    val name: String,
+    val secret: String,
+)
