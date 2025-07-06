@@ -1,11 +1,9 @@
 package org.kiteio.punica
 
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.window.ComposeUIViewController
+import org.kiteio.punica.mirror.App
+import org.kiteio.punica.mirror.platform.Platform
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 fun mainViewController() = ComposeUIViewController {
-    App(windowSizeClass = WindowSizeClass.calculateFromSize(DpSize.Unspecified))
+    App(Platform.iOS)
 }
