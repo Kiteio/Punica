@@ -1,5 +1,6 @@
 [versions]
 agp = "8.10.1"
+adaptive = "1.2.0-alpha03"
 alertKmp = "2.0.0"
 androidx-activityCompose = "1.12.0-alpha02"
 androidx-lifecycle = "2.9.1"
@@ -8,7 +9,7 @@ buildkonfig = "0.17.1"
 coil = "3.2.0"
 composeHotReload = "1.0.0-beta01"
 compose-icon = "1.1.1"
-compose-multiplatform = "1.9.0-alpha02"
+compose-multiplatform = "1.9.0-alpha03"
 cryptography = "0.4.0"
 datastore = "1.2.0-alpha02"
 glance = "1.2.0-alpha01"
@@ -21,7 +22,7 @@ ksoup = "0.2.4"
 ktor = "3.2.0"
 markdown-renderer = "0.35.0"
 materialkolor = "2.1.1"
-navigation = "2.9.0-beta02"
+navigation = "2.9.0-beta03"
 otp = "2.4.1"
 paging = "3.3.0-alpha02-0.5.1"
 startup-runtine = "1.2.0"
@@ -30,6 +31,9 @@ tess4Android = "4.8.0"
 tess4j = "5.16.0"
 
 [libraries]
+adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "adaptive" }
+adaptive-layout = { module = "org.jetbrains.compose.material3.adaptive:adaptive-layout", version.ref = "adaptive" }
+adaptive-navigation = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation", version.ref = "adaptive" }
 alertKmp = { module = "io.github.khubaibkhan4:alert-kmp", version.ref = "alertKmp" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
