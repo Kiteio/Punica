@@ -9,22 +9,36 @@ import org.kiteio.punica.mirror.platform.Platform
 import org.kiteio.punica.mirror.ui.PunicaExpressiveTheme
 import org.kiteio.punica.mirror.ui.pages.NavigationRoute
 import org.kiteio.punica.mirror.ui.pages.navigationDestination
+import org.koin.compose.KoinMultiplatformApplication
+import org.koin.core.annotation.KoinExperimentalAPI
+import org.koin.dsl.KoinConfiguration
+import org.koin.dsl.module
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun App(platform: Platform) {
     val isDarkTheme = false
     val navController = rememberNavController()
 
-    PunicaExpressiveTheme(
-        isDarkTheme = isDarkTheme,
-        modifyColorScheme = if (!isDarkTheme)
-            platform::whiteBackgroundOnDesktop else null,
+    KoinMultiplatformApplication(
+        config = KoinConfiguration {
+            modules(
+                module { single { platform } },
+                module { single { navController } },
+            )
+        },
     ) {
-        NavHost(
-            navController = navController,
-            startDestination = NavigationRoute,
+        PunicaExpressiveTheme(
+            isDarkTheme = isDarkTheme,
+            modifyColorScheme = if (!isDarkTheme)
+                platform::whiteBackgroundOnDesktop else null,
         ) {
-            navigationDestination()
+            NavHost(
+                navController = navController,
+                startDestination = NavigationRoute,
+            ) {
+                navigationDestination()
+            }
         }
     }
 }

@@ -59,14 +59,14 @@ fun NavGraphBuilder.navigationDestination() {
 
 @Preview
 @Composable
-fun PreviewNavigationPage() {
+private fun PreviewNavigationPage() {
     PunicaExpressiveTheme {
         NavigationPage()
     }
 }
 
 @Composable
-fun NavigationPage() {
+private fun NavigationPage() {
     val navController = rememberNavController()
     val navigationSuiteType = rememberNavigationSuiteType()
 

@@ -14,6 +14,7 @@ cryptography = "0.4.0"
 datastore = "1.2.0-alpha02"
 glance = "1.2.0-alpha01"
 htmlconverter = "1.0.4"
+koin-bom = "4.1.0"
 kotlin = "2.2.0"
 kotlinx-coroutines = "1.10.2"
 kotlinx-datetime = "0.6.2"
@@ -51,6 +52,9 @@ datastore = { module = "androidx.datastore:datastore-preferences-core", version.
 glance-appwidget = { module = "androidx.glance:glance-appwidget", version.ref = "glance" }
 glance-material3 = { module = "androidx.glance:glance-material3", version.ref = "glance" }
 htmlconverter = { module = "be.digitalia.compose.htmlconverter:htmlconverter", version.ref = "htmlconverter" }
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
+koin-compose = { module = "io.insert-koin:koin-compose" }
+koin-core = { module = "io.insert-koin:koin-core" }
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
