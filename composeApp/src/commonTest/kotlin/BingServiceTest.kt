@@ -9,7 +9,7 @@ class BingServiceTest {
      * 获取壁纸测试。
      */
     @Test
-    fun shouldGetWallpaper(): Unit = runBlocking {
-        println(service.getWallpaper())
+    fun shouldGetWallpapers(): Unit = runBlocking {
+        println(service.getWallpapers())
     }
 }

@@ -83,7 +83,7 @@ import punica.composeapp.generated.resources.not_logged_in
 import punica.composeapp.generated.resources.official_website
 import punica.composeapp.generated.resources.official_website_kiteio
 import punica.composeapp.generated.resources.open_source_repository
-import punica.composeapp.generated.resources.poem
+import punica.composeapp.generated.resources.extract
 import punica.composeapp.generated.resources.punica
 import punica.composeapp.generated.resources.settings
 import punica.composeapp.generated.resources.theme_mode
@@ -186,7 +186,7 @@ private fun Content() {
 
                             // 诗句
                             Text(
-                                stringResource(Res.string.poem),
+                                stringResource(Res.string.extract),
                                 style = MaterialTheme.typography.labelSmall,
                             )
                         }
@@ -383,7 +383,7 @@ private fun PunicaGitHub() {
     val uriHandler = LocalUriHandler.current
 
     Setting(
-        onClick = { uriHandler.openUri(Build.punicaGitHub) },
+        onClick = { uriHandler.openUri("https://github.com/${Build.organization}/${Build.appName}") },
         leadingIcon = {
             Icon(
                 SimpleIcons.Github,

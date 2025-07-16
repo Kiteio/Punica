@@ -16,6 +16,18 @@
     <strong><big>更新日志</big></strong>
 </summary>
 
+##### 7月16日
+
+- 新增设置页面镜像（重构）
+
+<p>
+
+<img width="60%" src="readme/2025.07.16-1.png" alt="screenshot" />
+
+<img width="21%" src="readme/2025.07.16-2.png" alt="screenshot" />
+
+</p>
+
 ##### 7月12日
 
 - 新增 Koin 依赖注入
@@ -75,13 +87,15 @@
 ##### 6月11日
 
 - 新增毕业审查功能（Compose Multiplatform ~~Beta~~ Alpha 版本有 Bug，桌面端无法运行）
+
 </details>
 
 ## 简介
 
 小石榴是一款**三方**的教务系统软件，由广东财经大学 21 级学生开发。如果你已经厌倦了那难用的网页端教务系统和庞大的套壳软件，小石榴值得一试。
 
-小石榴 UI 基于 [Compose Multiplatform](https://www.jetbrains.com/zh-cn/compose-multiplatform/) 设计，提供查课表、查成绩、选课等功能。
+小石榴 UI 基于 [Compose Multiplatform](https://www.jetbrains.com/zh-cn/compose-multiplatform/)
+设计，提供查课表、查成绩、选课等功能。
 
 小石榴完全开源，个人数据全部保存于本地，更加便捷可靠。
 

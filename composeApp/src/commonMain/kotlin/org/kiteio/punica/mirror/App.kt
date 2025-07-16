@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import org.kiteio.punica.mirror.platform.Platform
 import org.kiteio.punica.mirror.ui.PunicaExpressiveTheme
 import org.kiteio.punica.mirror.ui.pages.NavigationRoute
+import org.kiteio.punica.mirror.ui.pages.navigation.settingModule
 import org.kiteio.punica.mirror.ui.pages.navigationDestination
 import org.koin.compose.KoinMultiplatformApplication
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -25,6 +26,7 @@ fun App(platform: Platform) {
             modules(
                 module { single { platform } },
                 module { single { navController } },
+                settingModule,
             )
         },
     ) {

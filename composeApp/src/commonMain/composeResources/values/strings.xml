@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">小石榴</string>
-    <string name="poem">花自飘零水自流。一种相思，两处闲愁</string>
+    <string name="extract">花自飘零水自流。一种相思，两处闲愁</string>
 
     <string name="welcome">欢迎(｡•ㅅ•｡)♡</string>
 

@@ -14,8 +14,12 @@ plugins {
 }
 
 kotlin {
-    // Kotlin 2.2.0 上下文参数支持
-    compilerOptions.freeCompilerArgs.add("-Xcontext-parameters")
+    compilerOptions.freeCompilerArgs.addAll(
+        // 上下文参数
+        "-Xcontext-parameters",
+        // 平台类
+        "-Xexpect-actual-classes",
+    )
 
     androidTarget {
         compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
@@ -36,7 +40,6 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.appdirs)
             implementation(libs.cryptography.provider.jdk)
             implementation(libs.glance.appwidget)
             implementation(libs.glance.material3)
@@ -67,9 +70,11 @@ kotlin {
             implementation(libs.composeIcon.tabler)
             implementation(libs.cryptography.core)
             implementation(libs.datastore)
+            implementation(libs.haze.materials)
             implementation(libs.htmlconverter)
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
             implementation(libs.koin.core)
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.serialization.json)
@@ -176,8 +181,12 @@ buildkonfig {
     defaultConfigs {
         buildConfigField(FieldSpec.Type.STRING, "appName", "Punica")
         buildConfigField(FieldSpec.Type.STRING, "versionName", punicaVersion)
+        buildConfigField(
+            FieldSpec.Type.STRING,
+            "composeVersion",
+            libs.versions.compose.multiplatform.get()
+        )
         buildConfigField(FieldSpec.Type.STRING, "organization", "Kiteio")
-        buildConfigField(FieldSpec.Type.STRING, "punicaGitHub", "https://github.com/Kiteio/Punica")
         buildConfigField(FieldSpec.Type.STRING, "officialWebsite", "https://kiteio.top")
     }
 }
