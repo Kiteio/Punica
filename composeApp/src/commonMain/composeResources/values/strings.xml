@@ -32,6 +32,11 @@
 
     <string name="connect_timeout">连接超时</string>
 
+    <!-- SettingPage -->
+    <string name="wallpaper">壁纸</string>
+    <string name="avatar">头像</string>
+    <string name="not_logged_in">未登录</string>
+
     <!-- VersionsPage.kt -->
     <string name="current_version">当前版本</string>
     <string name="old_edition">不再维护的旧版本</string>
@@ -189,10 +194,8 @@
     <string name="academic_progress">学业进度</string>
 
     <!-- SettingsPage.kt -->
-    <string name="wallpaper">壁纸</string>
     <string name="academic_system">教务系统</string>
     <string name="otp" translatable="false">OTP</string>
-    <string name="not_logged_in">未登录</string>
     <string name="logging_in">登录中</string>
     <string name="current_week">当前周次</string>
     <string name="campus">校区</string>
@@ -225,8 +228,8 @@
     <string name="login_successful">登录成功</string>
     <string name="delete">删除</string>
     <string name="delete_successful">删除成功</string>
-    <string name="visible">可见</string>
-    <string name="invisible">不可见</string>
+    <string name="visibility">可见</string>
+    <string name="visibility_off">不可见</string>
 
     <!-- HomePage.kt -->
     <string name="timetable">课表</string>

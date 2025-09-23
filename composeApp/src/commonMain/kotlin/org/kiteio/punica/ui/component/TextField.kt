@@ -29,8 +29,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
 import punica.composeapp.generated.resources.Res
-import punica.composeapp.generated.resources.invisible
-import punica.composeapp.generated.resources.visible
+import punica.composeapp.generated.resources.visibility
+import punica.composeapp.generated.resources.visibility_off
 
 @Composable
 fun ElevatedPasswordTextField(
@@ -59,8 +59,8 @@ fun ElevatedPasswordTextField(
                     if (visible) Icons.Outlined.Visibility else
                         Icons.Outlined.VisibilityOff,
                     stringResource(
-                        if (visible) Res.string.visible else
-                            Res.string.invisible,
+                        if (visible) Res.string.visibility else
+                            Res.string.visibility_off,
                     ),
                 )
             }

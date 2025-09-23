@@ -1,10 +1,12 @@
+package service
+
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import org.kiteio.punica.mirror.modal.education.Course
 import org.kiteio.punica.mirror.modal.education.Semester
 import org.kiteio.punica.mirror.modal.education.containsWeek
-import org.kiteio.punica.mirror.platform.readText
+import org.kiteio.punica.mirror.platform.readCaptcha
 import org.kiteio.punica.mirror.service.EducationService
 import util.readUser
 import kotlin.test.Test
@@ -22,9 +24,8 @@ class EducationServiceTest {
      * 登录。
      */
     private fun login(): Unit = runBlocking {
-        val dataPath = "src/commonTest/resources/tessdata/"
         try {
-            val captcha = service.getCaptcha().readText(dataPath)
+            val captcha = service.getCaptcha().readCaptcha()
             service.login(user.id, user.password, captcha)
         } catch (e: Exception) {
             // 验证码出错重试

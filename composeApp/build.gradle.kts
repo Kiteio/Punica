@@ -68,6 +68,8 @@ kotlin {
             implementation(libs.composeIcon.css)
             implementation(libs.composeIcon.simple)
             implementation(libs.composeIcon.tabler)
+            implementation(libs.compottie)
+            implementation(libs.compottie.dot)
             implementation(libs.cryptography.core)
             implementation(libs.datastore)
             implementation(libs.haze.materials)

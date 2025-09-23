@@ -14,9 +14,7 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
-/**
- * 设置页面 Koin 模块。
- */
+/** 设置页面 Koin 模块 */
 val settingModule = module {
     singleOf(::BingService)
     singleOf(::WallpaperRepository)
@@ -46,9 +44,9 @@ class SettingViewModel(
             withContext(Dispatchers.Default) {
                 try {
                     val wallpaper = wallpaperRepository.getWallpaper()
-                    _uiState.value = SettingUiState.Success(wallpaper)
+                    _uiState.emit(SettingUiState.Success(wallpaper))
                 } catch (e: Exception) {
-                    _uiState.value = SettingUiState.Error(e)
+                    _uiState.emit(SettingUiState.Error(e))
                 }
             }
         }
@@ -56,7 +54,7 @@ class SettingViewModel(
 }
 
 /**
- * 设置页面 Intent。
+ * 设置页面意图。
  */
 sealed class SettingIntent {
     /** 加载壁纸 */
@@ -68,7 +66,7 @@ sealed class SettingIntent {
  */
 sealed class SettingUiState {
     /** 加载中 */
-    object Loading : SettingUiState()
+    data object Loading : SettingUiState()
 
     /**
      * 加载成功。
@@ -80,5 +78,5 @@ sealed class SettingUiState {
     ) : SettingUiState()
 
     /** 加载失败 */
-    data class Error(val e: Exception) : SettingUiState()
+    data class Error(val e: Throwable) : SettingUiState()
 }

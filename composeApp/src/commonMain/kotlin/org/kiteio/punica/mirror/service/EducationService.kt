@@ -7,7 +7,9 @@ import com.fleeksoft.ksoup.select.Evaluator
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpSend
 import io.ktor.client.plugins.cookies.AcceptAllCookiesStorage
+import io.ktor.client.plugins.cookies.CookiesStorage
 import io.ktor.client.plugins.cookies.HttpCookies
+import io.ktor.client.plugins.cookies.addCookie
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.plugin
 import io.ktor.client.plugins.timeout
@@ -18,6 +20,7 @@ import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
 import io.ktor.client.statement.readRawBytes
 import io.ktor.client.statement.request
+import io.ktor.http.Cookie
 import io.ktor.http.encodeURLParameter
 import io.ktor.http.parameters
 import io.ktor.http.parseQueryString
@@ -67,17 +70,17 @@ import org.kiteio.punica.mirror.util.parseIsoVariantWithoutSecond
  * 教务系统服务。
  */
 fun EducationService(): EducationService {
+    val cookiesStorage = AcceptAllCookiesStorage()
     val httpClient = HttpClient {
         defaultRequest {
             url(EducationServiceImpl.BASE_URL)
         }
-        // TODO: 改用 intercept 存取 Cookie 并保存本地
         install(HttpCookies) {
-            storage = AcceptAllCookiesStorage()
+            storage = cookiesStorage
         }
     }
 
-    return EducationServiceImpl(httpClient)
+    return EducationServiceImpl(httpClient, cookiesStorage)
 }
 
 /**
@@ -87,7 +90,7 @@ interface EducationService {
     /**
      * 登录验证码。
      */
-    suspend fun getCaptcha(): ByteArray
+    suspend fun getCaptcha(cookie: Cookie? = null): ByteArray
 
     /**
      * 登录。
@@ -270,6 +273,7 @@ interface EducationService {
 
 private class EducationServiceImpl(
     private val httpClient: HttpClient,
+    private val storage: CookiesStorage,
 ) : EducationService {
     private var user: EducationUser? = null
 
@@ -283,9 +287,13 @@ private class EducationServiceImpl(
         const val BASE_URL = "http://jwxt.gdufe.edu.cn"
     }
 
-    override suspend fun getCaptcha() = httpClient
-        .get("/jsxsd/verifycode.servlet")
-        .readRawBytes()
+    override suspend fun getCaptcha(cookie: Cookie?): ByteArray {
+        cookie?.let {
+            storage.addCookie(BASE_URL, it)
+        }
+        return httpClient.get("/jsxsd/verifycode.servlet")
+            .readRawBytes()
+    }
 
     override suspend fun login(userId: String, password: String, captcha: String) {
         user = EducationUser(userId, password)

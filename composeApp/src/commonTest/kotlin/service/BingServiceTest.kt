@@ -1,3 +1,5 @@
+package service
+
 import kotlinx.coroutines.runBlocking
 import org.kiteio.punica.mirror.service.BingService
 import kotlin.test.Test

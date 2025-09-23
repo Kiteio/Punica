@@ -1,9 +1,11 @@
+package service
+
 import kotlinx.coroutines.runBlocking
 import kotlinx.io.buffered
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
 import kotlinx.io.readByteArray
-import org.kiteio.punica.mirror.platform.readText
+import org.kiteio.punica.mirror.platform.readCaptcha
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -16,7 +18,6 @@ class OCRTest {
         val path = Path("src/commonTest/resources/captcha.png")
         val byteArray = SystemFileSystem.source(path).buffered().readByteArray()
 
-        val dataPath = "src/commonTest/resources/tessdata/"
-        assertEquals(byteArray.readText(dataPath), "zvnm")
+        assertEquals(byteArray.readCaptcha(), "zvnm")
     }
 }

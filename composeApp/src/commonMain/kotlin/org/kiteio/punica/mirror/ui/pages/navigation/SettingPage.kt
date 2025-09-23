@@ -44,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -52,7 +53,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import androidx.window.core.layout.WindowSizeClass
 import coil3.compose.AsyncImage
 import compose.icons.SimpleIcons
@@ -68,13 +71,18 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kiteio.punica.Build
+import org.kiteio.punica.mirror.ui.AppUiState
+import org.kiteio.punica.mirror.ui.AppViewModel
 import org.kiteio.punica.mirror.ui.PunicaExpressiveTheme
+import org.kiteio.punica.mirror.ui.component.animation.DotLottieAnimation
+import org.kiteio.punica.mirror.ui.pages.LoginRoute
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.app_name
+import punica.composeapp.generated.resources.avatar
 import punica.composeapp.generated.resources.extract
 import punica.composeapp.generated.resources.jetpackcompose
-import punica.composeapp.generated.resources.logo
 import punica.composeapp.generated.resources.not_logged_in
 import punica.composeapp.generated.resources.punica
 import punica.composeapp.generated.resources.wallpaper
@@ -91,7 +99,10 @@ data object SettingRoute
  */
 fun NavGraphBuilder.settingDestination() {
     composable<SettingRoute> {
+        val appViewModel = koinInject<AppViewModel>()
+        val appUiState by appViewModel.uiState.collectAsStateWithLifecycle()
         val settingViewModel = koinViewModel<SettingViewModel>()
+        val navController = koinInject<NavHostController>()
         val uiState by settingViewModel.uiState.collectAsStateWithLifecycle()
 
         LaunchedEffect(Unit) {
@@ -100,8 +111,9 @@ fun NavGraphBuilder.settingDestination() {
 
         SettingPage(
             uiState = uiState,
-            userId = stringResource(Res.string.app_name),
-            isLoggedIn = true,
+            userId = (appUiState as? AppUiState.LoggedIn)?.user?.id,
+            isLoggedIn = (appUiState as? AppUiState.LoggedIn)?.user != null,
+            navController = navController,
         )
     }
 }
@@ -114,6 +126,7 @@ private fun SettingPagePreview() {
             uiState = SettingUiState.Error(Exception()),
             userId = stringResource(Res.string.app_name),
             isLoggedIn = false,
+            navController = rememberNavController(),
         )
     }
 }
@@ -130,6 +143,7 @@ private fun SettingPage(
     uiState: SettingUiState,
     userId: String?,
     isLoggedIn: Boolean,
+    navController: NavHostController,
 ) {
     val adaptiveInfo = currentWindowAdaptiveInfo()
     val isWindowWidthSizeAtLeastDpMedium = adaptiveInfo
@@ -143,6 +157,9 @@ private fun SettingPage(
             MainPane(
                 userId = userId,
                 isLoggedIn = isLoggedIn,
+                onUserCardClick = {
+                    navController.navigate(LoginRoute)
+                },
                 wallpaperUrl = if (uiState is SettingUiState.Success)
                     uiState.wallpaperUrl else null,
                 wallpaperLoadError = uiState is SettingUiState.Error,
@@ -174,6 +191,7 @@ private fun SettingPage(
 private fun MainPane(
     userId: String?,
     isLoggedIn: Boolean,
+    onUserCardClick: () -> Unit,
     wallpaperUrl: Any?,
     wallpaperLoadError: Boolean,
     modifier: Modifier = Modifier,
@@ -204,6 +222,7 @@ private fun MainPane(
                 UserCard(
                     userId = userId,
                     isLoggedIn = isLoggedIn,
+                    onClick = onUserCardClick,
                     modifier = Modifier.padding(horizontal = 16.dp)
                         .widthIn(max = 560.dp)
                         .clip(CircleShape)
@@ -249,10 +268,11 @@ private fun MainPane(
 private fun UserCard(
     userId: String?,
     isLoggedIn: Boolean,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Surface(
-        onClick = {},
+        onClick = onClick,
         modifier = modifier,
         shape = CircleShape,
         color = MaterialTheme.colorScheme.primaryContainer.copy(.1f),
@@ -270,17 +290,11 @@ private fun UserCard(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 // 头像
-                Surface(
-                    onClick = {},
-                    shape = CircleShape,
-                    shadowElevation = 1.dp,
-                ) {
-                    Image(
-                        painterResource(Res.drawable.punica),
-                        contentDescription = stringResource(Res.string.logo),
-                        modifier = Modifier.size(56.dp).padding(8.dp),
-                    )
-                }
+                DotLottieAnimation(
+                    "files/multiple_circles.lottie",
+                    contentDescription = stringResource(Res.string.avatar),
+                    modifier = Modifier.size(64.dp).scale(1.5f),
+                )
                 Spacer(Modifier.width(8.dp))
 
                 Column {

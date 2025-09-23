@@ -7,6 +7,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.kiteio.punica.mirror.App
 import org.kiteio.punica.mirror.platform.Platform
+import org.kiteio.punica.mirror.ui.snackbarHostState
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.app_name
 import punica.composeapp.generated.resources.punica
@@ -18,6 +19,9 @@ fun main() = application {
         title = stringResource(Res.string.app_name),
         icon = painterResource(Res.drawable.punica),
     ) {
-        App(Platform.Desktop)
+        App(
+            platform = Platform.Desktop,
+            snackbarHostState = snackbarHostState,
+        )
     }
 }
