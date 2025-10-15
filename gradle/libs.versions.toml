@@ -1,82 +1,111 @@
 [versions]
-agp = "8.10.1"
-adaptive = "1.2.0-alpha03"
-alertKmp = "2.0.0"
-androidx-activityCompose = "1.12.0-alpha02"
-androidx-lifecycle = "2.9.1"
-appdirs = "1.4.0"
-buildkonfig = "0.17.1"
-coil = "3.2.0"
-composeHotReload = "1.0.0-beta01"
-compose-icon = "1.1.1"
-compose-multiplatform = "1.9.0-alpha03"
-compottie = "2.0.0-rc04"
-cryptography = "0.4.0"
-datastore = "1.2.0-alpha02"
-glance = "1.2.0-alpha01"
-haze = "1.6.7"
-htmlconverter = "1.0.4"
-koin-bom = "4.1.0"
-kotlin = "2.2.0"
+agp = "8.12.3"
+androidx-activityCompose = "1.12.0-alpha09"
+androidx-lifecycle = "2.10.0-alpha02"
+composeHotReload = "1.0.0-rc02"
+compose-multiplatform = "1.10.0-alpha02"
+kotlin = "2.3.0-Beta1"
 kotlinx-coroutines = "1.10.2"
-kotlinx-datetime = "0.6.2"
-kotlinx-serialization = "1.8.1"
-ksoup = "0.2.4"
-ktor = "3.2.0"
-markdown-renderer = "0.35.0"
-materialkolor = "2.1.1"
-navigation = "2.9.0-beta03"
+
+# Crypto
+cryptography = "0.5.0"
+# DateTime
+kotlinx-datetime = "0.7.1"
+# Device
+alertKmp = "2.0.0"
+# DI
+koin-bom = "4.1.2-Beta1"
+koin-annotation = "2.2.0"
+# Network
+ktor = "3.3.1"
+# Serializer
+kotlinx-serialization = "1.9.0"
+ksoup = "0.2.5"
+# Storage
+appdirs = "1.5.0"
+datastore = "1.2.0-alpha02"
+# Tooling
+buildkonfig = "0.17.1"
+ksp = "2.2.20-2.0.4"
+# UI
+adaptive = "1.2.0-alpha07"
+coil = "3.3.0"
+colorpicker = "1.1.2"
+compose-icon = "1.1.1"
+compottie = "2.0.1"
+glance = "1.2.0-beta01"
+haze = "1.6.10"
+htmlconverter = "1.1.0"
+markdown-renderer = "0.37.0"
+materialkolor = "3.0.1"
+navigation3 = "1.0.0-alpha02"
+paging = "3.4.0-alpha04"
+windowManager = "1.5.0-alpha02"
+# Utils
 otp = "2.4.1"
-paging = "3.3.0-alpha02-0.5.1"
-startup-runtine = "1.2.0"
 sublime-fuzzy = "2.3.4"
-tess4Android = "4.8.0"
+tess4Android = "4.9.0"
 tess4j = "5.16.0"
 
 [libraries]
-adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "adaptive" }
-adaptive-layout = { module = "org.jetbrains.compose.material3.adaptive:adaptive-layout", version.ref = "adaptive" }
-adaptive-navigation = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation", version.ref = "adaptive" }
-alertKmp = { module = "io.github.khubaibkhan4:alert-kmp", version.ref = "alertKmp" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
-appdirs = { module = "net.harawata:appdirs", version.ref = "appdirs" }
-coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
-coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
-composeIcon-css = { module = "br.com.devsrsouza.compose.icons:css-gg", version.ref = "compose-icon" }
-composeIcon-simple = { module = "br.com.devsrsouza.compose.icons:simple-icons", version.ref = "compose-icon" }
-composeIcon-tabler = { module = "br.com.devsrsouza.compose.icons:tabler-icons", version.ref = "compose-icon" }
-compottie = { module = "io.github.alexzhirkevich:compottie", version.ref = "compottie" }
-compottie-dot = { module = "io.github.alexzhirkevich:compottie-dot", version.ref = "compottie" }
+kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+
+# Crypto
 cryptography-core = { module = "dev.whyoleg.cryptography:cryptography-core", version.ref = "cryptography" }
 cryptography-provider-jdk = { module = "dev.whyoleg.cryptography:cryptography-provider-jdk", version.ref = "cryptography" }
 cryptography-provider-apple = { module = "dev.whyoleg.cryptography:cryptography-provider-apple", version.ref = "cryptography" }
-datastore = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastore" }
-glance-appwidget = { module = "androidx.glance:glance-appwidget", version.ref = "glance" }
-glance-material3 = { module = "androidx.glance:glance-material3", version.ref = "glance" }
-haze-materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = "haze" }
-htmlconverter = { module = "be.digitalia.compose.htmlconverter:htmlconverter", version.ref = "htmlconverter" }
+# DateTime
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+# Device
+alert-kmp = { module = "io.github.khubaibkhan4:alert-kmp", version.ref = "alertKmp" }
+# DI
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
+koin-annotation = { module = "io.insert-koin:koin-annotations", version.ref = "koin-annotation" }
 koin-compose = { module = "io.insert-koin:koin-compose" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel" }
+koin-compose-viewmodel-navigation = { module = "io.insert-koin:koin-compose-viewmodel-navigation" }
 koin-core = { module = "io.insert-koin:koin-core" }
-kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
-kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
-ksoup = { module = "com.fleeksoft.ksoup:ksoup", version.ref = "ksoup" }
+koin-jsr330 = { module = "io.insert-koin:koin-jsr330", version.ref = "koin-annotation" }
+koin-ksp-compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin-annotation" }
+# Network
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
-material3-windowSizeClass = { module = "org.jetbrains.compose.material3:material3-window-size-class", version.ref = "compose-multiplatform" }
-markdownRenderer-m3 = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "markdown-renderer" }
+# Serializer
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+ksoup = { module = "com.fleeksoft.ksoup:ksoup", version.ref = "ksoup" }
+# Storage
+appdirs = { module = "net.harawata:appdirs", version.ref = "appdirs" }
+datastore = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastore" }
+# UI
+adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "adaptive" }
+adaptive-layout = { module = "org.jetbrains.compose.material3.adaptive:adaptive-layout", version.ref = "adaptive" }
+adaptive-navigation = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation", version.ref = "adaptive" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
+colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "colorpicker" }
+composeIcon-css = { module = "br.com.devsrsouza.compose.icons:css-gg", version.ref = "compose-icon" }
+composeIcon-simple = { module = "br.com.devsrsouza.compose.icons:simple-icons", version.ref = "compose-icon" }
+composeIcon-tabler = { module = "br.com.devsrsouza.compose.icons:tabler-icons", version.ref = "compose-icon" }
+compottie = { module = "io.github.alexzhirkevich:compottie", version.ref = "compottie" }
+compottie-dot = { module = "io.github.alexzhirkevich:compottie-dot", version.ref = "compottie" }
+glance-appwidget = { module = "androidx.glance:glance-appwidget", version.ref = "glance" }
+glance-material3 = { module = "androidx.glance:glance-material3", version.ref = "glance" }
+haze-materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = "haze" }
+htmlconverter = { module = "be.digitalia.compose.htmlconverter:htmlconverter", version.ref = "htmlconverter" }
+markdown-renderer-m3 = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "markdown-renderer" }
 materialkolor = { module = "com.materialkolor:material-kolor", version.ref = "materialkolor" }
-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation" }
+navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
+paging-common = { module = "androidx.paging:paging-common", version.ref = "paging" }
+paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
+windowManager = { module = "org.jetbrains.androidx.window:window-core", version.ref = "windowManager" }
+# Utils
 otp = { module = "dev.turingcomplete:kotlin-onetimepassword", version.ref = "otp" }
-paging-compose = { module = "app.cash.paging:paging-compose-common", version.ref = "paging" }
-startup-runtine = { module = "androidx.startup:startup-runtime", version.ref = "startup-runtine" }
 sublime-fuzzy = { module = "com.github.android-password-store:sublime-fuzzy", version.ref = "sublime-fuzzy" }
 tess4Android = { module = "cz.adaptech.tesseract4android:tesseract4android", version.ref = "tess4Android" }
 tess4j = { module = "net.sourceforge.tess4j:tess4j", version.ref = "tess4j" }
@@ -89,3 +118,4 @@ composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "k
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

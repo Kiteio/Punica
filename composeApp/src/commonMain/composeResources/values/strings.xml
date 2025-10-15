@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">小石榴</string>
-    <string name="extract">花自飘零水自流。一种相思，两处闲愁</string>
+    <string name="extract">曾经有一份真诚的爱情摆在我的面前，但是我没有珍惜，等到了失去的时候才后悔莫及，尘世间最痛苦的事莫过于此。如果上天可以给我一个机会再来一次的话，我会跟那个女孩子说我爱她，如果非要把这份爱上加一个期限，我希望是一万年。</string>
 
     <string name="welcome">欢迎(｡•ㅅ•｡)♡</string>
 
@@ -33,8 +33,6 @@
     <string name="connect_timeout">连接超时</string>
 
     <!-- SettingPage -->
-    <string name="wallpaper">壁纸</string>
-    <string name="avatar">头像</string>
     <string name="not_logged_in">未登录</string>
 
     <!-- VersionsPage.kt -->
@@ -112,7 +110,6 @@
     <!-- SecondClasPage.kt -->
     <string name="activity">活动</string>
     <string name="log">记录</string>
-    <string name="logo">标识</string>
     <string name="online">线上</string>
     <string name="offline">线下</string>
     <string name="need_submit">需要提交作业</string>
@@ -158,7 +155,6 @@
     <string name="hours_24">24小时</string>
 
     <!-- TimetablePage.kt -->
-    <string name="week_of">第%1$d周</string>
     <string name="all">全部</string>
     <string name="reset">重置</string>
     <string name="note">备注</string>
@@ -198,17 +194,7 @@
     <string name="otp" translatable="false">OTP</string>
     <string name="logging_in">登录中</string>
     <string name="current_week">当前周次</string>
-    <string name="campus">校区</string>
-    <string name="canton_haizhu">广州 · 海珠</string>
-    <string name="foshan_sanshui">佛山 · 三水</string>
-    <string name="theme_mode">主题模式</string>
-    <string name="theme_mode_default">跟随系统</string>
-    <string name="theme_mode_light">亮色</string>
-    <string name="theme_mode_dark">暗色</string>
-    <string name="version">版本</string>
-    <string name="github" translatable="false">GitHub</string>
     <string name="open_source_repository">开源仓库</string>
-    <string name="official_website">官网</string>
     <string name="official_website_kiteio">Kiteio 官方网站</string>
 
     <string name="safety_instruction">小石榴是一款开源软件，我们十分重视您的隐私，您的数据将在本地妥善保存。首次登录需要下载 OCR 训练文件，请耐心等待</string>
@@ -231,8 +217,36 @@
     <string name="visibility">可见</string>
     <string name="visibility_off">不可见</string>
 
-    <!-- HomePage.kt -->
+
+
+    <string name="navigate_before">返回</string>
+
+    <!-- 主页 -->
     <string name="timetable">课表</string>
+    <string name="photo">相册</string>
     <string name="modules">模块</string>
+    <string name="me">我</string>
+
+    <!-- 我的页 -->
+    <string name="wallpaper">壁纸</string>
+    <string name="avatar">头像</string>
+    <string name="logo">标识</string>
+    <string name="campus">校区</string>
+    <string name="canton">广州</string>
+    <string name="foshan">佛山</string>
+    <string name="week_of">第%1$d周</string>
+    <string name="primary_color">主色调</string>
+    <string name="girl">女生</string>
+    <string name="boy">男生</string>
     <string name="settings">设置</string>
+    <string name="version">版本</string>
+    <string name="github" translatable="false">GitHub</string>
+    <string name="official_website">官网</string>
+    <string name="power_by_compose_multiplatform">Power by Compose Multiplatform</string>
+
+    <!-- 设置页 -->
+    <string name="theme_mode">主题模式</string>
+    <string name="theme_mode_auto">自动</string>
+    <string name="theme_mode_light">亮色</string>
+    <string name="theme_mode_dark">暗色</string>
 </resources>

@@ -7,7 +7,7 @@ import java.awt.Color
 import java.io.ByteArrayInputStream
 import javax.imageio.ImageIO
 
-actual suspend fun ByteArray.readText(): String = withContext(Dispatchers.Default) {
+actual suspend fun ByteArray.readText(): String = withContext(Dispatchers.IO) {
     val bufferedImage = ImageIO.read(ByteArrayInputStream(this@readText))
     val tesseract = Tesseract()
     tesseract.setDatapath(getDataPath())

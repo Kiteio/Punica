@@ -2,13 +2,7 @@ package org.kiteio.punica.mirror.modal.education
 
 import kotlinx.datetime.DayOfWeek
 import org.jetbrains.compose.resources.StringResource
-import punica.composeapp.generated.resources.Res
-import punica.composeapp.generated.resources.category_basic
-import punica.composeapp.generated.resources.category_cross_grade
-import punica.composeapp.generated.resources.category_cross_major
-import punica.composeapp.generated.resources.category_elective
-import punica.composeapp.generated.resources.category_general
-import punica.composeapp.generated.resources.category_major
+import punica.composeapp.generated.resources.*
 
 /**
  * 课表课程。
@@ -240,19 +234,17 @@ data class SelectedCourse(
                     // 有些多节次的课只会显示开始和结束，如 1-4 节，而不是 1-2-3-4 节
                     .let { it[0]..it[1] }.toSet()
             },
-            dayOfWeek = timeSegment.get(1).let {
-                DayOfWeek(
-                    when (it) {
-                        "星期一" -> 1
-                        "星期二" -> 2
-                        "星期三" -> 3
-                        "星期四" -> 4
-                        "星期五" -> 5
-                        "星期六" -> 6
-                        else -> 7
-                    }
-                )
-            },
+            dayOfWeek = DayOfWeek(
+                when (timeSegment[1]) {
+                    "星期一" -> 1
+                    "星期二" -> 2
+                    "星期三" -> 3
+                    "星期四" -> 4
+                    "星期五" -> 5
+                    "星期六" -> 6
+                    else -> 7
+                }
+            ),
             clazz = null,
         )
     }

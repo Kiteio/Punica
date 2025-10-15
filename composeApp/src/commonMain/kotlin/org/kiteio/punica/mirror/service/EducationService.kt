@@ -4,67 +4,27 @@ import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Element
 import com.fleeksoft.ksoup.select.Elements
 import com.fleeksoft.ksoup.select.Evaluator
-import io.ktor.client.HttpClient
-import io.ktor.client.plugins.HttpSend
-import io.ktor.client.plugins.cookies.AcceptAllCookiesStorage
-import io.ktor.client.plugins.cookies.CookiesStorage
-import io.ktor.client.plugins.cookies.HttpCookies
-import io.ktor.client.plugins.cookies.addCookie
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.plugin
-import io.ktor.client.plugins.timeout
-import io.ktor.client.request.HttpRequestBuilder
-import io.ktor.client.request.forms.submitForm
-import io.ktor.client.request.get
-import io.ktor.client.request.parameter
-import io.ktor.client.statement.bodyAsText
-import io.ktor.client.statement.readRawBytes
-import io.ktor.client.statement.request
-import io.ktor.http.Cookie
-import io.ktor.http.encodeURLParameter
-import io.ktor.http.parameters
-import io.ktor.http.parseQueryString
+import io.ktor.client.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.cookies.*
+import io.ktor.client.request.*
+import io.ktor.client.request.forms.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.isoDayNumber
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.kiteio.punica.mirror.modal.education.Alert
-import org.kiteio.punica.mirror.modal.education.Alerts
-import org.kiteio.punica.mirror.modal.education.BasicTeacher
-import org.kiteio.punica.mirror.modal.education.Campus
-import org.kiteio.punica.mirror.modal.education.Course
-import org.kiteio.punica.mirror.modal.education.CourseGrade
-import org.kiteio.punica.mirror.modal.education.CourseGrades
-import org.kiteio.punica.mirror.modal.education.CourseLog
-import org.kiteio.punica.mirror.modal.education.CourseSystem
-import org.kiteio.punica.mirror.modal.education.CourseTable
-import org.kiteio.punica.mirror.modal.education.CoursesOverview
-import org.kiteio.punica.mirror.modal.education.Exam
-import org.kiteio.punica.mirror.modal.education.Exams
-import org.kiteio.punica.mirror.modal.education.Exemption
-import org.kiteio.punica.mirror.modal.education.Exemptions
-import org.kiteio.punica.mirror.modal.education.GraduationAudit
-import org.kiteio.punica.mirror.modal.education.LevelGrade
-import org.kiteio.punica.mirror.modal.education.LevelGrades
-import org.kiteio.punica.mirror.modal.education.Plan
-import org.kiteio.punica.mirror.modal.education.Plans
-import org.kiteio.punica.mirror.modal.education.Progress
-import org.kiteio.punica.mirror.modal.education.ProgressModule
-import org.kiteio.punica.mirror.modal.education.Progresses
-import org.kiteio.punica.mirror.modal.education.SelectableCourse
-import org.kiteio.punica.mirror.modal.education.SelectedCourse
-import org.kiteio.punica.mirror.modal.education.Semester
-import org.kiteio.punica.mirror.modal.education.Teacher
-import org.kiteio.punica.mirror.modal.education.Teachers
-import org.kiteio.punica.mirror.modal.education.Timetable
+import org.kiteio.punica.mirror.modal.education.*
 import org.kiteio.punica.mirror.util.Json
 import org.kiteio.punica.mirror.util.now
 import org.kiteio.punica.mirror.util.parseIsoVariantWithoutSecond
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 /**
  * 教务系统服务。
@@ -330,6 +290,7 @@ private class EducationServiceImpl(
      */
     private data class EducationUser(val id: String, val password: String)
 
+    @OptIn(ExperimentalTime::class)
     override suspend fun logout() {
         httpClient.get("/jsxsd/xk/LoginToXk") {
             parameter("method", "exit")

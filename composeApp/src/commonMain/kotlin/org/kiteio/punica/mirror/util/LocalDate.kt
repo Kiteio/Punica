@@ -1,13 +1,14 @@
 package org.kiteio.punica.mirror.util
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalDateTime.Companion.Format
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format.char
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 /**
  * 返回当前的 [LocalDate]。
@@ -17,12 +18,14 @@ fun LocalDate.Companion.now() = LocalDateTime.now().date
 /**
  * 返回当前的 [LocalDateTime]。
  */
+@OptIn(ExperimentalTime::class)
 fun LocalDateTime.Companion.now() = Clock.System.now()
     .toLocalDateTime(TimeZone.currentSystemDefault())
 
 /**
  * 返回 [epochMilliseconds] 的 [LocalDateTime]。
  */
+@OptIn(ExperimentalTime::class)
 fun LocalDateTime.Companion.from(epochMilliseconds: Long): LocalDateTime {
     return Instant.fromEpochMilliseconds(epochMilliseconds)
         .toLocalDateTime(TimeZone.currentSystemDefault())
@@ -31,8 +34,8 @@ fun LocalDateTime.Companion.from(epochMilliseconds: Long): LocalDateTime {
 private val dateTimeWithoutSecondFormat by lazy {
     Format {
         year(); char('-')
-        monthNumber();char('-')
-        dayOfMonth(); char(' ')
+        monthNumber(); char('-')
+        day(); char(' ')
         hour(); char(':')
         minute()
     }
@@ -47,8 +50,8 @@ fun LocalDateTime.Companion.parseIsoVariantWithoutSecond(input: CharSequence): L
 private val dateTimeFormat by lazy {
     Format {
         year(); char('-')
-        monthNumber();char('-')
-        dayOfMonth(); char(' ')
+        monthNumber(); char('-')
+        day(); char(' ')
         hour(); char(':')
         minute(); char(':')
         second()

@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
-import app.cash.paging.compose.LazyPagingItems
+import androidx.paging.compose.LazyPagingItems
 import org.jetbrains.compose.resources.stringResource
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.error

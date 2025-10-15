@@ -1,24 +1,10 @@
 package org.kiteio.punica.ui.page.timetable
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.PagerState
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -32,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.flow.first
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.number
 import kotlinx.datetime.plus
 import org.jetbrains.compose.resources.stringArrayResource
 import org.kiteio.punica.AppVM
@@ -177,7 +164,7 @@ private fun Header(
                             Text(dayOfWeek, fontWeight = FontWeight.Bold)
                             // 日期
                             Text(
-                                "${date.monthNumber}-${date.dayOfMonth}",
+                                "${date.month.number}-${date.day}",
                                 color = LocalTextStyle.current.color,
                                 fontWeight = FontWeight.Bold,
                                 style = MaterialTheme.typography.labelSmall,

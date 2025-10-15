@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.ksp)
 }
 
 kotlin {
@@ -38,14 +39,17 @@ kotlin {
         val desktopMain by getting
 
         androidMain.dependencies {
-            implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+
+            // Crypto
             implementation(libs.cryptography.provider.jdk)
+            // Network
+            implementation(libs.ktor.client.okhttp)
+            // UI
             implementation(libs.glance.appwidget)
             implementation(libs.glance.material3)
-            implementation(libs.ktor.client.okhttp)
+            // Utils
             implementation(libs.otp)
-            implementation(libs.startup.runtine)
             implementation(libs.tess4Android)
         }
         commonMain.dependencies {
@@ -55,40 +59,56 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.material3AdaptiveNavigationSuite)
             implementation(compose.materialIconsExtended)
+            implementation(compose.preview)
             implementation(compose.runtime)
             implementation(compose.ui)
+            implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+            // Crypto
+            implementation(libs.cryptography.core)
+            // DateTime
+            implementation(libs.kotlinx.datetime)
+            // Device
+            implementation(libs.alert.kmp)
+            // DI
+            implementation(project.dependencies.platform(libs.koin.bom))
+            api(libs.koin.annotation)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            implementation(libs.koin.compose.viewmodel.navigation)
+            implementation(libs.koin.core)
+            implementation(libs.koin.jsr330)
+            // Network
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            // Serializer
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.ksoup)
+            // Storage
+            implementation(libs.datastore)
+            // UI
             implementation(libs.adaptive)
             implementation(libs.adaptive.layout)
             implementation(libs.adaptive.navigation)
-            implementation(libs.alertKmp)
-            implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.androidx.lifecycle.viewmodel.compose)
             implementation(libs.coil.compose)
             implementation(libs.coil.network.ktor3)
+            implementation(libs.colorpicker)
             implementation(libs.composeIcon.css)
             implementation(libs.composeIcon.simple)
             implementation(libs.composeIcon.tabler)
             implementation(libs.compottie)
             implementation(libs.compottie.dot)
-            implementation(libs.cryptography.core)
-            implementation(libs.datastore)
             implementation(libs.haze.materials)
-            implementation(libs.htmlconverter)
-            implementation(project.dependencies.platform(libs.koin.bom))
-            implementation(libs.koin.compose)
-            implementation(libs.koin.compose.viewmodel)
-            implementation(libs.koin.core)
-            implementation(libs.kotlinx.datetime)
-            implementation(libs.kotlinx.serialization.json)
-            implementation(libs.ksoup)
-            implementation(libs.ktor.client.content.negotiation)
-            implementation(libs.ktor.client.core)
-            implementation(libs.ktor.serialization.kotlinx.json)
-            implementation(libs.material3.windowSizeClass)
             implementation(libs.materialkolor)
-            implementation(libs.markdownRenderer.m3)
-            implementation(libs.navigation.compose)
+            implementation(libs.htmlconverter)
+            implementation(libs.markdown.renderer.m3)
+            implementation(libs.navigation3.ui)
+            implementation(libs.paging.common)
             implementation(libs.paging.compose)
+            implementation(libs.windowManager)
+            // Utils
             implementation(libs.sublime.fuzzy)
         }
         commonTest.dependencies {
@@ -96,17 +116,29 @@ kotlin {
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
-            implementation(libs.appdirs)
-            implementation(libs.cryptography.provider.jdk)
             implementation(libs.kotlinx.coroutines.swing)
+
+            // Crypto
+            implementation(libs.cryptography.provider.jdk)
+            // Network
             implementation(libs.ktor.client.okhttp)
+            // Storage
+            implementation(libs.appdirs)
+            // Utils
             implementation(libs.otp)
             implementation(libs.tess4j)
         }
         iosMain.dependencies {
+            // Crypto
             implementation(libs.cryptography.provider.apple)
+            // Network
             implementation(libs.ktor.client.darwin)
         }
+    }
+
+    // KSP Common sourceSet
+    sourceSets.named("commonMain").configure {
+        kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
     }
 }
 
@@ -155,6 +187,15 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
+    add("kspCommonMainMetadata", libs.koin.ksp.compiler)
+    add("kspAndroid", libs.koin.ksp.compiler)
+    add("kspIosX64", libs.koin.ksp.compiler)
+    add("kspIosArm64", libs.koin.ksp.compiler)
+    add("kspIosSimulatorArm64", libs.koin.ksp.compiler)
+}
+
+tasks.matching { it.name.startsWith("ksp") && it.name != "kspCommonMainKotlinMetadata" }.configureEach {
+    dependsOn("kspCommonMainKotlinMetadata")
 }
 
 compose.desktop {

@@ -1,6 +1,7 @@
 package org.kiteio.punica.client.academic.foundation
 
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.number
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.wrapper.now
 
@@ -26,11 +27,11 @@ data class Term(val startYear: Int, val ordinal: Int) {
         /** 当前学期，1-20 ..< 7-20为一个学期 */
         val current by lazy {
             LocalDate.now().run {
-                val isBefore720 = monthNumber == 7 && dayOfMonth < 20
-                val startYear = if (monthNumber < 7 || isBefore720) year - 1 else year
+                val isBefore720 = month.number == 7 && day < 20
+                val startYear = if (month.number < 7 || isBefore720) year - 1 else year
 
-                val isAfter120 = monthNumber == 1 && dayOfMonth >= 20
-                val ordinal = if (isAfter120 || monthNumber in 2..6 || isBefore720) 2 else 1
+                val isAfter120 = month.number == 1 && day >= 20
+                val ordinal = if (isAfter120 || month.number in 2..6 || isBefore720) 2 else 1
 
                 Term(startYear, ordinal)
             }

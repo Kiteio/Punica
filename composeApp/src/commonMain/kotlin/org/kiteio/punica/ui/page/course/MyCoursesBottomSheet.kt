@@ -1,11 +1,6 @@
 package org.kiteio.punica.ui.page.course
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
@@ -14,14 +9,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -31,20 +19,12 @@ import org.kiteio.punica.client.academic.foundation.MCourse
 import org.kiteio.punica.client.course.CourseSystem
 import org.kiteio.punica.client.course.api.delete
 import org.kiteio.punica.client.course.api.getCourses
-import org.kiteio.punica.ui.component.CardListItem
-import org.kiteio.punica.ui.component.HorizontalTabPager
-import org.kiteio.punica.ui.component.LoadingNotNullOrEmpty
-import org.kiteio.punica.ui.component.ModalBottomSheet
-import org.kiteio.punica.ui.component.showToast
+import org.kiteio.punica.ui.component.*
 import org.kiteio.punica.ui.page.timetable.Timetable
 import org.kiteio.punica.ui.page.totp.DeleteDialog
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 import org.kiteio.punica.wrapper.launchCatching
-import punica.composeapp.generated.resources.Res
-import punica.composeapp.generated.resources.selected_courses
-import punica.composeapp.generated.resources.timetable
-import punica.composeapp.generated.resources.withdraw_course
-import punica.composeapp.generated.resources.withdraw_course_successful
+import punica.composeapp.generated.resources.*
 
 @Composable
 fun MyCoursesBottomSheet(visible: Boolean, onDismissRequest: () -> Unit, courseSystem: CourseSystem?) {
@@ -85,7 +65,7 @@ fun MyCoursesBottomSheet(visible: Boolean, onDismissRequest: () -> Unit, courseS
                             courses.forEach { course ->
                                 if (course.dayOfWeek != null && course.sections != null) {
                                     // 计算当前课程下标
-                                    val index = course.dayOfWeek.ordinal * 6 + (course.sections.minOf { it -> it } - 1) / 2
+                                    val index = course.dayOfWeek.ordinal * 6 + (course.sections.minOf { it } - 1) / 2
 
                                     (list[index] ?: mutableListOf<MCourse>().also { list[index] = it }).add(course)
                                 }

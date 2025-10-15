@@ -28,7 +28,7 @@ suspend fun AcademicSystem.getTermDateRange(term: Term = Term.current): TermDate
         val formatter = LocalDate.Format {
             year(); char('年')
             monthNumber();char('月')
-            dayOfMonth()
+            day()
         }
 
         val start = LocalDate.parse(

@@ -1,13 +1,14 @@
 package org.kiteio.punica.client.gitlab.api
 
-import io.ktor.client.call.body
-import kotlinx.datetime.Instant
+import io.ktor.client.call.*
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.client.gitlab.GitLab
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 /**
  * 返回 GitLab 仓库下的发行版。
@@ -39,6 +40,7 @@ private data class ReleaseImpl(
     override val description: String,
     @SerialName("released_at") val realeasedAt: String,
 ) : Release {
+    @OptIn(ExperimentalTime::class)
     override val time =
         Instant.parse(realeasedAt).toLocalDateTime(TimeZone.currentSystemDefault())
 }

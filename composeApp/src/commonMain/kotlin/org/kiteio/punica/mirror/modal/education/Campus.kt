@@ -1,42 +1,58 @@
 package org.kiteio.punica.mirror.modal.education
 
 import org.jetbrains.compose.resources.StringResource
-import punica.composeapp.generated.resources.Res
-import punica.composeapp.generated.resources.campus_canton
-import punica.composeapp.generated.resources.campus_foshan
+import punica.composeapp.generated.resources.*
 
 /**
  * 校区。
  *
- * @property nameRes 名称资源
- * @property schedule 时间表
+ * @property strRes 校区名称字符串资源
+ * @property areaStrRes 地区名称字符串资源
  */
-sealed class Campus(val id: Int) {
-    abstract val nameRes: StringResource
-    abstract val schedule: List<ClosedRange<String>>
-
+enum class Campus(
+    val strRes: StringResource,
+    val areaStrRes: StringResource,
+) {
     /** 广州校区 */
-    data object Canton : Campus(1) {
-        override val nameRes = Res.string.campus_canton
+    Canton(
+        strRes = Res.string.campus_canton,
+        areaStrRes = Res.string.canton,
+    ) {
         override val schedule get() = cantonSchedule
-    }
+    },
 
     /** 佛山校区 */
-    data object Foshan : Campus(2) {
-        override val nameRes = Res.string.campus_foshan
+    Foshan(
+        strRes = Res.string.campus_foshan,
+        areaStrRes = Res.string.foshan,
+    ) {
         override val schedule get() = foshanSchedule
-    }
+    };
+
+    val id get() = ordinal + 1
+
+    /** 时间表 */
+    abstract val schedule: List<ClosedRange<String>>
 
     companion object {
+        val Default = Canton
+
         /**
          * 通过 [id] 获取校区。
          */
-        fun getById(id: Int) = if (id == 1) Canton else Foshan
+        fun getById(id: Int): Campus {
+            require(id in 1..Campus.entries.size)
+
+            return when (id) {
+                Canton.id -> Canton
+                else -> Foshan
+            }
+        }
 
         /**
          * 通过名字获取校区。
          */
-        fun getByName(name: String) = when(name) {
+        fun getByName(name: String) = when (name) {
             "广州校区" -> Canton
             "佛山校区" -> Foshan
             else -> error("Unknown campus: $name.")

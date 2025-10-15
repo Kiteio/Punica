@@ -2,6 +2,7 @@ package org.kiteio.punica.serialization
 
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import okio.Path.Companion.toPath
+import org.kiteio.punica.mirror.util.AppDirs
 
 /**
  * 存储。
@@ -43,4 +44,4 @@ object Stores {
  * 返回 DataStore。
  */
 private fun dataStore(name: String) = PreferenceDataStoreFactory
-    .createWithPath { fileDir("datastore/$name.preferences_pb").toPath() }
+    .createWithPath { AppDirs.filesDir("datastore/$name.preferences_pb").toPath() }

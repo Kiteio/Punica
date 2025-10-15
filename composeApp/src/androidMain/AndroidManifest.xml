@@ -25,18 +25,6 @@
             </intent-filter>
         </activity>
 
-        <!-- 提供 applicationContext -->
-        <provider
-            android:name="androidx.startup.InitializationProvider"
-            android:authorities="org.kiteio.punica.androidx-startup"
-            android:exported="false"
-            tools:node="merge">
-
-            <meta-data
-                android:name="org.kiteio.punica.ContextInitializer"
-                android:value="androidx.startup" />
-        </provider>
-
         <!-- 小组件 -->
         <receiver
             android:name=".ui.widget.TimetableWidgetReceiver"

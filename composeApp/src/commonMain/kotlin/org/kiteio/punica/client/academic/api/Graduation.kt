@@ -1,10 +1,9 @@
 package org.kiteio.punica.client.academic.api
 
 import com.fleeksoft.ksoup.Ksoup
-import io.ktor.client.plugins.timeout
-import io.ktor.client.statement.bodyAsText
-import io.ktor.client.statement.readRawBytes
-import io.ktor.http.parameters
+import io.ktor.client.plugins.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.io.buffered
@@ -13,7 +12,7 @@ import kotlinx.io.files.SystemFileSystem
 import kotlinx.io.files.SystemPathSeparator
 import org.jetbrains.compose.resources.getString
 import org.kiteio.punica.client.academic.AcademicSystem
-import org.kiteio.punica.serialization.downloadsDir
+import org.kiteio.punica.mirror.util.AppDirs
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.app_name
 import punica.composeapp.generated.resources.graduation
@@ -63,7 +62,7 @@ suspend fun AcademicSystem.getGraduation(isPrimary: Boolean = true): Graduation 
  * 下载毕业审核报告。
  */
 suspend fun AcademicSystem.downloadGraduationReport(route: String): Path {
-    val dir = downloadsDir(getString(Res.string.app_name))
+    val dir = AppDirs.downloadsDir(getString(Res.string.app_name))
     val path = Path(
         "$dir${SystemPathSeparator}$userId${getString(Res.string.graduation)}.doc",
     )

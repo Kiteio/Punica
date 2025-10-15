@@ -1,24 +1,21 @@
 package org.kiteio.punica.mirror.ui
 
+import jakarta.inject.Singleton
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.module
 
 /**
  * Toast。
+ *
+ * TODO: 统一为 Snackbar。
  */
 expect fun showToast(message: String)
 
-/** Toast Koin 模块 */
-val toastModule = module {
-    singleOf(::Toast)
-}
-
 /**
  * Toast。
  */
-class Toast() : MVI<ToastUiState, ToastIntent> {
+@Singleton
+class Toast : MVI<ToastUiState, ToastIntent> {
     private val _uiState = MutableStateFlow<ToastUiState>(ToastUiState.Hide)
     override val uiState = _uiState.asStateFlow()
 

@@ -4,24 +4,20 @@ import com.fleeksoft.ksoup.Ksoup
 import dev.whyoleg.cryptography.CryptographyProvider
 import dev.whyoleg.cryptography.DelicateCryptographyApi
 import dev.whyoleg.cryptography.algorithms.AES
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.cookies.AcceptAllCookiesStorage
-import io.ktor.client.plugins.cookies.HttpCookies
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.defaultTransformers
-import io.ktor.client.request.forms.submitForm
-import io.ktor.client.request.get
-import io.ktor.client.request.header
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.HttpHeaders
-import io.ktor.http.header.AcceptEncoding
-import io.ktor.http.parameters
-import io.ktor.serialization.kotlinx.json.json
-import io.ktor.util.encodeBase64
-import io.ktor.utils.io.InternalAPI
-import io.ktor.utils.io.core.toByteArray
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.cookies.*
+import io.ktor.client.request.*
+import io.ktor.client.request.forms.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
+import io.ktor.http.header.*
+import io.ktor.serialization.kotlinx.json.*
+import io.ktor.util.*
+import io.ktor.utils.io.*
+import io.ktor.utils.io.core.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerialName
@@ -88,9 +84,7 @@ private class WebVpnServiceImpl(
         // 获取 Cookie
         httpClient.get(COOKIE_URL)
 
-        val authParams = getAuthParams()
-
-        if (authParams == null) return@withContext
+        val authParams = getAuthParams() ?: return@withContext
 
         submitForm(userId, password, authParams)
 
@@ -103,7 +97,7 @@ private class WebVpnServiceImpl(
     private suspend fun getAuthParams(): AuthParams? {
         val text = httpClient.get(LOGIN_URL).bodyAsText()
 
-        var doc = Ksoup.parse(text)
+        val doc = Ksoup.parse(text)
 
         // 已登录
         if (doc.title() == "资源导航登录") return null

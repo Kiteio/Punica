@@ -23,7 +23,7 @@ suspend fun AcademicSystem.getExams(): Exams {
         val formatter = LocalDateTime.Format {
             year(); char('-')
             monthNumber(); char('-')
-            dayOfMonth(); char(' ')
+            day(); char(' ')
             hour(); char(':')
             minute()
         }

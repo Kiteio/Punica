@@ -14,16 +14,7 @@ import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.components.Scaffold
 import androidx.glance.appwidget.provideContent
 import androidx.glance.appwidget.updateAll
-import androidx.glance.layout.Alignment
-import androidx.glance.layout.Box
-import androidx.glance.layout.Column
-import androidx.glance.layout.Row
-import androidx.glance.layout.Spacer
-import androidx.glance.layout.fillMaxSize
-import androidx.glance.layout.fillMaxWidth
-import androidx.glance.layout.height
-import androidx.glance.layout.padding
-import androidx.glance.layout.width
+import androidx.glance.layout.*
 import androidx.glance.material3.ColorProviders
 import androidx.glance.text.Text
 import com.materialkolor.dynamicColorScheme
@@ -32,6 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.daysUntil
+import kotlinx.datetime.number
 import org.kiteio.punica.R
 import org.kiteio.punica.client.academic.api.Timetable
 import org.kiteio.punica.client.academic.foundation.Campus
@@ -105,7 +97,7 @@ class TimetableWidget : GlanceAppWidget() {
                             Row(modifier = GlanceModifier.fillMaxWidth()) {
                                 Row(modifier = GlanceModifier.defaultWeight()) {
                                     // 日期
-                                    Text("${now.monthNumber}-${now.dayOfMonth}")
+                                    Text("${now.month.number}-${now.day}")
                                     Spacer(modifier = GlanceModifier.width(8.dp))
                                     // 星期
                                     Text(daysOfWeek[dayOfWeekOrdinal])
@@ -139,7 +131,7 @@ class TimetableWidget : GlanceAppWidget() {
                                     Spacer(modifier = GlanceModifier.height(4.dp))
                                 }
                             }
-                            if (list.all { courses -> courses?.all { it.weeks.contains(week) } != true } == true) {
+                            if (list.all { courses -> courses?.all { it.weeks.contains(week) } != true }) {
                                 Box(
                                     modifier = GlanceModifier.fillMaxSize(),
                                     contentAlignment = Alignment.Center,

@@ -1,13 +1,13 @@
 package org.kiteio.punica.mirror.service
 
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.plugins.cache.HttpCache
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.request.get
-import io.ktor.client.request.parameter
-import io.ktor.serialization.kotlinx.json.json
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.cache.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.request.*
+import io.ktor.serialization.kotlinx.json.*
+import jakarta.inject.Singleton
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.mirror.modal.bing.Wallpaper
 import org.kiteio.punica.mirror.platform.CacheStorage
@@ -17,6 +17,7 @@ import org.kiteio.punica.mirror.util.Json
 /**
  * 必应服务。
  */
+@Singleton
 fun BingService(): BingService {
     val httpClient = HttpClient {
         defaultRequest {

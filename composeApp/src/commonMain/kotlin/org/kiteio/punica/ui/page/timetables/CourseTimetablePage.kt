@@ -117,7 +117,7 @@ private fun CourseTimetableVM.Content() {
                             supportingContent = {
                                 // 教师
                                 Text(
-                                    it.filter { it.teacher != null }
+                                    it.filter { it1 -> it1.teacher != null }
                                         .map { course -> course.teacher }
                                         .toSet()
                                         .joinToString(),

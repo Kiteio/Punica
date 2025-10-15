@@ -1,9 +1,9 @@
 package org.kiteio.punica.wrapper
 
 import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import app.cash.paging.PagingConfig
 
 /**
  * [PagingSource]<[Int], [Value]>。

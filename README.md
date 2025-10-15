@@ -17,6 +17,10 @@
     <strong><big>更新日志</big></strong>
 </summary>
 
+##### 10月16日
+
+- 重构部分 UI，更新依赖，引入 Navigation 3
+
 ##### 9月23日
 
 - 新增登录页面

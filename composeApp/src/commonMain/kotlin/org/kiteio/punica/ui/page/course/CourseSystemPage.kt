@@ -128,8 +128,8 @@ private fun CourseSystemVM.Content() {
 
                 HorizontalTabPager(
                     state,
-                    tabContent = {
-                        Text(stringResource(CourseCategory.entries[it].nameRes))
+                    tabContent = { it1 ->
+                        Text(stringResource(CourseCategory.entries[it1].nameRes))
                     },
                     tabScrollable = true,
                 ) { page ->

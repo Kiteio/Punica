@@ -2,50 +2,15 @@ package org.kiteio.punica.ui.page.settings
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.AutoMode
-import androidx.compose.material.icons.outlined.DarkMode
-import androidx.compose.material.icons.outlined.DateRange
-import androidx.compose.material.icons.outlined.LightMode
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.Web
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.outlined.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -71,31 +36,14 @@ import org.kiteio.punica.ui.page.home.TopLevelRoute
 import org.kiteio.punica.ui.page.versions.VersionsRoute
 import org.kiteio.punica.ui.theme.ThemeMode
 import org.kiteio.punica.wrapper.launchCatching
-import punica.composeapp.generated.resources.Res
-import punica.composeapp.generated.resources.app_name
-import punica.composeapp.generated.resources.campus
-import punica.composeapp.generated.resources.canton_haizhu
-import punica.composeapp.generated.resources.current_week
-import punica.composeapp.generated.resources.foshan_sanshui
-import punica.composeapp.generated.resources.github
-import punica.composeapp.generated.resources.logging_in
-import punica.composeapp.generated.resources.not_logged_in
-import punica.composeapp.generated.resources.official_website
-import punica.composeapp.generated.resources.official_website_kiteio
-import punica.composeapp.generated.resources.open_source_repository
-import punica.composeapp.generated.resources.extract
-import punica.composeapp.generated.resources.punica
-import punica.composeapp.generated.resources.settings
-import punica.composeapp.generated.resources.theme_mode
-import punica.composeapp.generated.resources.wallpaper
-import punica.composeapp.generated.resources.week_of
+import punica.composeapp.generated.resources.*
 
 /**
  * 设置页面路由。
  */
 @Serializable
 object SettingsRoute : TopLevelRoute {
-    override val nameRes = Res.string.settings
+    override val nameRes = Res.string.me
     override val icon = Icons.Outlined.Settings
     override val toggledIcon = Icons.Filled.Settings
 }
@@ -346,8 +294,8 @@ private fun CampusSetting() {
             Text(
                 stringResource(
                     when (campus) {
-                        Campus.CANTON -> Res.string.canton_haizhu
-                        Campus.FO_SHAN -> Res.string.foshan_sanshui
+                        Campus.CANTON -> Res.string.canton
+                        Campus.FO_SHAN -> Res.string.foshan
                     }
                 )
             )
