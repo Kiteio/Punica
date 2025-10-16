@@ -1,10 +1,8 @@
 # 小石榴：领先的广财教务系统
 
-> 9月23日，我回来了，我的时间实在有限，但石榴是我最后的念想，我不想放弃。
-
-我们计划对软件架构进行重大调整。
-
 > ChanwingChow：石榴承载了我四年的编程梦，也让我结识了待我最好的女友。时间不歇，四年大学已经接近尾声，而石榴仍潺潺而流。
+> 
+> 后记：梦已醒，意难平。
 
 <p align="center">
     <img src="composeApp/src/commonMain/composeResources/drawable/punica.png"
@@ -12,10 +10,21 @@
         width="160" />
 </p>
 
+### 近期更新
+
+> 新版本正在更新中，请耐心等待...
+
+- 添加 Toast 和 Android 系统栏主题切换
+- 重构部分 UI，更新依赖，引入 Navigation 3
+
 <details>
 <summary>
     <strong><big>更新日志</big></strong>
 </summary>
+
+##### 10月17日
+
+- 添加 Toast 和 Android 系统栏主题切换
 
 ##### 10月16日
 
@@ -108,6 +117,14 @@
 
 小石榴完全开源，个人数据全部保存于本地，更加便捷可靠。
 
+## 如何使用
+
+小石榴目前支持 Android、Windows，请在 [Release](https://github.com/Kiteio/Punica/releases) 中最新版的 Assets 里找到对应平台的文件。
+小石榴安装包只在此处发行，从其他地方获取的软件我们不能保证其安全性。
+
+- Android 安装包: punica-**android**-x.x.x.**apk**
+- Window 压缩包：punica-**windows**-x.x.x.**zip**
+
 ## 截图
 
 <p align="center">
@@ -119,9 +136,9 @@
 ## 支持
 
 小石榴是一款公益项目，软件完全免费且无广告。好的软件需要有更多人发现，如果你喜欢石榴，请点亮仓库星标。
-此外，你也可以向好友分享它。
+此外，你可以向好友分享它。
 
-如果有条件的话，可以扫码请我喝杯奶茶，感谢支持！
+如果有条件的话，也可以扫码请我喝杯奶茶，感谢支持！
 
 <p align="center">
    <img width="24%" src="readme/qrcode.png" alt="donate" />

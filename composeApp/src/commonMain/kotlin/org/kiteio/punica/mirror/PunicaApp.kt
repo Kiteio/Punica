@@ -1,10 +1,10 @@
 package org.kiteio.punica.mirror
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
@@ -12,6 +12,9 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.serialization.modules.SerializersModule
 import org.kiteio.punica.mirror.storage.Preferences
 import org.kiteio.punica.mirror.ui.Toast
@@ -40,15 +43,10 @@ import org.koin.ksp.generated.module
 @OptIn(KoinExperimentalAPI::class)
 @Composable
 fun PunicaApp() {
-    val backStack = rememberNavBackStack(
-        configuration = SavedStateConfiguration {
-            serializersModule = SerializersModule {
-                polymorphic(MainRoute.serializer())
-                polymorphic(SettingsRoute.serializer())
-            }
-        },
-        MainRoute,
-    )
+    val scope = rememberCoroutineScope()
+
+    val backStack = rememberNavBackStack(MainRoute)
+    val snackbarHostState = remember { SnackbarHostState() }
 
     KoinMultiplatformApplication(
         config = KoinConfiguration {
@@ -58,23 +56,48 @@ fun PunicaApp() {
             )
         },
     ) {
-        val toast = koinInject<Toast>()
-        val toastUiState by toast.uiState.collectAsStateWithLifecycle()
-
-        // 监听 Toast 状态，显示 Toast
-        LaunchedEffect(toastUiState) {
-            (toastUiState as? ToastUiState.Show)?.run {
-                // TODO: ShowToast。
-                toast.hide()
-            }
-        }
-
         // 主色调
         val primaryColor by Preferences.primaryColor
             .collectAsState(Preferences.primaryColor.syncFirst())
 
+        // 主题模式
         val themeMode by Preferences.themeMode
             .collectAsState(Preferences.themeMode.syncFirst())
+
+        // Toast
+        val toast = koinInject<Toast>()
+        // Toast UI 状态
+        val toastUiState by toast.uiState.collectAsStateWithLifecycle()
+        var toastJob by remember { mutableStateOf<Job?>(null) }
+
+        // 监听 Toast 状态，显示 Toast
+        LaunchedEffect(toastUiState) {
+            (toastUiState as? ToastUiState.Show)?.run {
+                toastJob?.cancel()
+                toastJob = scope.launch {
+                    try {
+                        launch {
+                            // 展示 Snackbar
+                            snackbarHostState.showSnackbar(
+                                message = message,
+                                withDismissAction = true,
+                                // 此线程将被阻塞
+                                duration = SnackbarDuration.Indefinite,
+                            )
+                        }
+
+                        // 重置 Toast 状态
+                        toast.hide()
+
+                        // 延迟
+                        delay(duration.timeMillis)
+                    } finally {
+                        // 隐藏 Snackbar
+                        snackbarHostState.currentSnackbarData?.dismiss()
+                    }
+                }
+            }
+        }
 
         PunicaExpressiveTheme(
             darkTheme = when (themeMode) {
@@ -83,15 +106,49 @@ fun PunicaApp() {
             },
             primaryColor = primaryColor,
         ) {
-            NavDisplay(
-                backStack = backStack,
-                entryProvider = entryProvider {
-                    mainEntry()
-                    settingsEntry()
+            Scaffold(
+                snackbarHost = {
+                    SnackbarHost(
+                        hostState = snackbarHostState,
+                        snackbar = {
+                            Snackbar(
+                                snackbarData = it,
+                                shape = MaterialTheme.shapes.medium,
+                            )
+                        },
+                    )
                 },
-            )
+            ) { innerPadding ->
+                NavDisplay(
+                    backStack = backStack,
+                    entryProvider = entryProvider {
+                        mainEntry()
+                        settingsEntry()
+                    },
+                    modifier = Modifier
+                        .consumeWindowInsets(innerPadding),
+                )
+            }
         }
     }
+}
+
+/**
+ * 返回 [NavBackStack]。
+ */
+@Composable
+private inline fun <reified T : NavKey> rememberNavBackStack(
+    vararg elements: T,
+): NavBackStack<NavKey> {
+    return rememberNavBackStack(
+        configuration = SavedStateConfiguration {
+            serializersModule = SerializersModule {
+                polymorphic(MainRoute.serializer())
+                polymorphic(SettingsRoute.serializer())
+            }
+        },
+        *elements,
+    )
 }
 
 /**

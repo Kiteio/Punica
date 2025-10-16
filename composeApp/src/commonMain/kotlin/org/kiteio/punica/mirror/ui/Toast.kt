@@ -6,13 +6,6 @@ import kotlinx.coroutines.flow.asStateFlow
 
 /**
  * Toast。
- *
- * TODO: 统一为 Snackbar。
- */
-expect fun showToast(message: String)
-
-/**
- * Toast。
  */
 @Singleton
 class Toast : MVI<ToastUiState, ToastIntent> {
@@ -21,27 +14,53 @@ class Toast : MVI<ToastUiState, ToastIntent> {
 
     override fun dispatch(intent: ToastIntent) {
         _uiState.value = when (intent) {
-            is ToastIntent.Show -> ToastUiState.Show(intent.message)
+            is ToastIntent.Show -> ToastUiState.Show(
+                intent.message,
+                intent.duration,
+            )
             is ToastIntent.Hide -> ToastUiState.Hide
         }
     }
 }
 
 /**
- * 显示 Toast。
+ * Toast 展示时长。
  */
-fun Toast.show(message: String) {
-    dispatch(ToastIntent.Show(message))
+sealed class ToastDuration(val timeMillis: kotlin.Long) {
+    /** 短时间 */
+    data object Short : ToastDuration(2400L)
+
+    /** 长时间 */
+    data object Long : ToastDuration(3000L)
+}
+
+/**
+ * 显示 Toast。
+ * 
+ * @param message 消息
+ * @param duration 展示时长
+ */
+fun Toast.show(
+    message: String,
+    duration: ToastDuration = ToastDuration.Short,
+) {
+    dispatch(ToastIntent.Show(message, duration))
 }
 
 /**
  * 显示异常 Toast。
+ *
+ * @param throwable 异常
+ * @param duration 展示时长
  */
-fun Toast.show(throwable: Throwable) {
+fun Toast.show(
+    throwable: Throwable,
+    duration: ToastDuration = ToastDuration.Short,
+) {
     val message = throwable.message
         ?: throwable::class.simpleName
         ?: throwable.toString()
-    dispatch(ToastIntent.Show(message))
+    dispatch(ToastIntent.Show(message, duration))
 }
 
 /**
@@ -55,8 +74,20 @@ fun Toast.hide() {
  * Toast 状态。
  */
 sealed class ToastUiState {
-    data class Show(val message: String) : ToastUiState()
+    /**
+     * Toast 展示。
+     *
+     * @property message 消息
+     * @property duration 展示时长
+     */
+    data class Show(
+        val message: String,
+        val duration: ToastDuration,
+    ) : ToastUiState()
 
+    /**
+     * Toast 隐藏。
+     */
     data object Hide : ToastUiState()
 }
 
@@ -64,7 +95,19 @@ sealed class ToastUiState {
  * Toast 意图。
  */
 sealed class ToastIntent {
-    data class Show(val message: String) : ToastIntent()
+    /**
+     * 展示 Toast。
+     *
+     * @property message 消息
+     * @property duration 展示时长
+     */
+    data class Show(
+        val message: String,
+        val duration: ToastDuration,
+    ) : ToastIntent()
 
+    /**
+     * 隐藏 Toast。
+     */
     data object Hide : ToastIntent()
 }
