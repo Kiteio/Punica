@@ -21,14 +21,14 @@ import org.kiteio.punica.ui.component.Loading
 import org.kiteio.punica.ui.component.NavBackAppBar
 import org.kiteio.punica.ui.page.modules.ModuleRoute
 import punica.composeapp.generated.resources.Res
-import punica.composeapp.generated.resources.academic_notice
+import punica.composeapp.generated.resources.academic_notices
 
 /**
  * 教学通知页面路由。
  */
 @Serializable
 object NoticeRoute : ModuleRoute {
-    override val nameRes = Res.string.academic_notice
+    override val nameRes = Res.string.academic_notices
     override val icon = CssGgIcons.Bell
 }
 

@@ -75,7 +75,6 @@ data object MeRoute : BottomNavKey {
         _icon.value = gender.avatar
         _selectedIcon.value = gender.selectedAvatar
     }
-
 }
 
 @OptIn(ExperimentalHazeMaterialsApi::class, ExperimentalMaterial3ExpressiveApi::class)
@@ -99,7 +98,7 @@ private fun MeScreen() {
     val week by viewModel.week.collectAsState(0)
 
     // 主色调
-    val primaryColor by viewModel.primaryColor.collectAsState(MaterialTheme.punicaColor)
+    val primaryColor by viewModel.primaryColor.collectAsState(punicaColor)
 
     // 性别
     val gender by viewModel.gender.collectAsState(Gender.Default)
@@ -275,8 +274,8 @@ private fun UserCard(
 
     // 名字颜色
     val nameColors = listOf(
+        MaterialTheme.colorScheme.primaryFixedDim,
         MaterialTheme.colorScheme.inversePrimary,
-        Color(0xFFDB7EC3),
     )
 
     Box(modifier = modifier) {

@@ -1,6 +1,5 @@
 package org.kiteio.punica.mirror.storage
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
@@ -57,7 +56,7 @@ object Preferences {
 
     /** 主色调 */
     val primaryColor = preferences.data
-        .map { it[Keys.primaryColor] ?: MaterialTheme.punicaColor.toArgb() }
+        .map { it[Keys.primaryColor] ?: punicaColor.toArgb() }
         .map { Color(it) }
 
     /** 性别 */

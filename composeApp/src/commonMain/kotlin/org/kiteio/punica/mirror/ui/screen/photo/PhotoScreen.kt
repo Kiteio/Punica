@@ -26,7 +26,6 @@ data object PhotoRoute : BottomNavKey {
     override val strRes = Res.string.photo
     override val icon = Icons.Outlined.Photo
     override val selectedIcon = Icons.Filled.Photo
-
 }
 
 @Composable

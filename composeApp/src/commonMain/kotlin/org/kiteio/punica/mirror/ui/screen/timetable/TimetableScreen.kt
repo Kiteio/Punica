@@ -20,7 +20,6 @@ data object TimetableRoute : BottomNavKey {
     override val strRes = Res.string.timetable
     override val icon = Icons.Outlined.CalendarMonth
     override val selectedIcon = Icons.Filled.CalendarMonth
-
 }
 
 @Composable

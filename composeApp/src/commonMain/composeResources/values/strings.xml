@@ -176,22 +176,10 @@
     </string-array>
 
     <!-- ModulesPage.kt -->
-    <string name="emergency_call">紧急电话</string>
-    <string name="academic_notice">教学通知</string>
     <string name="frequently_used_websites">常用网站</string>
-    <string name="course_system">选课系统</string>
-    <string name="exam">考试安排</string>
-    <string name="cet">四六级</string>
-    <string name="grade">成绩</string>
-    <string name="second_class">第二课堂</string>
-    <string name="teacher_profile">教师信息</string>
-    <string name="course_timetable">课程课表</string>
-    <string name="implementation_plan">执行计划</string>
-    <string name="academic_progress">学业进度</string>
 
     <!-- SettingsPage.kt -->
     <string name="academic_system">教务系统</string>
-    <string name="otp" translatable="false">OTP</string>
     <string name="logging_in">登录中</string>
     <string name="current_week">当前周次</string>
     <string name="open_source_repository">开源仓库</string>
@@ -218,7 +206,6 @@
     <string name="visibility_off">不可见</string>
 
 
-
     <string name="navigate_before">返回</string>
 
     <!-- 主页 -->
@@ -239,14 +226,38 @@
     <string name="girl">女生</string>
     <string name="boy">男生</string>
     <string name="settings">设置</string>
+
+    <!-- 设置页 -->
     <string name="version">版本</string>
     <string name="github" translatable="false">GitHub</string>
     <string name="official_website">官网</string>
     <string name="power_by_compose_multiplatform">Power by Compose Multiplatform</string>
-
-    <!-- 设置页 -->
     <string name="theme_mode">主题模式</string>
     <string name="theme_mode_auto">自动</string>
     <string name="theme_mode_light">亮色</string>
     <string name="theme_mode_dark">暗色</string>
+
+    <!-- 模块页 -->
+    <string name="emergency_call">紧急电话</string>
+    <string name="otp" translatable="false">OTP</string>
+    <string name="guang_cai_websites">广财网站</string>
+    <string name="teacher_profile">教师信息</string>
+    <string name="course_timetable">课程课表</string>
+    <string name="implementation_plan">执行计划</string>
+    <string name="course_system">选课系统</string>
+    <string name="not_yet_open">暂未开放</string>
+    <string name="academic_notices">教学通知</string>
+    <plurals name="new_notice">
+        <item quantity="other">有 %1$s 条新通知</item>
+    </plurals>
+    <string name="no_new_notice">没有新通知</string>
+    <string name="exam">考试安排</string>
+    <string name="no_arrangement">没有安排</string>
+    <plurals name="arrangement">
+        <item quantity="other">有 $1$s 个安排</item>
+    </plurals>
+    <string name="cet">四六级</string>
+    <string name="grade">课程成绩</string>
+    <string name="second_class">第二课堂</string>
+    <string name="academic_progress">学业进度</string>
 </resources>

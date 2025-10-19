@@ -4,6 +4,13 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 
 /**
+ * 导航到 [route]。
+ */
+fun NavBackStack<NavKey>.navigate(route: NavKey) {
+    add(route)
+}
+
+/**
  * 返回上一个页面，若堆栈中只有一个路由，则不进行任何操作。
  */
 fun NavBackStack<NavKey>.navigateUp() {
