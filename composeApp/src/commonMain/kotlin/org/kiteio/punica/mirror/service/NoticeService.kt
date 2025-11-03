@@ -13,7 +13,7 @@ import org.kiteio.punica.mirror.modal.notice.Notice
 /**
  * 教务通知服务。
  */
-fun NoticeService(): NoticeService {
+fun getNoticeService(): NoticeService {
     val httpClient = HttpClient {
         defaultRequest {
             url(NoticeServiceImpl.BASE_URL)

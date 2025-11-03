@@ -1,10 +1,11 @@
 [versions]
 agp = "8.12.3"
-androidx-activityCompose = "1.12.0-alpha09"
-androidx-lifecycle = "2.10.0-alpha02"
+androidx-activityCompose = "1.12.0-beta01"
+androidx-lifecycle = "2.10.0-alpha03"
 composeHotReload = "1.0.0-rc02"
-compose-multiplatform = "1.10.0-alpha02"
-kotlin = "2.3.0-Beta1"
+compose-material3 = "1.10.0-alpha03"
+compose-multiplatform = "1.10.0-alpha03"
+kotlin = "2.3.0-Beta2"
 kotlinx-coroutines = "1.10.2"
 
 # Crypto
@@ -15,7 +16,7 @@ kotlinx-datetime = "0.7.1"
 alertKmp = "2.0.0"
 # DI
 koin-bom = "4.1.2-Beta1"
-koin-annotation = "2.2.0"
+koin-annotation = "2.3.0"
 # Network
 ktor = "3.3.1"
 # Serializer
@@ -24,23 +25,25 @@ ksoup = "0.2.5"
 # Storage
 appdirs = "1.5.0"
 datastore = "1.2.0-alpha02"
+room = "2.8.3"
+sqlite = "2.6.1"
 # Tooling
 buildkonfig = "0.17.1"
 ksp = "2.2.20-2.0.4"
 # UI
-adaptive = "1.2.0-alpha07"
+adaptive = "1.2.0"
 coil = "3.3.0"
 colorpicker = "1.1.2"
 compose-icon = "1.1.1"
-compottie = "2.0.1"
+compottie = "2.0.2"
 glance = "1.2.0-beta01"
 haze = "1.6.10"
 htmlconverter = "1.1.0"
 markdown-renderer = "0.37.0"
-materialkolor = "3.0.1"
-navigation3 = "1.0.0-alpha02"
+materialkolor = "5.0.0-alpha02"
+navigation3 = "1.0.0-alpha03"
 paging = "3.4.0-alpha04"
-windowManager = "1.5.0-alpha02"
+windowManager = "1.5.0-beta01"
 # Utils
 otp = "2.4.1"
 sublime-fuzzy = "2.3.4"
@@ -49,8 +52,10 @@ tess4j = "5.16.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
-androidx-lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel-navigation3 = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "androidx-lifecycle" }
+compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-material3" }
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 
 # Crypto
@@ -82,6 +87,9 @@ ksoup = { module = "com.fleeksoft.ksoup:ksoup", version.ref = "ksoup" }
 # Storage
 appdirs = { module = "net.harawata:appdirs", version.ref = "appdirs" }
 datastore = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastore" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+sqlite-bundled = { module  = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 # UI
 adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "adaptive" }
 adaptive-layout = { module = "org.jetbrains.compose.material3.adaptive:adaptive-layout", version.ref = "adaptive" }
@@ -119,3 +127,4 @@ composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-mu
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+room = { id = "androidx.room", version.ref = "room" }

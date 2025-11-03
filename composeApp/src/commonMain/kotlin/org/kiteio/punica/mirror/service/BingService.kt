@@ -18,7 +18,7 @@ import org.kiteio.punica.mirror.util.Json
  * 必应服务。
  */
 @Singleton
-fun BingService(): BingService {
+fun getBingService(): BingService {
     val httpClient = HttpClient {
         defaultRequest {
             url(BingServiceImpl.BASE_URL)

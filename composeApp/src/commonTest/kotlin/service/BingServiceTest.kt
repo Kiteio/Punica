@@ -1,11 +1,11 @@
 package service
 
 import kotlinx.coroutines.runBlocking
-import org.kiteio.punica.mirror.service.BingService
+import org.kiteio.punica.mirror.service.getBingService
 import kotlin.test.Test
 
 class BingServiceTest {
-    private val service = BingService()
+    private val service = getBingService()
 
     /**
      * 获取壁纸测试。

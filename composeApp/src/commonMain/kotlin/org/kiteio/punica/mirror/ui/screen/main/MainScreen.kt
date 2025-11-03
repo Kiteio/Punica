@@ -14,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.EntryProviderBuilder
+import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -38,7 +38,7 @@ import org.kiteio.punica.mirror.ui.screen.timetable.timetableEntry
 /**
  * 主页入口。
  */
-fun EntryProviderBuilder<NavKey>.mainEntry() {
+fun EntryProviderScope<NavKey>.mainEntry() {
     entry<MainRoute> { MainScreen() }
 }
 

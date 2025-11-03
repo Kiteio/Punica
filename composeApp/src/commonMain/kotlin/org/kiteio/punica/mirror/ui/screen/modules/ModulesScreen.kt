@@ -20,7 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.EntryProviderBuilder
+import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
@@ -50,7 +50,7 @@ import punica.composeapp.generated.resources.*
 /**
  * 模块页入口。
  */
-fun EntryProviderBuilder<NavKey>.modulesEntry() {
+fun EntryProviderScope<NavKey>.modulesEntry() {
     entry<ModulesRoute> { ModulesScreen() }
 }
 
@@ -109,21 +109,26 @@ private fun ModulesScreen() {
             )
         },
         Module(SecondClassRoute) {
-            ProgressIndicator({ 0.5f })
+            ProgressIndicator(progress = { 0.5f })
         },
         Module(ProgressesRoute) {
-            ProgressIndicator({ 0.5f })
+            ProgressIndicator(progress = { 0.5f })
         },
     )
 
     Scaffold { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            // 工具
+            // 工具模块
             LazyRow(
-                contentPadding = PaddingValues(16.dp),
+                contentPadding = PaddingValues(
+                    start = 16.dp,
+                    top = 16.dp,
+                    end = 16.dp,
+                    bottom = 8.dp,
+                ),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                items(toolModules) {
+                items(toolModules, key = { it::class.simpleName!! }) {
                     ToolModule(
                         it,
                         onClick = {
@@ -137,18 +142,19 @@ private fun ModulesScreen() {
                 }
             }
 
+            // 功能模块
             LazyVerticalStaggeredGrid(
                 columns = StaggeredGridCells.Adaptive(144.dp),
                 contentPadding = PaddingValues(
                     start = 16.dp,
+                    top = 8.dp,
                     end = 16.dp,
                     bottom = 16.dp,
                 ),
                 verticalItemSpacing = 16.dp,
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                items(modules) {
-                    // 选课系统
+                items(modules, key = { it.route::class.simpleName!! }) {
                     Module(
                         it.route,
                         onClick = {

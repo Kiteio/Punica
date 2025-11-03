@@ -13,7 +13,7 @@ import org.kiteio.punica.mirror.platform.platformHttpClient
 /**
  * 四六级服务。
  */
-fun CetService(): CetService {
+fun getCetService(): CetService {
     val httpClient = platformHttpClient {
         defaultRequest {
             url(CetServiceImpl.BASE_URL)

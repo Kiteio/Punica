@@ -7,17 +7,17 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.kiteio.punica.mirror.modal.Gender
 import org.kiteio.punica.mirror.modal.education.Campus
-import org.kiteio.punica.mirror.service.BingService
+import org.kiteio.punica.mirror.repository.WallpaperRepository
 import org.kiteio.punica.mirror.storage.Preferences
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class MeViewModel(
-    private val bingService: BingService,
+    private val wallpaperRepository: WallpaperRepository,
 ) : ViewModel() {
     /** 壁纸 */
     val wallpaper = flow {
-        emit(bingService.getWallpapers().first()).also {
+        emit(wallpaperRepository.getWallpaper()).also {
             _isWallpaperLoading.update { false }
         }
     }.catch {

@@ -1,7 +1,7 @@
 package org.kiteio.punica.mirror.ui.screen.modules.progresses
 
 import androidx.compose.runtime.Composable
-import androidx.navigation3.runtime.EntryProviderBuilder
+import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import compose.icons.TablerIcons
 import compose.icons.tablericons.ChartLine
@@ -13,7 +13,7 @@ import punica.composeapp.generated.resources.academic_progress
 /**
  * 学业进度页入口。
  */
-fun EntryProviderBuilder<NavKey>.progressesEntry() {
+fun EntryProviderScope<NavKey>.progressesEntry() {
     entry<ProgressesRoute> { ProgressesScreen() }
 }
 

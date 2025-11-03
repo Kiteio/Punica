@@ -33,7 +33,7 @@ import org.kiteio.punica.mirror.util.parseIsoVariantWithoutSecond
 /**
  * 第二课堂服务。
  */
-fun SecondClassService(): SecondClassService {
+fun getSecondClassService(): SecondClassService {
     val httpClient = HttpClient {
         defaultRequest {
             url(SecondClassServiceImpl.BASE_URL)

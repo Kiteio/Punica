@@ -4,14 +4,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.runtime.Composable
-import androidx.navigation3.runtime.EntryProviderBuilder
+import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.mirror.ui.navigation.BottomNavKey
 import punica.composeapp.generated.resources.Res
 import punica.composeapp.generated.resources.timetable
 
-fun EntryProviderBuilder<NavKey>.timetableEntry() {
+fun EntryProviderScope<NavKey>.timetableEntry() {
     entry<TimetableRoute> { TimetableScreen() }
 }
 

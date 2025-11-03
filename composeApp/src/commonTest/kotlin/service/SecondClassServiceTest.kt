@@ -2,12 +2,12 @@ package service
 
 import kotlinx.coroutines.runBlocking
 import org.kiteio.punica.mirror.modal.secondclass.BasicActivity
-import org.kiteio.punica.mirror.service.SecondClassService
+import org.kiteio.punica.mirror.service.getSecondClassService
 import util.readUser
 import kotlin.test.Test
 
 class SecondClassServiceTest {
-    private val service = SecondClassService()
+    private val service = getSecondClassService()
     private val user = readUser()
 
     init {

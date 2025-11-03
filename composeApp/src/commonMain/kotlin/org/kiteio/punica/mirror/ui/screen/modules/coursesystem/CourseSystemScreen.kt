@@ -1,7 +1,7 @@
 package org.kiteio.punica.mirror.ui.screen.modules.coursesystem
 
 import androidx.compose.runtime.Composable
-import androidx.navigation3.runtime.EntryProviderBuilder
+import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import compose.icons.CssGgIcons
 import compose.icons.cssggicons.Slack
@@ -13,7 +13,7 @@ import punica.composeapp.generated.resources.course_system
 /**
  * 选课系统页入口。
  */
-fun EntryProviderBuilder<NavKey>.courseSystemEntry() {
+fun EntryProviderScope<NavKey>.courseSystemEntry() {
     entry<CourseSystemRoute> { CourseSystemScreen() }
 }
 

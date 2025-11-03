@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
@@ -22,7 +23,6 @@ import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kiteio.punica.AppVM
 import org.kiteio.punica.client.academic.api.Graduation
 import org.kiteio.punica.client.academic.api.downloadGraduationReport
@@ -34,17 +34,7 @@ import org.kiteio.punica.ui.page.modules.ModuleRoute
 import org.kiteio.punica.ui.theme.PunicaTheme
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 import org.kiteio.punica.wrapper.launchCatching
-import punica.composeapp.generated.resources.Res
-import punica.composeapp.generated.resources.check_graduation_report
-import punica.composeapp.generated.resources.enrolment_method
-import punica.composeapp.generated.resources.graduation
-import punica.composeapp.generated.resources.graduation_completion_rate
-import punica.composeapp.generated.resources.graduation_credits
-import punica.composeapp.generated.resources.graduation_enrolment_rate
-import punica.composeapp.generated.resources.graduation_name
-import punica.composeapp.generated.resources.graduation_type
-import punica.composeapp.generated.resources.graduation_year
-import punica.composeapp.generated.resources.note
+import punica.composeapp.generated.resources.*
 
 fun NavGraphBuilder.graduationDestination() {
     composable<GraduationRoute> { GraduationPage() }

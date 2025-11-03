@@ -22,7 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.EntryProviderBuilder
+import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.window.core.layout.WindowSizeClass
@@ -42,8 +42,12 @@ import org.kiteio.punica.mirror.modal.Gender
 import org.kiteio.punica.mirror.modal.bing.Wallpaper
 import org.kiteio.punica.mirror.modal.education.Campus
 import org.kiteio.punica.mirror.storage.Preferences
+import org.kiteio.punica.mirror.ui.AppViewModel
+import org.kiteio.punica.mirror.ui.UserState
 import org.kiteio.punica.mirror.ui.animation.dotLottiePainterResource
 import org.kiteio.punica.mirror.ui.navigation.BottomNavKey
+import org.kiteio.punica.mirror.ui.navigation.navigate
+import org.kiteio.punica.mirror.ui.screen.login.LoginRoute
 import org.kiteio.punica.mirror.ui.screen.settings.SettingsRoute
 import org.kiteio.punica.mirror.ui.theme.punicaColor
 import org.kiteio.punica.mirror.util.syncFirst
@@ -54,7 +58,7 @@ import punica.composeapp.generated.resources.*
 /**
  * 我的页入口。
  */
-fun EntryProviderBuilder<NavKey>.meEntry() {
+fun EntryProviderScope<NavKey>.meEntry() {
     entry<MeRoute> { MeScreen() }
 }
 
@@ -81,10 +85,11 @@ data object MeRoute : BottomNavKey {
 @Composable
 private fun MeScreen() {
     val backStack = koinInject<NavBackStack<NavKey>>()
+    val appViewModel = koinInject<AppViewModel>()
 
     val viewModel = koinViewModel<MeViewModel>()
 
-    var username by remember { mutableStateOf("12345678910") }
+    val userState by appViewModel.userState.collectAsState()
 
     // 壁纸
     val wallpaper by viewModel.wallpaper.collectAsState(null)
@@ -127,9 +132,12 @@ private fun MeScreen() {
 
                 // 用户卡片
                 UserCard(
-                    name = username,
+                    name = userState.userId,
+                    isLoggedIn = userState is UserState.LoggedIn,
                     onAvatarClick = {},
-                    onNameCardClick = {},
+                    onNameCardClick = {
+                        backStack.navigate(LoginRoute)
+                    },
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(horizontal = 8.dp)
@@ -234,11 +242,13 @@ private fun Wallpaper(
  * 用户卡片。
  *
  * @param name 名字
+ * @param isLoggedIn 是否已登录
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun UserCard(
-    name: String,
+    name: String?,
+    isLoggedIn: Boolean,
     onAvatarClick: () -> Unit,
     onNameCardClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -326,13 +336,21 @@ private fun UserCard(
                 ) {
                     // 名字
                     Text(
-                        name,
+                        name ?: stringResource(Res.string.not_logged_in),
                         fontWeight = FontWeight.Black,
-                        style = LocalTextStyle.current.copy(
-                            brush = Brush.linearGradient(
-                                colors = nameColors,
-                            )
-                        ),
+                        style = LocalTextStyle.current.run {
+                            if (isLoggedIn) {
+                                copy(
+                                    brush = Brush.linearGradient(
+                                        colors = nameColors,
+                                    )
+                                )
+                            }else {
+                                copy(
+                                    color = MaterialTheme.colorScheme.error,
+                                )
+                            }
+                        },
                     )
                     Spacer(Modifier.height(4.dp))
                     // 摘抄

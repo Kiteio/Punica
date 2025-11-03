@@ -1,5 +1,6 @@
 package org.kiteio.punica.mirror
 
+import androidx.compose.animation.*
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -15,10 +16,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.modules.SerializersModule
 import org.kiteio.punica.mirror.storage.Preferences
+import org.kiteio.punica.mirror.ui.AppViewModel
 import org.kiteio.punica.mirror.ui.Toast
 import org.kiteio.punica.mirror.ui.ToastUiState
 import org.kiteio.punica.mirror.ui.hide
 import org.kiteio.punica.mirror.ui.navigation.polymorphic
+import org.kiteio.punica.mirror.ui.screen.login.LoginRoute
+import org.kiteio.punica.mirror.ui.screen.login.loginEntry
 import org.kiteio.punica.mirror.ui.screen.main.MainRoute
 import org.kiteio.punica.mirror.ui.screen.main.mainEntry
 import org.kiteio.punica.mirror.ui.screen.modules.calls.CallsRoute
@@ -80,14 +84,6 @@ fun PunicaApp() {
             )
         },
     ) {
-        // 主色调
-        val primaryColor by Preferences.primaryColor
-            .collectAsState(Preferences.primaryColor.syncFirst())
-
-        // 主题模式
-        val themeMode by Preferences.themeMode
-            .collectAsState(Preferences.themeMode.syncFirst())
-
         // Toast
         val toast = koinInject<Toast>()
         // Toast UI 状态
@@ -123,6 +119,21 @@ fun PunicaApp() {
             }
         }
 
+        val appViewModel = koinInject<AppViewModel>()
+
+        LaunchedEffect(Unit) {
+            // 自动登录
+            appViewModel.autoLogin()
+        }
+
+        // 主色调
+        val primaryColor by Preferences.primaryColor
+            .collectAsState(Preferences.primaryColor.syncFirst())
+
+        // 主题模式
+        val themeMode by Preferences.themeMode
+            .collectAsState(Preferences.themeMode.syncFirst())
+
         PunicaExpressiveTheme(
             darkTheme = when (themeMode) {
                 ThemeMode.Auto -> isSystemInDarkTheme()
@@ -145,11 +156,31 @@ fun PunicaApp() {
             ) {
                 NavDisplay(
                     backStack = backStack,
+                    transitionSpec = {
+                        ContentTransform(
+                            slideInHorizontally { it / 2 } + fadeIn(),
+                            fadeOut(),
+                        )
+                    },
+                    popTransitionSpec = {
+                        ContentTransform(
+                            fadeIn(),
+                            slideOutHorizontally { it / 2 } + fadeOut(),
+                        )
+                    },
+                    predictivePopTransitionSpec = {
+                        ContentTransform(
+                            fadeIn(),
+                            slideOutHorizontally { it / 2 } + fadeOut(targetAlpha = 0.5f),
+                        )
+                    },
                     entryProvider = entryProvider {
                         // 主页
                         mainEntry()
                         // 设置页
                         settingsEntry()
+                        // 登录页
+                        loginEntry()
 
                         // 紧急电话页
                         callsEntry()
@@ -197,6 +228,7 @@ private inline fun <reified T : NavKey> rememberNavBackStack(
             serializersModule = SerializersModule {
                 polymorphic(MainRoute.serializer())
                 polymorphic(SettingsRoute.serializer())
+                polymorphic(LoginRoute.serializer())
 
                 polymorphic(CallsRoute.serializer())
                 polymorphic(TotpRoute.serializer())

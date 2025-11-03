@@ -3,35 +3,14 @@ package org.kiteio.punica.ui.page.settings
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ExpandLess
 import androidx.compose.material.icons.outlined.ExpandMore
-import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -56,26 +35,7 @@ import org.kiteio.punica.ui.theme.link
 import org.kiteio.punica.wrapper.LaunchedEffectCatching
 import org.kiteio.punica.wrapper.focusCleaner
 import org.kiteio.punica.wrapper.launchCatching
-import punica.composeapp.generated.resources.Res
-import punica.composeapp.generated.resources.academic_system
-import punica.composeapp.generated.resources.academic_system_password
-import punica.composeapp.generated.resources.default_is_user_id
-import punica.composeapp.generated.resources.error_password_is_empty
-import punica.composeapp.generated.resources.error_user_id_is_11_digits
-import punica.composeapp.generated.resources.expand_less
-import punica.composeapp.generated.resources.expand_more
-import punica.composeapp.generated.resources.forget_password
-import punica.composeapp.generated.resources.logging_in
-import punica.composeapp.generated.resources.login
-import punica.composeapp.generated.resources.login_successful
-import punica.composeapp.generated.resources.logo
-import punica.composeapp.generated.resources.logout
-import punica.composeapp.generated.resources.password
-import punica.composeapp.generated.resources.punica
-import punica.composeapp.generated.resources.safety_instruction
-import punica.composeapp.generated.resources.second_class_password
-import punica.composeapp.generated.resources.should_be_11_digits
-import punica.composeapp.generated.resources.user_id
+import punica.composeapp.generated.resources.*
 
 @Composable
 fun UserBottomSheet(visible: Boolean, onDismissRequest: () -> Unit) {
@@ -165,7 +125,7 @@ fun UserBottomSheet(visible: Boolean, onDismissRequest: () -> Unit) {
                     modifier = Modifier.fillMaxWidth(0.9f),
                     readOnly = isUserLogin || AppVM.isLoggingIn,
                     label = { Text(stringResource(Res.string.password)) },
-                    placeholder = { Text(stringResource(Res.string.academic_system_password)) },
+                    placeholder = { Text(stringResource(Res.string.tip_input_password)) },
                     isError = isLoginButtonClicked && password.isBlank(),
                     errorText = {
                         Text(stringResource(Res.string.error_password_is_empty))

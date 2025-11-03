@@ -1,5 +1,7 @@
 package org.kiteio.punica.mirror.repository
 
+import jakarta.inject.Singleton
+import org.kiteio.punica.mirror.modal.bing.Wallpaper
 import org.kiteio.punica.mirror.service.BingService
 
 /**
@@ -7,7 +9,8 @@ import org.kiteio.punica.mirror.service.BingService
  *
  * @param service Bing 服务
  */
-fun WallpaperRepository(
+@Singleton
+fun getWallpaperRepository(
     service: BingService,
 ): WallpaperRepository {
     return WallpaperRepositoryImpl(service)
@@ -20,7 +23,7 @@ interface WallpaperRepository {
     /**
      * 获取壁纸。
      */
-    suspend fun getWallpaper(): String
+    suspend fun getWallpaper(): Wallpaper
 }
 
 // --------------- 实现 ---------------
@@ -28,7 +31,7 @@ interface WallpaperRepository {
 private class WallpaperRepositoryImpl(
     private val service: BingService,
 ) : WallpaperRepository {
-    override suspend fun getWallpaper(): String {
-        return service.getWallpapers().first().url
+    override suspend fun getWallpaper(): Wallpaper {
+        return service.getWallpapers().first()
     }
 }

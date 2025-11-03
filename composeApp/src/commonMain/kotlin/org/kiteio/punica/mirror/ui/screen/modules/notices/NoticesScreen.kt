@@ -1,7 +1,7 @@
 package org.kiteio.punica.mirror.ui.screen.modules.notices
 
 import androidx.compose.runtime.Composable
-import androidx.navigation3.runtime.EntryProviderBuilder
+import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import compose.icons.CssGgIcons
 import compose.icons.cssggicons.Bell
@@ -13,7 +13,7 @@ import punica.composeapp.generated.resources.academic_notices
 /**
  * 教务通知页入口。
  */
-fun EntryProviderBuilder<NavKey>.noticesEntry() {
+fun EntryProviderScope<NavKey>.noticesEntry() {
     entry<NoticesRoute> { NoticesScreen() }
 }
 

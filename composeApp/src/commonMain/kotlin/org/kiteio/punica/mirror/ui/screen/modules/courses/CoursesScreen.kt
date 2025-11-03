@@ -1,7 +1,7 @@
 package org.kiteio.punica.mirror.ui.screen.modules.courses
 
 import androidx.compose.runtime.Composable
-import androidx.navigation3.runtime.EntryProviderBuilder
+import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import compose.icons.TablerIcons
 import compose.icons.tablericons.Book
@@ -13,7 +13,7 @@ import punica.composeapp.generated.resources.course_timetable
 /**
  * 课程课表页入口。
  */
-fun EntryProviderBuilder<NavKey>.coursesEntry() {
+fun EntryProviderScope<NavKey>.coursesEntry() {
     entry<CoursesRoute> { CoursesScreen() }
 }
 

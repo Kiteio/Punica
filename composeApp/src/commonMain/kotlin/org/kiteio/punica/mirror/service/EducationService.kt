@@ -11,6 +11,7 @@ import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import jakarta.inject.Singleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.DayOfWeek
@@ -19,6 +20,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.isoDayNumber
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.kiteio.punica.http.cookie
 import org.kiteio.punica.mirror.modal.education.*
 import org.kiteio.punica.mirror.util.Json
 import org.kiteio.punica.mirror.util.now
@@ -29,18 +31,18 @@ import kotlin.time.ExperimentalTime
 /**
  * 教务系统服务。
  */
-fun EducationService(): EducationService {
-    val cookiesStorage = AcceptAllCookiesStorage()
+@Singleton
+fun getEducationService(): EducationService {
     val httpClient = HttpClient {
         defaultRequest {
             url(EducationServiceImpl.BASE_URL)
         }
         install(HttpCookies) {
-            storage = cookiesStorage
+            storage = AcceptAllCookiesStorage()
         }
     }
 
-    return EducationServiceImpl(httpClient, cookiesStorage)
+    return EducationServiceImpl(httpClient)
 }
 
 /**
@@ -50,7 +52,7 @@ interface EducationService {
     /**
      * 登录验证码。
      */
-    suspend fun getCaptcha(cookie: Cookie? = null): ByteArray
+    suspend fun getCaptcha(cookies: List<Cookie>): HttpResponse
 
     /**
      * 登录。
@@ -233,7 +235,6 @@ interface EducationService {
 
 private class EducationServiceImpl(
     private val httpClient: HttpClient,
-    private val storage: CookiesStorage,
 ) : EducationService {
     private var user: EducationUser? = null
 
@@ -247,15 +248,15 @@ private class EducationServiceImpl(
         const val BASE_URL = "http://jwxt.gdufe.edu.cn"
     }
 
-    override suspend fun getCaptcha(cookie: Cookie?): ByteArray {
-        cookie?.let {
-            storage.addCookie(BASE_URL, it)
+    override suspend fun getCaptcha(cookies: List<Cookie>): HttpResponse {
+        return httpClient.get("/jsxsd/verifycode.servlet") {
+            cookies.forEach { cookie(it) }
         }
-        return httpClient.get("/jsxsd/verifycode.servlet")
-            .readRawBytes()
     }
 
     override suspend fun login(userId: String, password: String, captcha: String) {
+        require(captcha.length == 4) { "验证码错误!!" }
+
         user = EducationUser(userId, password)
         val text = httpClient.submitForm(
             "/jsxsd/xk/LoginToXkLdap",

@@ -1,11 +1,11 @@
 package service
 
 import kotlinx.coroutines.runBlocking
-import org.kiteio.punica.mirror.service.NoticeService
+import org.kiteio.punica.mirror.service.getNoticeService
 import kotlin.test.Test
 
 class NoticeServiceTest {
-    private val service = NoticeService()
+    private val service = getNoticeService()
 
     /**
      * 获取通知列表测试。

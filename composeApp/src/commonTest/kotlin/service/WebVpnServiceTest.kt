@@ -1,13 +1,13 @@
 package service
 
 import kotlinx.coroutines.runBlocking
-import org.kiteio.punica.mirror.service.WebVpnService
+import org.kiteio.punica.mirror.service.getWebVpnService
 import util.readTotp
 import util.readUser
 import kotlin.test.Test
 
 class WebVpnServiceTest {
-    private val service = WebVpnService()
+    private val service = getWebVpnService()
     private val user = readUser()
     private val totp = readTotp()
 

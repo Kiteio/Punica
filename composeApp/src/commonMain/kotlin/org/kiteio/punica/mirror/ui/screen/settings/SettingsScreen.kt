@@ -14,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.EntryProviderBuilder
+import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import compose.icons.SimpleIcons
 import compose.icons.simpleicons.Github
@@ -29,7 +29,7 @@ import punica.composeapp.generated.resources.*
 /**
  * 设置页入口。
  */
-fun EntryProviderBuilder<NavKey>.settingsEntry() {
+fun EntryProviderScope<NavKey>.settingsEntry() {
     entry<SettingsRoute> { SettingsScreen() }
 }
 

@@ -30,7 +30,7 @@ import kotlin.random.Random
  * WebVpn 服务。
  */
 @OptIn(InternalAPI::class)
-fun WebVpnService(): WebVpnService {
+fun getWebVpnService(): WebVpnService {
     val httpClient = HttpClient {
         defaultRequest {
             url(WebVpnServiceImpl.BASE_URL)

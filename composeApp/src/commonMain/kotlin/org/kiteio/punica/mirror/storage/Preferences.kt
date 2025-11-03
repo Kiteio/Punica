@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.map
 import okio.Path.Companion.toPath
 import org.kiteio.punica.mirror.modal.Gender
@@ -29,6 +30,9 @@ object Preferences {
      * 存储键。
      */
     private object Keys {
+        /** 学号 */
+        val userId = stringPreferencesKey("user_id")
+
         /** 校区 */
         val campus = intPreferencesKey("campus")
 
@@ -44,6 +48,10 @@ object Preferences {
         /** 主题模式 */
         val themeMode = intPreferencesKey("theme_mode")
     }
+
+    /** 学号 */
+    val userId = preferences.data
+        .map { it[Keys.userId] }
 
     /** 校区 */
     val campus = preferences.data
@@ -70,6 +78,13 @@ object Preferences {
         .map { ThemeMode.entries[it] }
 
     /**
+     * 更改学号。
+     */
+    suspend fun changeUserId(userId: String) {
+        preferences.edit { it[Keys.userId] = userId }
+    }
+
+    /**
      * 更改校区。
      */
     suspend fun changeCampus(campus: Campus) {
@@ -90,8 +105,6 @@ object Preferences {
      */
     suspend fun changePrimaryColor(color: Color) {
         preferences.edit {
-            println(color)
-            println(Color(color.toArgb()))
             it[Keys.primaryColor] = color.toArgb()
         }
     }

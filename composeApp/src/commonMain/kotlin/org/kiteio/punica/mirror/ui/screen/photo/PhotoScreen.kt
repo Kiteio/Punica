@@ -4,7 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.outlined.Photo
 import androidx.compose.runtime.Composable
-import androidx.navigation3.runtime.EntryProviderBuilder
+import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.mirror.ui.navigation.BottomNavKey
@@ -14,7 +14,7 @@ import punica.composeapp.generated.resources.photo
 /**
  * 相册页入口。
  */
-fun EntryProviderBuilder<NavKey>.photoEntry() {
+fun EntryProviderScope<NavKey>.photoEntry() {
     entry<PhotoRoute> { PhotoScreen() }
 }
 

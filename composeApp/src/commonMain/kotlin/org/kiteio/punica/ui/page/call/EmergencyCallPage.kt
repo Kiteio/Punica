@@ -11,11 +11,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.ContentCopy
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -35,15 +31,7 @@ import org.kiteio.punica.ui.component.showToast
 import org.kiteio.punica.ui.page.modules.ModuleRoute
 import org.kiteio.punica.ui.rememberRunBlocking
 import org.kiteio.punica.wrapper.launchCatching
-import punica.composeapp.generated.resources.Res
-import punica.composeapp.generated.resources.campus_alarm
-import punica.composeapp.generated.resources.campus_police_office
-import punica.composeapp.generated.resources.copy
-import punica.composeapp.generated.resources.copy_successful
-import punica.composeapp.generated.resources.emergency_call
-import punica.composeapp.generated.resources.first_aid
-import punica.composeapp.generated.resources.guanzhou_police_station
-import punica.composeapp.generated.resources.hours_24
+import punica.composeapp.generated.resources.*
 
 /**
  * 紧急电话页面路由。

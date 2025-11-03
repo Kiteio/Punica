@@ -1,5 +1,6 @@
 package service
 
+import io.ktor.client.statement.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
@@ -7,13 +8,13 @@ import org.kiteio.punica.mirror.modal.education.Course
 import org.kiteio.punica.mirror.modal.education.Semester
 import org.kiteio.punica.mirror.modal.education.containsWeek
 import org.kiteio.punica.mirror.platform.readCaptcha
-import org.kiteio.punica.mirror.service.EducationService
+import org.kiteio.punica.mirror.service.getEducationService
 import util.readUser
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class EducationServiceTest {
-    private val service = EducationService()
+    private val service = getEducationService()
     private val user = readUser()
 
     init {
@@ -25,7 +26,7 @@ class EducationServiceTest {
      */
     private fun login(): Unit = runBlocking {
         try {
-            val captcha = service.getCaptcha().readCaptcha()
+            val captcha = service.getCaptcha(emptyList()).readRawBytes().readCaptcha()
             service.login(user.id, user.password, captcha)
         } catch (e: Exception) {
             // 验证码出错重试

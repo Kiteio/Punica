@@ -1,7 +1,7 @@
 package org.kiteio.punica.mirror.ui.screen.modules.secondclass
 
 import androidx.compose.runtime.Composable
-import androidx.navigation3.runtime.EntryProviderBuilder
+import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import compose.icons.CssGgIcons
 import compose.icons.cssggicons.Dribbble
@@ -13,7 +13,7 @@ import punica.composeapp.generated.resources.second_class
 /**
  * 第二课堂页入口。
  */
-fun EntryProviderBuilder<NavKey>.secondClassEntry() {
+fun EntryProviderScope<NavKey>.secondClassEntry() {
     entry<SecondClassRoute> { SecondClassScreen() }
 }
 

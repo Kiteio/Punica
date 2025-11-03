@@ -3,7 +3,6 @@
     <string name="app_name">小石榴</string>
     <string name="extract">曾经有一份真诚的爱情摆在我的面前，但是我没有珍惜，等到了失去的时候才后悔莫及，尘世间最痛苦的事莫过于此。如果上天可以给我一个机会再来一次的话，我会跟那个女孩子说我爱她，如果非要把这份爱上加一个期限，我希望是一万年。</string>
 
-    <string name="welcome">欢迎(｡•ㅅ•｡)♡</string>
 
     <string name="intro">    嘿，欢迎使用《小石榴》跨平台版本（目前支持 Android、Windows）。
     石榴是一款开源的广财教务系统三方工具，让你远离繁杂的教务系统。
@@ -31,9 +30,6 @@
     <string name="error">出了点问题</string>
 
     <string name="connect_timeout">连接超时</string>
-
-    <!-- SettingPage -->
-    <string name="not_logged_in">未登录</string>
 
     <!-- VersionsPage.kt -->
     <string name="current_version">当前版本</string>
@@ -186,24 +182,13 @@
     <string name="official_website_kiteio">Kiteio 官方网站</string>
 
     <string name="safety_instruction">小石榴是一款开源软件，我们十分重视您的隐私，您的数据将在本地妥善保存。首次登录需要下载 OCR 训练文件，请耐心等待</string>
-    <string name="user_id">学号</string>
-    <string name="password">密码</string>
-    <string name="second_class_password">第二课堂密码</string>
     <string name="should_be_11_digits">11 位数字</string>
-    <string name="academic_system_password">教务系统（融合门户）密码</string>
-    <string name="error_user_id_is_11_digits">学号是 11 位</string>
-    <string name="error_password_is_empty">请输入密码</string>
     <string name="default_is_user_id">默认是学号，可留空</string>
     <string name="expand_more">展开</string>
     <string name="expand_less">收起</string>
-    <string name="forget_password">忘记密码</string>
-    <string name="login">登录</string>
     <string name="logout">退出</string>
-    <string name="login_successful">登录成功</string>
     <string name="delete">删除</string>
     <string name="delete_successful">删除成功</string>
-    <string name="visibility">可见</string>
-    <string name="visibility_off">不可见</string>
 
 
     <string name="navigate_before">返回</string>
@@ -218,6 +203,7 @@
     <string name="wallpaper">壁纸</string>
     <string name="avatar">头像</string>
     <string name="logo">标识</string>
+    <string name="not_logged_in">未登录</string>
     <string name="campus">校区</string>
     <string name="canton">广州</string>
     <string name="foshan">佛山</string>
@@ -260,4 +246,30 @@
     <string name="grade">课程成绩</string>
     <string name="second_class">第二课堂</string>
     <string name="academic_progress">学业进度</string>
+
+    <!-- 登录页 -->
+    <string name="welcome">欢迎 (｡•ㅅ•｡)♡</string>
+    <string name="cat">猫</string>
+    <string name="travel">旅行</string>
+    <string name="login">登录</string>
+    <string name="login_successful">登录成功</string>
+    <string name="user_id">学号</string>
+    <string name="password">密码</string>
+    <string name="second_class_password">第二课堂密码（选填）</string>
+    <string name="visibility">可见</string>
+    <string name="visibility_off">不可见</string>
+    <string name="tip_input_user_id">输入11位学号</string>
+    <string name="tip_input_password">教务系统（门户）密码</string>
+    <string name="tip_input_second_class_pwd">默认为学号</string>
+    <string name="error_user_id_is_11_digits">学号是 11 位</string>
+    <string name="error_password_is_empty">请输入密码</string>
+    <!-- 登录帮助底部抽屉 -->
+    <string name="help">帮助</string>
+    <string name="desc_data_secure">小石榴将您的数据存储于当前设备上（未加密）以保证不被滥用</string>
+    <string name="data_secure">数据安全</string>
+    <string name="desc_forget_password">请点击下方按钮前往官网重置密码</string>
+    <string name="auto_login">自动登录</string>
+    <string name="desc_auto_login">小石榴配备验证码识别功能，一次登录后，每次打开可自动登录同步数据</string>
+    <string name="forget_password">忘记密码</string>
+    <string name="go_to_reset">前往重置</string>
 </resources>

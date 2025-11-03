@@ -1,7 +1,7 @@
 package org.kiteio.punica.mirror.ui.screen.modules.teachers
 
 import androidx.compose.runtime.Composable
-import androidx.navigation3.runtime.EntryProviderBuilder
+import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import compose.icons.TablerIcons
 import compose.icons.tablericons.Id
@@ -13,7 +13,7 @@ import punica.composeapp.generated.resources.teacher_profile
 /**
  * 教师信息入口。
  */
-fun EntryProviderBuilder<NavKey>.teachersScreen() {
+fun EntryProviderScope<NavKey>.teachersScreen() {
     entry<TeachersRoute> { TeachersScreen() }
 }
 

@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 kotlin {
@@ -54,9 +55,8 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
             implementation(compose.foundation)
-            implementation(compose.material3)
+            implementation(libs.compose.material3)
             implementation(compose.material3AdaptiveNavigationSuite)
             implementation(compose.materialIconsExtended)
             implementation(compose.preview)
@@ -64,6 +64,7 @@ kotlin {
             implementation(compose.ui)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.lifecycle.viewmodel.compose)
+            implementation(libs.androidx.lifecycle.viewmodel.navigation3)
 
             // Crypto
             implementation(libs.cryptography.core)
@@ -88,6 +89,8 @@ kotlin {
             implementation(libs.ksoup)
             // Storage
             implementation(libs.datastore)
+            implementation(libs.room.runtime)
+            implementation(libs.sqlite.bundled)
             // UI
             implementation(libs.adaptive)
             implementation(libs.adaptive.layout)
@@ -160,6 +163,7 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            proguardFiles("proguard-rules.pro")
         }
     }
     applicationVariants.all {
@@ -187,14 +191,27 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
+    // Koin
     add("kspCommonMainMetadata", libs.koin.ksp.compiler)
     add("kspAndroid", libs.koin.ksp.compiler)
     add("kspIosX64", libs.koin.ksp.compiler)
     add("kspIosArm64", libs.koin.ksp.compiler)
     add("kspIosSimulatorArm64", libs.koin.ksp.compiler)
+    // Room
+    add("kspAndroid", libs.room.compiler)
+    add("kspDesktop", libs.room.compiler)
+    add("kspIosX64", libs.room.compiler)
+    add("kspIosArm64", libs.room.compiler)
+    add("kspIosSimulatorArm64", libs.room.compiler)
 }
 
-tasks.matching { it.name.startsWith("ksp") && it.name != "kspCommonMainKotlinMetadata" }.configureEach {
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
+tasks.matching {
+    it.name.startsWith("ksp") && it.name != "kspCommonMainKotlinMetadata"
+}.configureEach {
     dependsOn("kspCommonMainKotlinMetadata")
 }
 
