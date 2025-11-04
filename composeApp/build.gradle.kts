@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.buildkonfig)
     alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.composeHotReload)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinSerialization)
@@ -16,13 +15,6 @@ plugins {
 }
 
 kotlin {
-    compilerOptions.freeCompilerArgs.addAll(
-        // 上下文参数
-        "-Xcontext-parameters",
-        // 平台类
-        "-Xexpect-actual-classes",
-    )
-
     androidTarget {
         compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
     }
@@ -54,14 +46,14 @@ kotlin {
             implementation(libs.tess4Android)
         }
         commonMain.dependencies {
-            implementation(compose.components.resources)
-            implementation(compose.foundation)
+            implementation(libs.compose.components.resources)
+            implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
-            implementation(compose.material3AdaptiveNavigationSuite)
-            implementation(compose.materialIconsExtended)
-            implementation(compose.preview)
-            implementation(compose.runtime)
-            implementation(compose.ui)
+            implementation(libs.compose.material3AdaptiveNavigationSuite)
+            implementation(libs.compose.materialIconsExtended)
+            implementation(libs.compose.preview)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.ui)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.lifecycle.viewmodel.compose)
             implementation(libs.androidx.lifecycle.viewmodel.navigation3)
@@ -94,7 +86,7 @@ kotlin {
             // UI
             implementation(libs.adaptive)
             implementation(libs.adaptive.layout)
-            implementation(libs.adaptive.navigation)
+            implementation(libs.adaptive.navigation3)
             implementation(libs.coil.compose)
             implementation(libs.coil.network.ktor3)
             implementation(libs.colorpicker)

@@ -52,7 +52,6 @@ fun EntryProviderScope<NavKey>.loginEntry() {
 @Serializable
 data object LoginRoute : NavKey
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun LoginScreen() {
     val appViewModel = koinInject<AppViewModel>()

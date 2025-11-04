@@ -142,12 +142,7 @@
     <string name="library">图书馆</string>
 
     <!-- EmergencyCallPage.kt -->
-    <string name="copy">复制</string>
     <string name="copy_successful">复制成功</string>
-    <string name="first_aid">门诊部急救</string>
-    <string name="campus_alarm">校园报警</string>
-    <string name="campus_police_office">校园警务室</string>
-    <string name="guanzhou_police_station">官洲派出所</string>
     <string name="hours_24">24小时</string>
 
     <!-- TimetablePage.kt -->
@@ -272,4 +267,13 @@
     <string name="desc_auto_login">小石榴配备验证码识别功能，一次登录后，每次打开可自动登录同步数据</string>
     <string name="forget_password">忘记密码</string>
     <string name="go_to_reset">前往重置</string>
+
+    <!-- 紧急电话 -->
+    <string name="first_aid">门诊部急救</string>
+    <string name="campus_alarm">校园报警</string>
+    <string name="campus_police_office">校园警务室</string>
+    <string name="guanzhou_police_station">官洲派出所</string>
+    <string name="working_hours">工作时间</string>
+    <string name="copy">复制</string>
+    <string name="copied_phone_number_of">已复制「%1$s」电话</string>
 </resources>
