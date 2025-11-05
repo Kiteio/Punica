@@ -2,9 +2,12 @@ package org.kiteio.punica.mirror.storage
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import jakarta.inject.Singleton
 import org.kiteio.punica.mirror.modal.User
+import org.kiteio.punica.mirror.modal.cet.CetExam
+import org.kiteio.punica.mirror.storage.dao.CetExamDao
 import org.kiteio.punica.mirror.storage.dao.UserDao
 import org.kiteio.punica.mirror.util.AppDirs
 
@@ -23,9 +26,12 @@ fun getAppDatabase(): AppDatabase {
 /**
  * 数据库。
  */
-@Database(entities = [User::class], version = 1)
+@Database(entities = [User::class, CetExam::class], version = 1)
+@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
+
+    abstract fun cetExamDao(): CetExamDao
 }
 
 /**

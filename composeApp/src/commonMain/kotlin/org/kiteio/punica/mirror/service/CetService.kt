@@ -1,18 +1,23 @@
 package org.kiteio.punica.mirror.service
 
 import com.fleeksoft.ksoup.Ksoup
-import io.ktor.client.HttpClient
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.request.get
-import io.ktor.client.statement.bodyAsText
+import io.ktor.client.*
+import io.ktor.client.plugins.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import jakarta.inject.Singleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.kiteio.punica.mirror.modal.cet.CetExams
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.format.AmPmMarker
+import org.kiteio.punica.mirror.modal.cet.CetExam
+import org.kiteio.punica.mirror.modal.cet.CetExamTime
 import org.kiteio.punica.mirror.platform.platformHttpClient
 
 /**
  * 四六级服务。
  */
+@Singleton
 fun getCetService(): CetService {
     val httpClient = platformHttpClient {
         defaultRequest {
@@ -27,7 +32,10 @@ fun getCetService(): CetService {
  * 四六级服务。
  */
 interface CetService {
-    suspend fun getExam(): CetExams
+    /**
+     * 获取 Cet 考试。
+     */
+    suspend fun getExam(): CetExam
 }
 
 // --------------- 实现 ---------------
@@ -44,23 +52,38 @@ private class CetServiceImpl(
 
         val firstDiv = divs.first()!!
         val ul = firstDiv.child(1)
-
-        val writtenTime = ul.child(0).text()
-            .replace("笔试：", "")
-        val amSuject = ul.child(1).text()
-        val pmSuject = ul.child(2).text()
-        val writtenSubject = "$amSuject\n${pmSuject}"
-
         val spans = ul.child(4).children()
 
-        return@withContext CetExams(
-            name = firstDiv.child(0).text(),
-            written = mapOf(writtenTime to writtenSubject),
-            speaking = mapOf(
-                spans[0].text().split("：")
-                    .let { it[0] to it[1] },
-                spans[1].text().split("：")
-                    .let { it[0] to it[1] },
+        val name = firstDiv.child(0).text().removeSuffix("：")
+        val year = name.substring(0..3).toInt()
+        // 笔试日期
+        val writtenDate = ul.child(0).text()
+            .split("：")[1]
+                .let { LocalDate.parse("$year-$it") }
+        // 四级口语日期
+        val cet4SpeakingDate = spans[0].text()
+            .split("：")[0]
+                .let { LocalDate.parse("$year-$it") }
+        // 六级口语日期
+        val cet6SpeakingDate = spans[1].text()
+            .split("：")[0]
+                .let { LocalDate.parse("$year-$it") }
+
+        return@withContext CetExam(
+            name = name,
+            cet4Written = CetExamTime(
+                writtenDate,
+                AmPmMarker.AM,
+            ),
+            cet6Written = CetExamTime(
+                writtenDate,
+                AmPmMarker.PM,
+            ),
+            cet4Speaking = CetExamTime(
+                cet4SpeakingDate,
+            ),
+            cet6Speaking = CetExamTime(
+                cet6SpeakingDate,
             ),
             note = divs[1].text(),
             pdfUrlString = "$BASE_URL/project/CET/News/TestDataPlan-CET.pdf",

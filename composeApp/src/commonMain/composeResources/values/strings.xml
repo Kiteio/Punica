@@ -27,7 +27,6 @@
     <string name="dismiss">取消</string>
 
     <string name="nothing_provided">什么也没有</string>
-    <string name="error">出了点问题</string>
 
     <string name="connect_timeout">连接超时</string>
 
@@ -268,7 +267,7 @@
     <string name="forget_password">忘记密码</string>
     <string name="go_to_reset">前往重置</string>
 
-    <!-- 紧急电话 -->
+    <!-- 紧急电话页 -->
     <string name="first_aid">门诊部急救</string>
     <string name="campus_alarm">校园报警</string>
     <string name="campus_police_office">校园警务室</string>
@@ -276,4 +275,13 @@
     <string name="working_hours">工作时间</string>
     <string name="copy">复制</string>
     <string name="copied_phone_number_of">已复制「%1$s」电话</string>
+
+    <!-- 四六级页 -->
+    <string name="cet4_written">四级笔试</string>
+    <string name="cet6_written">六级笔试</string>
+    <string name="cet4_speaking">四级口语</string>
+    <string name="cet6_speaking">六级口语</string>
+    <string name="am">上午</string>
+    <string name="pm">下午</string>
+    <string name="error">出现了一些状况</string>
 </resources>

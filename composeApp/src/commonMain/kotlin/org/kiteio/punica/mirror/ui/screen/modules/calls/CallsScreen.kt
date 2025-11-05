@@ -11,7 +11,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.ContentCopy
-import androidx.compose.material.icons.outlined.Work
+import androidx.compose.material.icons.twotone.Work
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -36,10 +36,7 @@ import org.kiteio.punica.mirror.ui.component.NavBeforeIconButton
 import org.kiteio.punica.mirror.ui.navigation.ModuleNavKey
 import org.kiteio.punica.mirror.ui.show
 import org.koin.compose.koinInject
-import punica.composeapp.generated.resources.Res
-import punica.composeapp.generated.resources.copied_phone_number_of
-import punica.composeapp.generated.resources.emergency_call
-import punica.composeapp.generated.resources.working_hours
+import punica.composeapp.generated.resources.*
 
 /**
  * 紧急电话页入口。
@@ -220,8 +217,8 @@ private fun CallCard(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Icon(
-                                Icons.Outlined.Work,
-                                contentDescription = null,
+                                Icons.TwoTone.Work,
+                                contentDescription = stringResource(Res.string.working_hours),
                                 modifier = Modifier.size(16.dp),
                             )
                             Text(
@@ -236,7 +233,7 @@ private fun CallCard(
                 IconButton(onClick = { onCopy() }) {
                     Icon(
                         Icons.Outlined.ContentCopy,
-                        contentDescription = stringResource(Res.string.working_hours),
+                        contentDescription = stringResource(Res.string.copy),
                     )
                 }
             },

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "6954497fadcc236a017b0a2a887c431c",
+    "identityHash": "f8291d79949ea99c52433779664c224a",
     "entities": [
       {
         "tableName": "user",
@@ -39,11 +39,91 @@
             "id"
           ]
         }
+      },
+      {
+        "tableName": "cet_exam",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `note` TEXT NOT NULL, `pdfUrlString` TEXT NOT NULL, `id` INTEGER NOT NULL, `cet4_written_date` TEXT NOT NULL, `cet4_written_amPmMarker` TEXT, `cet6_written_date` TEXT NOT NULL, `cet6_written_amPmMarker` TEXT, `cet4_speaking_date` TEXT NOT NULL, `cet4_speaking_amPmMarker` TEXT, `cet6_speaking_date` TEXT NOT NULL, `cet6_speaking_amPmMarker` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pdfUrlString",
+            "columnName": "pdfUrlString",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cet4Written.date",
+            "columnName": "cet4_written_date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cet4Written.amPmMarker",
+            "columnName": "cet4_written_amPmMarker",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "cet6Written.date",
+            "columnName": "cet6_written_date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cet6Written.amPmMarker",
+            "columnName": "cet6_written_amPmMarker",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "cet4Speaking.date",
+            "columnName": "cet4_speaking_date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cet4Speaking.amPmMarker",
+            "columnName": "cet4_speaking_amPmMarker",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "cet6Speaking.date",
+            "columnName": "cet6_speaking_date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cet6Speaking.amPmMarker",
+            "columnName": "cet6_speaking_amPmMarker",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6954497fadcc236a017b0a2a887c431c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f8291d79949ea99c52433779664c224a')"
     ]
   }
 }
