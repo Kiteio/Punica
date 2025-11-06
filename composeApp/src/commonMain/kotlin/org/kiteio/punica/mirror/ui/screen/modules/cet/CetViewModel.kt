@@ -17,7 +17,7 @@ import org.koin.android.annotation.KoinViewModel
 @KoinViewModel
 class CetViewModel(
     private val cetRepository: CetRepository,
-    private val toast: Toast,
+    toast: Toast,
 ) : ViewModel(), MVI<CetUiState, CetIntent> {
     private val _uiState = MutableStateFlow<CetUiState>(CetUiState.Loading)
     override val uiState = _uiState.asStateFlow()
@@ -32,6 +32,7 @@ class CetViewModel(
         when (intent) {
             CetIntent.Load -> viewModelScope.launch(handler) {
                 // 加载四六级考试
+                _uiState.update { CetUiState.Loading }
                 val cetExam = cetRepository.getExam()
                 _uiState.update { CetUiState.Success(cetExam) }
             }
@@ -46,7 +47,11 @@ sealed class CetUiState {
     /** 加载中 */
     data object Loading : CetUiState()
 
-    /** 加载成功 */
+    /**
+     * 加载成功。
+     *
+     * @property cetExam Cet 考试
+     */
     data class Success(val cetExam: CetExam) : CetUiState()
 
     /** 加载失败 */

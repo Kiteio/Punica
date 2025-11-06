@@ -284,4 +284,9 @@
     <string name="am">上午</string>
     <string name="pm">下午</string>
     <string name="error">出现了一些状况</string>
+
+    <!-- 教学通知页 -->
+    <string name="empty">这里什么也没有</string>
+    <!-- 教学通知详情页 -->
+    <string name="open_in_browser">在浏览器打开</string>
 </resources>

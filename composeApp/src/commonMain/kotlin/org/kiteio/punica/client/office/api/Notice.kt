@@ -2,13 +2,13 @@ package org.kiteio.punica.client.office.api
 
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.select.Evaluator
-import io.ktor.client.statement.bodyAsText
+import io.ktor.client.statement.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kiteio.punica.client.office.AcademicOffice
 
 /**
- * 返回教务通知。
+ * 返回教学通知。
  */
 suspend fun AcademicOffice.getNotices(index: Int = 1): List<Notice> {
     return withContext(Dispatchers.Default) {
@@ -37,7 +37,7 @@ suspend fun AcademicOffice.getNotices(index: Int = 1): List<Notice> {
 
 
 /**
- * 教务通知。
+ * 教学通知。
  *
  * @property title 标题
  * @property time 时间

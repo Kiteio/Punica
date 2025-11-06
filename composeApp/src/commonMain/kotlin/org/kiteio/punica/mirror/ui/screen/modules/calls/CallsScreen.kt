@@ -184,7 +184,6 @@ private fun CallCard(
     workingHours: ClosedRange<LocalTime>? = null,
 ) {
     Surface(
-        color = MaterialTheme.colorScheme.surfaceContainerLowest,
         shape = MaterialTheme.shapes.small,
         border = BorderStroke(
             1.dp,

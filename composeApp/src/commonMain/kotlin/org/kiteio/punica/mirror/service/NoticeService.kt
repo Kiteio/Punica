@@ -2,17 +2,19 @@ package org.kiteio.punica.mirror.service
 
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.select.Evaluator
-import io.ktor.client.HttpClient
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.request.get
-import io.ktor.client.statement.bodyAsText
+import io.ktor.client.*
+import io.ktor.client.plugins.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import jakarta.inject.Singleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kiteio.punica.mirror.modal.notice.Notice
 
 /**
- * 教务通知服务。
+ * 教学通知服务。
  */
+@Singleton
 fun getNoticeService(): NoticeService {
     val httpClient = HttpClient {
         defaultRequest {
@@ -24,11 +26,11 @@ fun getNoticeService(): NoticeService {
 }
 
 /**
- * 教务通知服务。
+ * 教学通知服务。
  */
 interface NoticeService {
     /**
-     * 通知列表。
+     * 通知列表，每页 14 项。
      *
      * @param page 页码
      */
@@ -65,7 +67,7 @@ private class NoticeServiceImpl(
                 Notice(
                     title = a.attr("title"),
                     time = li.child(1).text(),
-                    urlString = "$BASE_URL/${a.attr("href")}",
+                    urlString = "$BASE_URL${a.attr("href")}",
                 )
             )
         }

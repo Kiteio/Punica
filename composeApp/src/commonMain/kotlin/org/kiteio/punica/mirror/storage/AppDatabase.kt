@@ -26,7 +26,13 @@ fun getAppDatabase(): AppDatabase {
 /**
  * 数据库。
  */
-@Database(entities = [User::class, CetExam::class], version = 1)
+@Database(
+    entities = [
+        User::class,
+        CetExam::class,
+    ],
+    version = 1,
+)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao

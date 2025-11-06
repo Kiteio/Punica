@@ -37,7 +37,9 @@ import org.kiteio.punica.mirror.ui.screen.modules.exams.ExamsRoute
 import org.kiteio.punica.mirror.ui.screen.modules.exams.examsEntry
 import org.kiteio.punica.mirror.ui.screen.modules.grades.GradesRoute
 import org.kiteio.punica.mirror.ui.screen.modules.grades.gradesEntry
+import org.kiteio.punica.mirror.ui.screen.modules.notices.NoticeDetailRoute
 import org.kiteio.punica.mirror.ui.screen.modules.notices.NoticesRoute
+import org.kiteio.punica.mirror.ui.screen.modules.notices.noticeDetailScreen
 import org.kiteio.punica.mirror.ui.screen.modules.notices.noticesEntry
 import org.kiteio.punica.mirror.ui.screen.modules.plans.PlansRoute
 import org.kiteio.punica.mirror.ui.screen.modules.plans.plansEntry
@@ -197,8 +199,10 @@ fun PunicaApp() {
                         plansEntry()
                         // 选课系统页
                         courseSystemEntry()
-                        // 教务通知页
+                        // 教学通知页
                         noticesEntry()
+                        // 教学通知详情页
+                        noticeDetailScreen()
                         // 考试安排页
                         examsEntry()
                         // 四六级页
@@ -239,6 +243,7 @@ private inline fun <reified T : NavKey> rememberNavBackStack(
                 polymorphic(PlansRoute.serializer())
                 polymorphic(CourseSystemRoute.serializer())
                 polymorphic(NoticesRoute.serializer())
+                polymorphic(NoticeDetailRoute.serializer())
                 polymorphic(ExamsRoute.serializer())
                 polymorphic(CetRoute.serializer())
                 polymorphic(GradesRoute.serializer())
