@@ -194,10 +194,8 @@
     <string name="version">版本</string>
     <string name="github" translatable="false">GitHub</string>
     <string name="open_source_repository">开源仓库</string>
-    <string name="official_website">官网</string>
-    <string name="official_website_kiteio">Kiteio 官方网站</string>
 
-    <string name="safety_instruction">小石榴是一款开源软件，我们十分重视您的隐私，您的数据将在本地妥善保存。首次登录需要下载 OCR 训练文件，请耐心等待</string>
+    <string name="safety_instruction">小石榴是一款开源软件，我们十分重视您的隐私，您的数据将在本地妥善保存。首次登录可能需要稍等片刻</string>
     <string name="user_id">学号</string>
     <string name="password">密码</string>
     <string name="second_class_password">第二课堂密码</string>

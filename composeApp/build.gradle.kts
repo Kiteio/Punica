@@ -164,6 +164,5 @@ buildkonfig {
         buildConfigField(FieldSpec.Type.STRING, "versionName", libs.versions.punica.versionName.get())
         buildConfigField(FieldSpec.Type.STRING, "organization", "Kiteio")
         buildConfigField(FieldSpec.Type.STRING, "punicaGitHub", "https://github.com/Kiteio/Punica")
-        buildConfigField(FieldSpec.Type.STRING, "officialWebsite", "https://kiteio.top")
     }
 }

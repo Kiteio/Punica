@@ -26,7 +26,6 @@ import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.Web
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -80,8 +79,6 @@ import punica.composeapp.generated.resources.foshan_sanshui
 import punica.composeapp.generated.resources.github
 import punica.composeapp.generated.resources.logging_in
 import punica.composeapp.generated.resources.not_logged_in
-import punica.composeapp.generated.resources.official_website
-import punica.composeapp.generated.resources.official_website_kiteio
 import punica.composeapp.generated.resources.open_source_repository
 import punica.composeapp.generated.resources.poem
 import punica.composeapp.generated.resources.punica
@@ -202,7 +199,6 @@ private fun Content() {
                     item { CampusSetting() }
                     item { Versions() }
                     item { PunicaGitHub() }
-                    item { OfficialWebsite() }
                 }
             }
         }
@@ -393,27 +389,6 @@ private fun PunicaGitHub() {
         title = { Text(stringResource(Res.string.github)) },
         supportText = {
             Text(stringResource(Res.string.open_source_repository))
-        },
-        modifier = Modifier.fillMaxWidth().padding(8.dp),
-    )
-}
-
-
-@Composable
-private fun OfficialWebsite() {
-    val uriHandler = LocalUriHandler.current
-
-    Setting(
-        onClick = { uriHandler.openUri(Build.officialWebsite) },
-        leadingIcon = {
-            Icon(
-                Icons.Outlined.Web,
-                contentDescription = stringResource(Res.string.official_website),
-            )
-        },
-        title = { Text(stringResource(Res.string.official_website)) },
-        supportText = {
-            Text(stringResource(Res.string.official_website_kiteio))
         },
         modifier = Modifier.fillMaxWidth().padding(8.dp),
     )
