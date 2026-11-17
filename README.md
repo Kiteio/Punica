@@ -1,12 +1,27 @@
 # 小石榴
 
-> 小石榴 2.0 现已发布。
-
 <p align="center">
     <img src="composeApp/src/commonMain/composeResources/drawable/punica.png"
         alt="Punica logo"
         width="160" />
 </p>
+
+> [!IMPORTANT]
+> **新版小石榴请前往 [Pomegranate](https://github.com/chanwingchow/Pomegranate)。**
+> 新版目前处于测试阶段，可以与本仓库的旧版并存；重要操作建议暂在旧版完成。
+
+<table>
+  <tr>
+    <td width="50%" align="center">
+      <strong><a href="https://github.com/chanwingchow/Pomegranate">查看新版仓库 →</a></strong><br />
+      <sub>Pomegranate · 源码、截图与使用说明</sub>
+    </td>
+    <td width="50%" align="center">
+      <strong><a href="https://github.com/chanwingchow/Pomegranate/releases/latest">下载新版 →</a></strong><br />
+      <sub>查看各平台安装包与发布说明</sub>
+    </td>
+  </tr>
+</table>
 
 ## 简介
 
@@ -32,9 +47,3 @@
 
 小石榴是一款公益项目，软件完全免费且无广告。好的软件需要有更多人发现，如果您喜欢石榴，请点亮仓库星标。
 此外，您也可以向好友分享它。
-
-如果有条件的话，可以扫码小捐，感谢您的支持！
-
-<p align="center">
-   <img width="24%" src="readme/img/qrcode.png" alt="donate" />
-</p>
